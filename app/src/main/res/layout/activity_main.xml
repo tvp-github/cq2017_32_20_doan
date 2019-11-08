@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="16dp"
@@ -10,8 +10,8 @@
     android:paddingRight="16dp"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/backgroud">
-    //tools:context="com.example.mytour.MainActivity"
+    android:id="@+id/layout"
+    android:background="@android:color/black">
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
@@ -46,6 +46,7 @@
            android:drawableLeft="@drawable/user"
            android:drawablePadding="16dp"/>
        <EditText
+           android:inputType="textPassword"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:id="@+id/edtlogin_password"
@@ -63,7 +64,7 @@
            android:id="@+id/txtforgotpass"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Forgot passwword"
+           android:text="Forgot password"
            android:textSize="16dp"
            android:textColor="#fff"
            android:layout_marginRight="20dp"
@@ -77,7 +78,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LOGIN"
@@ -89,7 +90,7 @@
             android:gravity="center"
             android:textSize="16dp"
             android:textColor="#fff">
-        </TextView>
+        </Button>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -127,6 +128,12 @@
             android:layout_marginTop="50dp"
             android:layout_gravity="center">
         </TextView>
+        <TextView
+            android:id="@+id/txtSignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign up"
+            android:textColor="@android:color/holo_blue_dark"/>
     </LinearLayout>
 </LinearLayout>
 
