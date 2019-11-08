@@ -1,18 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/backgroud">
+    //tools:context="com.example.mytour.MainActivity"
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+       <ImageView
+           android:layout_width="186dp"
+           android:layout_height="66dp"
+           android:background="@drawable/logo"
+           android:layout_gravity="center">
+       </ImageView>
+
+<!--       <TextView-->
+<!--           android:layout_width="match_parent"-->
+<!--           android:layout_height="wrap_content"-->
+<!--           android:gravity="center"-->
+<!--           android:textSize="30dp"-->
+<!--           android:text="LOGIN"/>-->
+       <EditText
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/edtlogin_user"
+           android:hint="Enter username"
+           android:inputType="text"
+           android:textColor="#000"
+           android:background="#f0f0f4"
+           android:padding="12dp"
+           android:layout_marginTop="50dp"
+           android:layout_marginBottom="10dp"
+           android:layout_marginLeft="20dp"
+           android:layout_marginRight="20dp"
+           android:drawableLeft="@drawable/user"
+           android:drawablePadding="16dp"/>
+       <EditText
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/edtlogin_password"
+           android:layout_marginTop="20dp"
+           android:hint="Enter password"
+           android:textColor="#000"
+           android:background="#f0f0f4"
+           android:padding="12dp"
+           android:layout_marginBottom="10dp"
+           android:layout_marginLeft="20dp"
+           android:layout_marginRight="20dp"
+           android:drawableLeft="@drawable/passwordd"
+           android:drawablePadding="16dp"/>
+       <TextView
+           android:id="@+id/txtforgotpass"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Forgot passwword"
+           android:textSize="16dp"
+           android:textColor="#fff"
+           android:layout_marginRight="20dp"
+           android:layout_gravity="right">
+       </TextView>
+   </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LOGIN"
+            android:id="@+id/btnlogin"
+            android:background="@drawable/btnformate"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="center"
+            android:padding="14dp"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:textColor="#fff">
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OR"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="25dp"
+            android:textColor="#000">
+        </TextView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/facebook"
+                android:layout_marginRight="10dp">
+            </ImageButton>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/google">
+            </ImageButton>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/act"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account?"
+            android:textSize="16dp"
+            android:textColor="#fff"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center">
+        </TextView>
+    </LinearLayout>
+</LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
