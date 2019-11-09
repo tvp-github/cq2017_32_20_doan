@@ -1,6 +1,7 @@
 package hcmus.android.lighttour.Retrofit;
 
 import hcmus.android.lighttour.APIService.ListToursService;
+import hcmus.android.lighttour.APIService.LoginGGService;
 import hcmus.android.lighttour.APIService.LoginService;
 import hcmus.android.lighttour.APIService.RegisterService;
 
@@ -22,6 +23,9 @@ public class ApiUtils {
 
         return RetrofitClient.getClient(BASE_URL).create(RegisterService.class);
     }
+    public static LoginGGService getLoginGGService() {
 
+        return RetrofitClient.getClient(BASE_URL).create(LoginGGService.class);
+    }
 
 }
