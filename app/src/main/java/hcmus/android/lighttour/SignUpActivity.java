@@ -2,9 +2,7 @@ package hcmus.android.lighttour;
 
 import androidx.appcompat.app.AppCompatActivity;
 import hcmus.android.lighttour.APIService.RegisterService;
-import hcmus.android.lighttour.R;
 import hcmus.android.lighttour.Response.Register;
-import hcmus.android.lighttour.Response.RegisterError;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -13,13 +11,12 @@ import retrofit2.Response;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.TextKeyListener;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,17 +61,23 @@ public class SignUpActivity extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-
                 DisableInputField();
+                String password = validate(edtPassword.getText().toString());
+                String fullName = validate(edtFullname.getText().toString());
+                String email = validate(edtEmail.getText().toString());
+                String phone = validate(edtPhone.getText().toString());
+                String address = validate(edtAdress.getText().toString());
+                String dob = validate(edtBirthday.getText().toString());
 
-                String password = edtPassword.getText().toString();
-                String fullName = edtFullname.getText().toString();
-                String email = edtEmail.getText().toString();
-                String phone = edtPhone.getText().toString();
-                String address = edtAdress.getText().toString();
-                String dob = edtBirthday.getText().toString();
-                int gender = Integer.parseInt(String.valueOf(edtGender.getText().toString().equals("Male")));
+                int gender;
+                String strGender;
+                strGender = edtGender.getText().toString();
+                if(strGender.equals("Male"))
+                    gender = 1;
+                else gender = 0;
+
                 sendRegister(password,fullName,email,phone,address,dob,gender);
+
             }
         });
     }
@@ -108,30 +111,29 @@ public class SignUpActivity extends AppCompatActivity {
                 }
                 if(response.code()==400) {
                     //Internal server Error -> Server error on getting tour list
-                    String msg = null;
-                    JSONObject message = null;
                     try {
-                        message = new JSONObject(response.errorBody().string());
-                        JSONArray errorArray = new JSONArray(message.getJSONArray("message"));
+                        String msg = "";
+                        JSONObject data = new JSONObject(response.errorBody().string());
+                        JSONArray errorArray = data.getJSONArray("message");
                         for (int i = 0 ; i < errorArray.length() ; i++){
-                            msg = msg + errorArray.getJSONObject(i).getString("msg") + "\n";
+                            if(i==0)
+                                msg = errorArray.getJSONObject(i).getString("msg");
+                            else
+                                msg = msg + "\n"+ errorArray.getJSONObject(i).getString("msg");
                         }
                         Toast.makeText(SignUpActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
                     EnableInputField();
                 }
-                if(response.code()==504){
+                if(response.code()==503){
+                    Toast.makeText(SignUpActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     String msg = null;
                     try {
                         msg = new JSONObject(response.errorBody().string()).getString("message");
                         Toast.makeText(SignUpActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
                     EnableInputField();
@@ -141,9 +143,13 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Register> call, Throwable t) {
-                Log.e("AAA", "Unable to submit post to API.");
+                Toast.makeText(SignUpActivity.this, "Unable to connect to server", Toast.LENGTH_SHORT).show();
+                EnableInputField();
             }
         });
     }
-
+    private String validate(String s){
+        if (s.length()>0) return s;
+        else return null;
+    }
 }

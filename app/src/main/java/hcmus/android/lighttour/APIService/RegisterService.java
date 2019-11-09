@@ -15,5 +15,5 @@ public interface RegisterService {
                             @Field("phone") String phone,
                             @Field("address") String address,
                             @Field("dob") String dob,
-                            @Field("genger") int genfer);
+                            @Field("gender") int gender);
 }
