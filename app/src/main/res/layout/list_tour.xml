@@ -7,11 +7,12 @@
     android:layout_margin="5pt"
     android:orientation="vertical"
     tools:context=".MainActivity"
+    android:weightSum="10"
     android:background="@drawable/sydney">
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,28 +21,29 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="horizontal">
-
         <ImageButton
             android:id="@+id/avatarUser"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_marginRight="30dp" />
-        <Button
+        <SearchView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/loginButton"
-            android:text="LOGIN"
             android:layout_gravity="center"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
         android:orientation="vertical"
-        android:layout_margin="20dp">
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -81,20 +83,21 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp">
+        android:layout_height="wrap_content"
+        android:layout_weight="6">
 
-        <ScrollView
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:background="#FFFFFF">
-
+        android:background="#FFFFFF"
+        android:layout_gravity="bottom">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -154,19 +157,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Home"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="Home" />
         </LinearLayout>
 
         <LinearLayout
@@ -187,7 +190,7 @@
                 android:text="Settings"
                 android:gravity="center"/>
         </LinearLayout>
-
     </LinearLayout>
+
 
 </LinearLayout>
