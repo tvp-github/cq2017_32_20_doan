@@ -13,6 +13,7 @@ import retrofit2.Response;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ListTourActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_tour);
         init();
-        listToursService.sendData(token,10,1,"name",false).enqueue(new Callback<ListTours>() {
+        listToursService.sendData(token,10,1,null,null).enqueue(new Callback<ListTours>() {
             @Override
             public void onResponse(Call<ListTours> call, Response<ListTours> response) {
                 if(response.code()==200){
@@ -42,7 +43,7 @@ public class ListTourActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ListTours> call, Throwable t) {
-
+                Toast.makeText(ListTourActivity.this, "Unable to load list of tours", Toast.LENGTH_SHORT).show();
             }
         });
         //Init Adapter, set Adapter to listTour
