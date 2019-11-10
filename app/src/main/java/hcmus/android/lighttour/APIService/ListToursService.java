@@ -9,7 +9,6 @@ import retrofit2.http.Query;
 
 public interface ListToursService {
     @GET("/tour/list")
-    @FormUrlEncoded
     Call<ListTours> sendData(@Header("Authorization") String token,
                              @Query("rowPerPage") int rowPerPage,
                              @Query("pageNum") int pageNum,
