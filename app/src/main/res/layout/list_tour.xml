@@ -35,10 +35,11 @@
 
         <SearchView
             android:id="@+id/loginButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@android:color/white" />
+            android:layout_marginRight="5dp"
+            android:background="@drawable/style_search"/>
     </LinearLayout>
 
     <LinearLayout
@@ -102,26 +103,27 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:background="#FFFFFF"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:paddingTop="3dp">
 
         <LinearLayout
-            android:id="@+id/btnHome"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/btnMenu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/home_listtour" />
+                android:background="@drawable/menu" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Home" />
+                android:text="Menu" />
         </LinearLayout>
 
         <LinearLayout
@@ -131,16 +133,16 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:id="@+id/btnNoti"
+                android:id="@+id/btnHistory"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/notification" />
+                android:background="@drawable/history" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Notification"
+                android:text="History"
                 android:gravity="center"/>
         </LinearLayout>
 
@@ -151,9 +153,11 @@
             android:layout_weight="1">
 
             <ImageButton
+                android:id="@+id/btnHome"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/home_listtour"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -169,15 +173,17 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/btnNoti"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/notification"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Home" />
+                android:text="Notifaction" />
         </LinearLayout>
 
         <LinearLayout
