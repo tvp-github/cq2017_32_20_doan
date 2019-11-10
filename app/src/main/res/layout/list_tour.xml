@@ -7,7 +7,7 @@
     android:layout_margin="5pt"
     android:orientation="vertical"
     tools:context=".MainActivity"
-    android:weightSum="10"
+    android:weightSum="11"
     android:background="@drawable/sydney">
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">
@@ -88,13 +88,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="6">
+        android:layout_height="0dp"
+        android:layout_weight="8">
 
         <ListView
             android:id="@+id/listTour"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
