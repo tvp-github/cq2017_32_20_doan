@@ -222,8 +222,11 @@ public class MainActivity extends AppCompatActivity {
                     userId = response.body().getUserId();
                     //Save token and userId
                     //Go to Home View
+                    MyApplication myApplication = (MyApplication) getApplication();
+                    myApplication.setToken(token);
                     Intent intent = new Intent(MainActivity.this, ListTourActivity.class);
                     startActivity(intent);
+                    EnableInputField();
                 }
                 if(response.code()==400){
                     //Toast error
