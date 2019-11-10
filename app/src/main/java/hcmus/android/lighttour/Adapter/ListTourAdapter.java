@@ -62,8 +62,8 @@ public class ListTourAdapter extends BaseAdapter{
         imgAvatar = view.findViewById(R.id.imgAvatar);
         //Đổ dữ liệu
         Tour tour = listTour.get(i);
-//        if(listTour.get(i).getAvatar()!=null && listTour.get(i).getAvatar().length()>0)
-//            Glide.with(context).load(listTour.get(i).getAvatar()).into(imgAvatar);
+        if(tour.getAvatar()!=null && tour.getAvatar().length()>0)
+            Glide.with(context).load(listTour.get(i).getAvatar()).into(imgAvatar);
         txtPrice.setText(tour.getMinCost()+" - "+tour.getMaxCost());
         txtName .setText(tour.getName());
         txtnumpeople.setText(tour.getAdults()+" Adults - "+tour.getChilds() + " Children");
@@ -77,7 +77,7 @@ public class ListTourAdapter extends BaseAdapter{
     }
     String formatCalendar(Calendar calendar){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String result = simpleDateFormat.format(calendar.get(Calendar.DATE));
+        String result = simpleDateFormat.format(calendar.getTime());
 
         return result;
     }

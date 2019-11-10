@@ -15,7 +15,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String accessToken = sharedPref.getString("token", null);
-        if((accessToken != null) && accessToken.isEmpty())
+        if((accessToken == null) || accessToken.isEmpty())
         {
             Intent intent = new Intent(SplashActivity.this,MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
