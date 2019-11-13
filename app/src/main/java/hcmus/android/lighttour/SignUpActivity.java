@@ -34,6 +34,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText edtPassword;
     EditText edtGender;
     Button btnRegister;
+    //Ánh xạ các view và khởi tạo Service
     public void init(){
         edtFullname = findViewById(R.id.edtsignup_fullname);
         edtEmail = findViewById(R.id.edtsignup_email);
@@ -51,7 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
         init();
-
+    //Khi người dùng bấm nút Register
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+                //Ngăn người dùng thay đổi dữ liệu
                 DisableInputField();
                 String password = validate(edtPassword.getText().toString());
                 String fullName = validate(edtFullname.getText().toString());
@@ -68,7 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String phone = validate(edtPhone.getText().toString());
                 String address = validate(edtAdress.getText().toString());
                 String dob = validate(edtBirthday.getText().toString());
-
+                //Kiểm tra gender
                 int gender;
                 String strGender;
                 strGender = edtGender.getText().toString();
@@ -81,7 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-
+    //Ngăn việc thay đổi dữ liệu
     private void DisableInputField() {
         edtFullname.setEnabled(false);
         edtEmail.setEnabled(false);
@@ -90,6 +92,7 @@ public class SignUpActivity extends AppCompatActivity {
         edtBirthday.setEnabled(false);
         edtPassword.setEnabled(false);
         edtGender.setEnabled(false);
+        btnRegister.setEnabled(false);
     }
     private void EnableInputField() {
         edtFullname.setEnabled(true);
@@ -99,6 +102,7 @@ public class SignUpActivity extends AppCompatActivity {
         edtBirthday.setEnabled(true);
         edtPassword.setEnabled(true);
         edtGender.setEnabled(true);
+        btnRegister.setEnabled(true);
     }
     public void sendRegister(String password, String fullName, String email, String phone, String address, String dob, int gender) {
         registerService.sendData(password,fullName,email,phone,address,dob,gender).enqueue(new Callback<Register>() {

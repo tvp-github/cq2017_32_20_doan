@@ -32,11 +32,14 @@ public class ListTourActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_tour);
         init();
+        //Gọi Retrofit Service để lấy dữ liệu từ API
         listToursService.sendData(token,10,1,null,null).enqueue(new Callback<ListTours>() {
             @Override
             public void onResponse(Call<ListTours> call, Response<ListTours> response) {
                 if(response.code()==200){
+                    //Nhập vào danh sách dữ liệu
                     listTourData.addAll(response.body().getTours());
+                    //Cập nhật tại listView
                     listTourAdapter.notifyDataSetChanged();
                 }
             }

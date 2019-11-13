@@ -43,9 +43,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
+    //Google login data
     static String ClientID = "101991060940-0bt756s94oj8nq63i8nba03mavcd1cj6.apps.googleusercontent.com";
     static String ClientSecret = "zg4LQ_wajUZN7oni20dOJADC";
     private static final int RC_SIGN_IN = 001;
+
     Button btnLogin;
     EditText edtEmailPhone;
     EditText edtPassword;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private LoginService loginService;
     private LoginGGService loginGGService;
     GoogleSignInClient mGoogleSignInClient;
-
+    //Ánh xạ view và khởi tạo các biến
     public void init(){
         btnLogin = findViewById(R.id.btnlogin);
         edtEmailPhone = findViewById(R.id.edtlogin_user);
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         //updateUI(account); Update UI if account not null
     }
+    //Sự kiện trả về khi gọi Google Login
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,14 +106,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
+    //Gọi login with google
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
 
-
+    //Xử lí thông tin trả về từ google
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -156,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             //updateUI(null);
         }
     }
-
+    //Retrofit để gọi đăng nhập bằng google
     private void sendLoginGG(String accessToken) {
         loginGGService.sendData(accessToken,null).enqueue(new Callback<LoginGG>() {
             @Override
@@ -212,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    //Login bình thường
     public void sendLogin(String emailPhone, String password) {
         loginService.sendData(emailPhone,password).enqueue(new Callback<Login>() {
             @Override
