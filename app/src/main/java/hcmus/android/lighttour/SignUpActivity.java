@@ -8,13 +8,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -23,6 +26,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class SignUpActivity extends AppCompatActivity {
     RegisterService registerService;
@@ -30,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText edtEmail;
     EditText edtPhone;
     EditText edtAdress;
-    EditText edtBirthday;
+    TextView edtBirthday;
     EditText edtPassword;
     EditText edtGender;
     Button btnRegister;
@@ -82,6 +88,26 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
+        edtBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Tạo calendar lưu giá trị nhập vào
+                final Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(SignUpActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        //cập nhật calendar
+                        calendar.set(Calendar.YEAR,i);
+                        calendar.set(Calendar.MONTH,i1);
+                        calendar.set(Calendar.DATE,i2);
+                        //Xuất ra
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        edtBirthday.setText(simpleDateFormat.format(calendar.getTime()));
+                    }
+                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
+                datePickerDialog.show();
+            }
+        });
     }
     //Ngăn việc thay đổi dữ liệu
     private void DisableInputField() {
@@ -89,7 +115,6 @@ public class SignUpActivity extends AppCompatActivity {
         edtEmail.setEnabled(false);
         edtPhone.setEnabled(false);
         edtAdress.setEnabled(false);
-        edtBirthday.setEnabled(false);
         edtPassword.setEnabled(false);
         edtGender.setEnabled(false);
         btnRegister.setEnabled(false);
@@ -99,7 +124,6 @@ public class SignUpActivity extends AppCompatActivity {
         edtEmail.setEnabled(true);
         edtPhone.setEnabled(true);
         edtAdress.setEnabled(true);
-        edtBirthday.setEnabled(true);
         edtPassword.setEnabled(true);
         edtGender.setEnabled(true);
         btnRegister.setEnabled(true);
