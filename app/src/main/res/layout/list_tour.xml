@@ -1,212 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5pt"
-    android:orientation="vertical"
     tools:context=".MainActivity"
-    android:weightSum="11"
    >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/avatarUser"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="30dp"
-            android:src="@drawable/user" />
-
-        <SearchView
-            android:id="@+id/loginButton"
+        android:layout_height="match_parent"
+        android:layout_margin="5pt"
+        android:orientation="vertical"
+        android:weightSum="11">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/style_search"/>
-    </LinearLayout>
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/btnCreate"
+                android:id="@+id/avatarUser"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/user" />
+
+            <SearchView
+                android:id="@+id/loginButton"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/style_search"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8">
-
-        <ListView
-            android:id="@+id/listTour"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:background="#FFFFFF"
-        android:layout_gravity="bottom"
-        android:paddingTop="3dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/btnMenu"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/menu" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Menu" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
             android:orientation="vertical"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/btnHistory"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/history" />
-
-            <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="History"
-                android:gravity="center"/>
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnCreate"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_height="0dp"
+            android:layout_weight="8">
 
-            <ImageButton
-                android:id="@+id/btnHome"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/home_listtour"/>
-
-            <TextView
+            <ListView
+                android:id="@+id/listTour"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Home"
-                android:gravity="center"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:background="#FFFFFF"
+            android:layout_gravity="bottom"
+            android:paddingTop="3dp">
 
-            <ImageButton
-                android:id="@+id/btnNoti"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/notification"/>
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Notifaction" />
-        </LinearLayout>
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
+                <ImageButton
+                    android:id="@+id/btnMenu"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/menu" />
 
-            <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/settings"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Menu" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/btnSettings"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Settings" />
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/btnHistory"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/history" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="History"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/btnHome"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/home_listtour"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btnNoti"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/notification"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Notifaction" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/settings"/>
+
+                <TextView
+                    android:id="@+id/btnSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Settings" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddTour"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="80dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/plus" />
 
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

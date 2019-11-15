@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class ListTourActivity extends AppCompatActivity {
     ListToursService listToursService;
     String token;
     ImageButton btnCreate;
+    FloatingActionButton btnAddTour;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -63,6 +66,20 @@ public class ListTourActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //Chuyển màn hình sang tạo tour
+         btnAddTour = (FloatingActionButton) findViewById(R.id.btnAddTour);
+
+        btnAddTour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListTourActivity.this, CreateTourActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
     }
 
     private void init() {
