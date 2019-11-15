@@ -10,7 +10,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -25,7 +28,7 @@ public class ListTourActivity extends AppCompatActivity {
     ImageView imgUserAva;
     ListToursService listToursService;
     String token;
-
+    ImageButton btnCreate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -52,12 +55,21 @@ public class ListTourActivity extends AppCompatActivity {
         //Init Adapter, set Adapter to listTour
         listTourAdapter = new ListTourAdapter(ListTourActivity.this,R.layout.list_item,listTourData);
         listTour.setAdapter(listTourAdapter);
+        //Chuyển màn hình sang tạo tour
+        btnCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListTourActivity.this, CreateTourActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void init() {
         listTourData = new ArrayList<Tour>();
         listTour = findViewById(R.id.listTour);
         imgUserAva = findViewById(R.id.avatarUser);
+        btnCreate = findViewById(R.id.btnCreate);
         listToursService = ApiUtils.getListToursAPIService();
         MyApplication myApplication = (MyApplication) getApplication();
         token = myApplication.getToken();
