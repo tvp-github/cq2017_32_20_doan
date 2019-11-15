@@ -70,8 +70,12 @@ public class ListTourAdapter extends BaseAdapter{
         Calendar startDate, endDate;
         startDate = Calendar.getInstance();
         endDate = Calendar.getInstance();
-        startDate.setTimeInMillis(Long.parseLong(tour.getStartDate()));
-        endDate.setTimeInMillis(Long.parseLong(tour.getEndDate()));
+        if(tour.getStartDate()!=null)
+            startDate.setTimeInMillis(Long.parseLong(tour.getStartDate()));
+        else startDate.setTimeInMillis(0);
+        if(tour.getEndDate()!=null)
+            endDate.setTimeInMillis(Long.parseLong(tour.getEndDate()));
+        else endDate.setTimeInMillis(0);
         txtDate.setText(formatCalendar(startDate)+" - "+ formatCalendar(endDate));
         return view;
     }
