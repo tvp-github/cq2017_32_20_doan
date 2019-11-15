@@ -34,7 +34,8 @@
         android:text="End Date"
         android:layout_below="@+id/edit_tour_name"
         android:layout_toRightOf="@+id/text_startDate"
-        android:gravity="right"/>
+        android:gravity="right"
+        android:layout_alignLeft="@+id/endDate"/>
 
 
     <TextView
@@ -42,7 +43,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/startDate"
         android:text="Select Date"
-        android:layout_below="@+id/text_startDate"/>
+        android:layout_below="@+id/text_startDate"
+        android:layout_marginRight="5dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,23 +52,25 @@
         android:id="@+id/endDate"
         android:text="Select Date"
         android:layout_below="@+id/text_endDate"
-        android:layout_toRightOf="@+id/startDate"/>
+        android:layout_toLeftOf="@+id/calendar2"
+        android:layout_marginRight="5dp"/>
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:id="@+id/calendar1"
         android:src="@drawable/calendar"
         android:layout_below="@id/text_startDate"
-        android:layout_toRightOf="@+id/startDate"/>
+        android:layout_toRightOf="@+id/startDate"
+        android:layout_marginRight="5dp" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:id="@+id/calendar2"
         android:src="@drawable/calendar"
         android:layout_below="@id/text_endDate"
-        android:layout_toRightOf="@+id/endDate"/>
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,7 +84,8 @@
         android:text="Children"
         android:id="@+id/text_children"
         android:layout_below="@+id/startDate"
-        android:layout_toRightOf="@+id/text_adults"/>
+        android:layout_toRightOf="@+id/text_adults"
+        android:layout_alignLeft="@+id/text_endDate"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -112,7 +117,8 @@
         android:text="Max cost"
         android:id="@+id/text_maxCost"
         android:layout_below="@+id/edit_childern"
-        android:layout_toRightOf="@+id/text_minCost"/>
+        android:layout_toRightOf="@+id/text_minCost"
+        android:layout_alignLeft="@+id/text_endDate"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -156,7 +162,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/check_privateTour"
         android:layout_below="@+id/chooseImg"
-        android:hint="This is your private trip?"/>
+        android:hint="This is your private trip ?"/>
 
     <Button
         android:layout_width="match_parent"
