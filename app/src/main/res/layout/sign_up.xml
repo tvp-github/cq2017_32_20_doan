@@ -85,12 +85,11 @@
             android:layout_marginRight="20dp"
             android:drawableLeft="@drawable/home"
             android:drawablePadding="16dp"/>
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edtsignup_dob"
             android:hint="Birthday"
-            android:inputType="text"
             android:textColor="#000"
             android:background="#f0f0f4"
             android:padding="12dp"
