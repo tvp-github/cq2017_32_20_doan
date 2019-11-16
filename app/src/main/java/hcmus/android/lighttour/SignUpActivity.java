@@ -14,9 +14,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText edtPassword;
     EditText edtGender;
     Button btnRegister;
+    Spinner spinner;
     //Ánh xạ các view và khởi tạo Service
     public void init(){
         edtFullname = findViewById(R.id.edtsignup_fullname);
@@ -48,8 +53,8 @@ public class SignUpActivity extends AppCompatActivity {
         edtAdress = findViewById(R.id.edtsignup_address);
         edtBirthday = findViewById(R.id.edtsignup_dob);
         edtPassword = findViewById(R.id.edtsignup_password);
-        edtGender = findViewById(R.id.edtsignup_gender);
         btnRegister = findViewById(R.id.btnregister);
+        spinner = findViewById(R.id.edtsignup_spinnergender);
         registerService = ApiUtils.getRegisterAPIService();
     }
     @Override
@@ -58,6 +63,9 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
         init();
+        final String[] gen = {"Female", "Male"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,gen);
+        spinner.setAdapter(arrayAdapter);
     //Khi người dùng bấm nút Register
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,13 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String address = validate(edtAdress.getText().toString());
                 String dob = validate(edtBirthday.getText().toString());
                 //Kiểm tra gender
-                int gender;
-                String strGender;
-                strGender = edtGender.getText().toString();
-                if(strGender.equals("Male"))
-                    gender = 1;
-                else gender = 0;
-
+                int gender = spinner.getSelectedItemPosition();
                 sendRegister(password,fullName,email,phone,address,dob,gender);
 
             }
@@ -116,7 +118,6 @@ public class SignUpActivity extends AppCompatActivity {
         edtPhone.setEnabled(false);
         edtAdress.setEnabled(false);
         edtPassword.setEnabled(false);
-        edtGender.setEnabled(false);
         btnRegister.setEnabled(false);
     }
     private void EnableInputField() {
@@ -125,7 +126,6 @@ public class SignUpActivity extends AppCompatActivity {
         edtPhone.setEnabled(true);
         edtAdress.setEnabled(true);
         edtPassword.setEnabled(true);
-        edtGender.setEnabled(true);
         btnRegister.setEnabled(true);
     }
     public void sendRegister(String password, String fullName, String email, String phone, String address, String dob, int gender) {
