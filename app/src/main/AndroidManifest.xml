@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CreateTourActivity"></activity>
+        <activity android:name=".CreateTourActivity"
+            android:parentActivityName=".ListTourActivity"></activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

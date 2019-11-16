@@ -4,22 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-   >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/toolbar_list_tour"
+        layout="@layout/toolbar">
+    </include>
+
     <LinearLayout
+        android:layout_marginTop="56dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5pt"
         android:orientation="vertical"
-        android:weightSum="11">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+        android:weightSum="10">
 
         <LinearLayout
             android:layout_width="match_parent"

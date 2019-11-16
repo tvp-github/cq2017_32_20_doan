@@ -1,6 +1,7 @@
 package hcmus.android.lighttour;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -69,6 +70,17 @@ public class CreateTourActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_tour);
         init();
+
+        //Khởi tạo toolbar cho activity
+        Toolbar toolbar =findViewById(R.id.toolbar_create_tour);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Create tour");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        mTitle.setText(toolbar.getTitle());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
         //Khi người dùng bấm nút Create Tour
         btnCreateTour.setOnClickListener(new View.OnClickListener() {
             @Override
