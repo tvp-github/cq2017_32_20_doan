@@ -85,32 +85,46 @@
             android:layout_marginRight="20dp"
             android:drawableLeft="@drawable/home"
             android:drawablePadding="16dp"/>
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/edtsignup_dob"
-            android:hint="Birthday"
-            android:textColor="#000"
-            android:background="#f0f0f4"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:drawableLeft="@drawable/dob"
-            android:drawablePadding="16dp"/>
-        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtsignup_gender"
-            android:hint="Gender"
-            android:textColor="#000"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
             android:background="#f0f0f4"
+            android:drawableLeft="@drawable/dob"
+            android:drawablePadding="16dp"
+            android:hint="Birthday"
             android:padding="12dp"
+            android:textColor="#000"
+            android:textSize="18sp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f0f0f4"
+            android:paddingRight="12dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:drawableLeft="@drawable/gender"
-            android:drawablePadding="16dp"/>
+            android:weightSum="8">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/gender"
+                android:layout_weight="7"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edtsignup_spinnergender"
+                android:hint="Gender"
+                android:layout_weight="1"
+                android:textColor="#000"
+                />
+        </LinearLayout>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,6 +139,7 @@
             android:layout_marginRight="20dp"
             android:drawableLeft="@drawable/password"
             android:drawablePadding="16dp"/>
+
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="20dp"
