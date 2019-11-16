@@ -209,7 +209,7 @@
             android:layout_weight="4"
             android:text="+"
             android:textSize="30dp"
-            android:background="#FFFFF"/>
+            android:background="#FFFFFF"/>
     </LinearLayout>
 
     <CheckBox
