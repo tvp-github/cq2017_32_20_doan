@@ -10,21 +10,27 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tour name"
-        android:id="@+id/textName"/>
+        android:text="TOUR NAME"
+        android:textColor="#041E9C"
+        android:id="@+id/textName"
+        android:textSize="25dp"
+
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:id="@+id/edit_tour_name"
-        android:layout_below="@+id/textName"/>
+        android:layout_below="@+id/textName"
+        android:layout_marginBottom="15dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_startDate"
         android:text="Start Date"
-        android:layout_below="@+id/edit_tour_name"/>
+        android:layout_below="@+id/edit_tour_name"
+        android:layout_marginBottom="10dp"/>
 
 
     <TextView
@@ -34,8 +40,7 @@
         android:text="End Date"
         android:layout_below="@+id/edit_tour_name"
         android:layout_toRightOf="@+id/text_startDate"
-        android:gravity="right"
-        android:layout_alignLeft="@+id/endDate"/>
+        android:layout_alignLeft="@+id/endDate" />
 
 
     <TextView
@@ -44,7 +49,13 @@
         android:id="@+id/startDate"
         android:text="Select Date"
         android:layout_below="@+id/text_startDate"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="10dp"
+        android:background="@drawable/style_border"
+        android:gravity="center"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,8 +63,15 @@
         android:id="@+id/endDate"
         android:text="Select Date"
         android:layout_below="@+id/text_endDate"
-        android:layout_toLeftOf="@+id/btnStartDate"
-        android:layout_marginRight="5dp"/>
+        android:layout_toLeftOf="@+id/btnEndDate"
+        android:layout_marginRight="10dp"
+        android:layout_alignTop="@+id/startDate"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:background="@drawable/style_border"
+        android:gravity="center"/>
 
     <ImageButton
         android:layout_width="20dp"
@@ -70,14 +88,18 @@
         android:id="@+id/btnEndDate"
         android:src="@drawable/calendar"
         android:layout_below="@id/text_endDate"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/endDate"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Adults"
         android:id="@+id/text_adults"
-        android:layout_below="@+id/startDate"/>
+        android:layout_below="@+id/startDate"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,14 +107,20 @@
         android:id="@+id/text_children"
         android:layout_below="@+id/startDate"
         android:layout_toRightOf="@+id/text_adults"
-        android:layout_alignLeft="@+id/text_endDate"/>
+        android:layout_alignLeft="@+id/text_endDate"
+        android:layout_alignTop="@+id/text_adults"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edit_adults"
         android:hint="0"
-        android:layout_below="@+id/text_adults"/>
+        android:layout_below="@+id/text_adults"
+        android:paddingLeft="80dp"
+        android:paddingRight="80dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:background="@drawable/style_border"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -101,7 +129,13 @@
         android:hint="0"
         android:layout_below="@+id/text_children"
         android:layout_toRightOf="@+id/edit_adults"
-        android:layout_alignLeft="@+id/text_children"/>
+        android:layout_alignLeft="@+id/text_children"
+        android:layout_alignTop="@+id/edit_adults"
+        android:paddingLeft="80dp"
+        android:paddingRight="80dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:background="@drawable/style_border"/>
 
 
     <TextView
@@ -109,7 +143,9 @@
         android:layout_height="wrap_content"
         android:text="Min cost"
         android:id="@+id/text_minCost"
-        android:layout_below="@+id/edit_adults"/>
+        android:layout_below="@+id/edit_adults"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -118,14 +154,20 @@
         android:id="@+id/text_maxCost"
         android:layout_below="@+id/edit_children"
         android:layout_toRightOf="@+id/text_minCost"
-        android:layout_alignLeft="@+id/text_endDate"/>
+        android:layout_alignLeft="@+id/text_endDate"
+        android:layout_alignTop="@+id/text_minCost"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edit_minCost"
         android:hint="0"
-        android:layout_below="@+id/text_minCost"/>
+        android:layout_below="@+id/text_minCost"
+        android:paddingLeft="80dp"
+        android:paddingRight="80dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:background="@drawable/style_border"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -134,7 +176,13 @@
         android:hint="0"
         android:layout_below="@+id/text_minCost"
         android:layout_toRightOf="@+id/edit_minCost"
-        android:layout_alignLeft="@+id/text_maxCost"/>
+        android:layout_alignLeft="@+id/text_maxCost"
+        android:layout_alignTop="@id/edit_minCost"
+        android:paddingLeft="80dp"
+        android:paddingRight="80dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:background="@drawable/style_border"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -142,19 +190,26 @@
         android:id="@+id/chooseImg"
         android:orientation="horizontal"
         android:weightSum="5"
-        android:layout_below="@+id/edit_minCost">
+        android:layout_below="@+id/edit_minCost"
+        android:layout_marginTop="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/style_border_no_radius">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Choose tour image"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:textSize="20dp"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:text="+"
-            android:textSize="20dp"/>
+            android:textSize="30dp"
+            android:background="#FFFFF"/>
     </LinearLayout>
 
     <CheckBox
@@ -162,14 +217,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/check_privateTour"
         android:layout_below="@+id/chooseImg"
-        android:hint="This is your private trip ?"/>
+        android:hint="This is your private trip ?"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_createTour"
         android:layout_below="@+id/check_privateTour"
-        android:text="Create Tour"/>
+        android:text="Create Tour"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/style_btn_create_tour"/>
 
 
 </RelativeLayout>
