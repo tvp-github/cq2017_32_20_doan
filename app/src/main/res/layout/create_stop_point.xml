@@ -1,7 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
 
-</LinearLayout>
+    <include
+        android:id="@+id/toolbar_create_tour"
+        layout="@layout/toolbar">
+    </include>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_stopPointname"
+        android:text="Stop point name"
+        android:layout_below="@+id/toolbar_create_tour"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_stopPointname"
+        android:hint="Điểm xuất phát"
+        android:layout_below="@+id/text_stopPointname"
+        android:background="@drawable/style_border"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_serviceType"
+        android:text="Service type"
+        android:layout_below="@+id/edit_stopPointname"/>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:id="@+id/spinner_serviceType"
+        android:hint="Restaurant"
+        android:background="@drawable/style_border"
+        android:layout_below="@+id/text_serviceType"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_address"
+        android:text="Address"
+        android:layout_below="@+id/spinner_serviceType"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_address"
+        android:hint="227 Nguyễn Văn Cừ, P.4, Q.5, TP.HCM"
+        android:layout_below="@+id/text_address"
+        android:background="@drawable/style_border"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_minCoststop"
+        android:text="Min cost"
+        android:layout_below="@+id/edit_address"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_maxCoststop"
+        android:text="Max cost"
+        android:layout_below="@+id/edit_address"
+        android:layout_alignLeft="@+id/edit_maxCoststop"
+        android:layout_alignTop="@+id/text_minCoststop"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_minCoststop"
+        android:hint="0"
+        android:layout_below="@+id/text_minCoststop"
+        android:background="@drawable/style_border"
+        android:padding="20dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_maxCoststop"
+        android:hint="0"
+        android:layout_below="@+id/text_maxCoststop"
+        android:background="@drawable/style_border"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/edit_minCoststop"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingRight="20dp"
+        android:paddingLeft="90dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_arrive"
+        android:text="Arrive at"
+        android:layout_below="@id/edit_minCoststop"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_timeArrive"
+        android:hint="Time"
+        android:layout_below="@+id/text_arrive"
+        android:background="@drawable/style_border_no_radius"
+        android:layout_alignLeft="@+id/edit_minCoststop"
+        android:layout_alignRight="@+id/edit_minCoststop" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_dateArrive"
+        android:hint="Select date"
+        android:layout_below="@+id/text_arrive"
+        android:background="@drawable/style_border_no_radius"
+        android:layout_toLeftOf="@+id/btn_calendar_arrive"
+        android:layout_alignLeft="@+id/text_maxCoststop"/>
+
+    <ImageButton
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/btn_calendar_arrive"
+        android:layout_below="@+id/text_dateArrive"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/calendar"
+        android:layout_alignTop="@+id/text_timeArrive" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_leave"
+        android:text="Leave at"
+        android:layout_below="@+id/text_timeArrive"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_timeLeave"
+        android:hint="Time"
+        android:layout_below="@+id/text_leave"
+        android:background="@drawable/style_border_no_radius"
+        android:layout_alignLeft="@+id/edit_minCoststop"
+        android:layout_alignRight="@+id/edit_minCoststop" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_dateLeave"
+        android:hint="Select date"
+        android:layout_below="@+id/text_leave"
+        android:background="@drawable/style_border_no_radius"
+        android:layout_toLeftOf="@+id/btn_calendar_arrive"
+        android:layout_alignLeft="@+id/text_maxCoststop"/>
+
+    <ImageButton
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/btn_calendar_leave"
+        android:layout_below="@+id/text_dateArrive"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/calendar"
+        android:layout_alignTop="@+id/text_timeLeave" />
+
+
+</RelativeLayout>
