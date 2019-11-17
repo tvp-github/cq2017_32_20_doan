@@ -43,7 +43,7 @@ public class CreateTourActivity extends AppCompatActivity {
     EditText edtMinCost;
     EditText edtMaxCost;
     //ImageView imgAvatar;
-    //CheckBox checkPrivate;
+    CheckBox checkPrivate;
     Button btnCreateTour;
     ImageButton btnStartDate;
     ImageButton btnEndDate;
@@ -56,9 +56,8 @@ public class CreateTourActivity extends AppCompatActivity {
         edtChildren = findViewById(R.id.edit_children);
         edtMinCost = findViewById(R.id.edit_minCost);
         edtMaxCost = findViewById(R.id.edit_maxCost);
-
         //imgAvatar =findViewById(R.id.img_avatar);
-        //checkPrivate = findViewById(R.id.check_Private);
+        checkPrivate = findViewById(R.id.check_privateTour);
         btnCreateTour = findViewById(R.id.btn_createTour);
         btnStartDate = findViewById(R.id.btnStartDate);
         btnEndDate = findViewById(R.id.btnEndDate);
@@ -91,18 +90,18 @@ public class CreateTourActivity extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-                //Ngăn người dùng thay đổi dữ liệu
-                DisableInputField();
-                String name = validate(edtName.getText().toString());
-                Long startDate = Long.parseLong(validate(txtStartDate.getText().toString()));
-                Long endDate = Long.parseLong(validate(txtEndDate.getText().toString()));
-                int adults = Integer.parseInt(validate(edtAdults.getText().toString()));
-                int childs = Integer.parseInt(validate(edtChildren.getText().toString()));
-                int minCost = Integer.parseInt(validate(edtMinCost.getText().toString()));
-                int maxCost = Integer.parseInt(validate(edtMaxCost.getText().toString()));
-
+//                //Ngăn người dùng thay đổi dữ liệu
+//                DisableInputField();
+//                String name = validate(edtName.getText().toString());
+//                Long startDate = Long.parseLong(validate(txtStartDate.getText().toString()));
+//                Long endDate = Long.parseLong(validate(txtEndDate.getText().toString()));
+//                int adults = Integer.parseInt(validate(edtAdults.getText().toString()));
+//                int childs = Integer.parseInt(validate(edtChildren.getText().toString()));
+//                int minCost = Integer.parseInt(validate(edtMinCost.getText().toString()));
+//                int maxCost = Integer.parseInt(validate(edtMaxCost.getText().toString()));
+//                boolean isPrivate = checkPrivate.isChecked();
                 Intent intent;
-                intent = new Intent(CreateTourActivity.this, SelectPlacesActivity.class);
+                intent = new Intent(CreateTourActivity.this, MapsActivity.class);
                 startActivity(intent);
 
                // sendCreateTour(name,startDate,endDate,adults,childs,minCost,maxCost);
@@ -164,7 +163,7 @@ public class CreateTourActivity extends AppCompatActivity {
         edtChildren.setEnabled(false);
         edtMinCost.setEnabled(false);
         edtMaxCost.setEnabled(false);
-        //CheckPrivate.setEnabled(false);
+        checkPrivate.setEnabled(false);
         btnStartDate.setEnabled(false);
         btnEndDate.setEnabled(false);
         btnCreateTour.setEnabled(false);
@@ -175,7 +174,7 @@ public class CreateTourActivity extends AppCompatActivity {
         edtChildren.setEnabled(true);
         edtMinCost.setEnabled(true);
         edtMaxCost.setEnabled(true);
-        //CheckPrivate.setEnabled(true);
+        checkPrivate.setEnabled(true);
         btnStartDate.setEnabled(true);
         btnEndDate.setEnabled(true);
         btnCreateTour.setEnabled(true);
