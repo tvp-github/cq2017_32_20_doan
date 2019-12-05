@@ -58,10 +58,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapClick(LatLng point) {
  //       mTapTextView.setText("tapped, point=" + point);
-//        Intent intent;
-//        intent = new Intent(MapsActivity.this, CreateSpotPointActivity.class);
-//        startActivity(intent);
-        displayAlertDialog();
+        Intent intent;
+        intent = new Intent(MapsActivity.this, PointInformationActivity.class);
+        startActivity(intent);
+        //displayAlertDialog();
+
     }
 
 
@@ -101,6 +102,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         AlertDialog dialog = alert.create();
         dialog.show();
     }
+
+
 
 //    @Override
 //    public void onMapLongClick(LatLng point) {

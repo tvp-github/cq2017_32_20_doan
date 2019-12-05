@@ -49,6 +49,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ListTourActivity" />
         <activity android:name=".CreateSpotPointActivity" />
-    </application>
+        <activity android:name=".PointInformationActivity" />
+        <activity android:name=".WriteReviewActivity" />
+</application>
 
 </manifest>
