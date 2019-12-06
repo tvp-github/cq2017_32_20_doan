@@ -13,12 +13,13 @@
         android:background="@color/windowBackground"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/text_stopPointname"
-            android:layout_alignParentTop="true"
-            android:hint="Stop point name"
+            android:text="Stop point name"
+            android:layout_below="@+id/toolbar_create_tour"
             android:textSize="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"/>
@@ -27,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edit_stopPointname"
+            android:hint="Điểm xuất phát"
             android:layout_below="@+id/text_stopPointname"
             android:background="@drawable/style_border"
             android:paddingLeft="10dp"
@@ -47,25 +49,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/spinner_serviceType"
+            android:hint="Restaurant"
             android:background="@drawable/style_border"
             android:layout_below="@+id/text_serviceType"
-            android:layout_marginTop="10dp"
-            android:textSize="15dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_province"
-            android:text="Provice"
-            android:layout_below="@+id/spinner_serviceType"
-            android:layout_marginTop="15dp"/>
-
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/spinner_provice"
-            android:background="@drawable/style_border"
-            android:layout_below="@+id/text_province"
             android:layout_marginTop="10dp"
             android:textSize="15dp"/>
 
@@ -77,12 +63,13 @@
             android:text="Address"
             android:textSize="15dp"
             android:layout_marginTop="15dp"
-            android:layout_below="@+id/spinner_provice"/>
+            android:layout_below="@+id/spinner_serviceType"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edit_address"
+            android:hint="227 Nguyễn Văn Cừ, P.4, Q.5, TP.HCM"
             android:layout_below="@+id/text_address"
             android:background="@drawable/style_border"
             android:layout_marginTop="5dp"
@@ -110,10 +97,10 @@
             android:layout_alignTop="@+id/text_minCoststop"/>
 
         <EditText
-            android:inputType="number"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:id="@+id/edit_minCoststop"
+            android:hint="0"
             android:layout_below="@+id/text_minCoststop"
             android:background="@drawable/style_border"
             android:paddingTop="15dp"
@@ -123,10 +110,10 @@
             android:textAlignment="textStart"/>
 
         <EditText
-            android:inputType="number"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:id="@+id/edit_maxCoststop"
+            android:hint="0"
             android:layout_below="@+id/text_maxCoststop"
             android:background="@drawable/style_border"
             android:layout_alignParentEnd="true"
@@ -151,7 +138,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/text_timeArrive"
-            android:inputType="time"
             android:hint="Time"
             android:layout_below="@+id/text_arrive"
             android:background="@drawable/style_border_no_radius"
@@ -164,7 +150,7 @@
 
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/text_dateArrive"
             android:hint="Select date"
@@ -178,6 +164,10 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:layout_marginRight="15dp"/>
+
+        <ImageButton
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
 
 
         <ImageButton
@@ -198,7 +188,6 @@
             android:layout_marginTop="15dp"/>
 
         <EditText
-            android:inputType="time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/text_timeLeave"
@@ -228,7 +217,7 @@
             android:paddingBottom="10dp"
             android:layout_marginRight="15dp"/>
 
-=
+        =
         <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"

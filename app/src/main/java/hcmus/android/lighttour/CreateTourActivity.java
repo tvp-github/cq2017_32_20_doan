@@ -1,5 +1,6 @@
 package hcmus.android.lighttour;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -7,6 +8,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -48,6 +50,8 @@ public class CreateTourActivity extends AppCompatActivity {
     ImageButton btnStartDate;
     ImageButton btnEndDate;
     //Ánh xạ các view và khởi tạo Service
+    Button btnSelectStart;
+    Button btnSelectEnd;
     public void init(){
         edtName = findViewById(R.id.edit_tour_name);
         txtStartDate = findViewById(R.id.startDate);
@@ -62,6 +66,8 @@ public class CreateTourActivity extends AppCompatActivity {
         btnStartDate = findViewById(R.id.btnStartDate);
         btnEndDate = findViewById(R.id.btnEndDate);
         CreateToursService = ApiUtils.getCreateToursService();
+        btnSelectStart = findViewById(R.id.select1);
+        btnSelectEnd = findViewById(R.id.select2);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +84,22 @@ public class CreateTourActivity extends AppCompatActivity {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    //
+        btnSelectStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CreateTourActivity.this, MapsActivity.class);
+                intent.putExtra("type",1);
+                startActivityForResult(intent,001);
+            }
+        });
+        btnSelectEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-
+            }
+        });
+    //
         //Khi người dùng bấm nút Create Tour
         btnCreateTour.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,9 +172,13 @@ public class CreateTourActivity extends AppCompatActivity {
     }
 
 
-
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 001 && resultCode == 001){
+            Toast.makeText(this, ""+ data.getDoubleExtra("lat",0.0f) + " "+ data.getDoubleExtra("long", 0.0f), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     //Ngăn việc thay đổi dữ liệu
     private void DisableInputField() {
