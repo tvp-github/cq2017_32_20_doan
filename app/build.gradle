@@ -43,4 +43,6 @@ dependencies {
     //Okhttp
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
     implementation 'com.google.android.material:material:1.0.0'
+    //Circle image
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 }
