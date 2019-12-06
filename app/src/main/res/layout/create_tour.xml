@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="@color/windowBackground">
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp">
     <include
         android:id="@+id/toolbar_create_tour"
         layout="@layout/toolbar">
     </include>
-
     <TextView
         android:layout_marginTop="56dp"
         android:layout_width="match_parent"
@@ -23,7 +28,7 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:id="@+id/edit_tour_name"
         android:layout_below="@+id/textName"
         android:layout_marginBottom="15dp"/>
@@ -115,19 +120,18 @@
         android:layout_alignTop="@+id/text_adults"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:id="@+id/edit_adults"
         android:hint="0"
         android:layout_below="@+id/text_adults"
-        android:paddingLeft="80dp"
-        android:paddingRight="80dp"
+        android:textAlignment="center"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
         android:background="@drawable/style_border"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:id="@+id/edit_children"
         android:hint="0"
@@ -135,8 +139,7 @@
         android:layout_toRightOf="@+id/edit_adults"
         android:layout_alignLeft="@+id/text_children"
         android:layout_alignTop="@+id/edit_adults"
-        android:paddingLeft="80dp"
-        android:paddingRight="80dp"
+        android:textAlignment="center"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
         android:background="@drawable/style_border"/>
@@ -162,19 +165,18 @@
         android:layout_alignTop="@+id/text_minCost"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:id="@+id/edit_minCost"
         android:hint="0"
         android:layout_below="@+id/text_minCost"
-        android:paddingLeft="80dp"
-        android:paddingRight="80dp"
+        android:textAlignment="center"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
         android:background="@drawable/style_border"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:id="@+id/edit_maxCost"
         android:hint="0"
@@ -182,8 +184,7 @@
         android:layout_toRightOf="@+id/edit_minCost"
         android:layout_alignLeft="@+id/text_maxCost"
         android:layout_alignTop="@id/edit_minCost"
-        android:paddingLeft="80dp"
-        android:paddingRight="80dp"
+        android:textAlignment="center"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
         android:background="@drawable/style_border"/>
@@ -213,7 +214,8 @@
             android:layout_weight="4"
             android:text="+"
             android:textSize="30dp"
-            android:background="@color/windowBackground"/>
+            android:background="@color/windowBackground"
+            android:layout_marginRight="5dp"/>
     </LinearLayout>
 
     <CheckBox
@@ -236,3 +238,4 @@
 
 
 </RelativeLayout>
+</ScrollView>

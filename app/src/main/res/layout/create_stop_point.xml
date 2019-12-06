@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="50dp"
-    android:gravity="center_vertical"
-    android:background="@color/windowBackground"
-    android:orientation="vertical">
+    android:fillViewport="true"
+    android:background="@color/windowBackground">
 
-<!--    <include-->
-<!--        android:id="@+id/toolbar_create_tour"-->
-<!--        layout="@layout/toolbar">-->
-<!--    </include>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/windowBackground"
         android:layout_marginLeft="7dp"
-        android:layout_marginRight="7dp"/>
+        android:layout_marginRight="7dp">
+        <include
+            android:id="@+id/toolbar_create_tour"
+            layout="@layout/toolbar">
+        </include>
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +45,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_serviceType"
             android:text="Service type"
-            android:layout_below="@+id/edit_stopPointname"/>
+            android:layout_below="@+id/edit_stopPointname"
+            android:layout_marginTop="15dp"/>
 
 
         <Spinner
@@ -57,8 +55,8 @@
             android:id="@+id/spinner_serviceType"
             android:hint="Restaurant"
             android:background="@drawable/style_border"
-            android:layout_below="@+id/edit_stopPointname"
-            android:layout_marginTop="15dp"
+            android:layout_below="@+id/text_serviceType"
+            android:layout_marginTop="10dp"
             android:textSize="15dp"/>
 
 
@@ -103,7 +101,7 @@
             android:layout_alignTop="@+id/text_minCoststop"/>
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:id="@+id/edit_minCoststop"
             android:hint="0"
@@ -111,12 +109,12 @@
             android:background="@drawable/style_border"
             android:paddingTop="15dp"
             android:paddingLeft="10dp"
-            android:paddingRight="170dp"
             android:paddingBottom="15dp"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="5dp"
+            android:textAlignment="textStart"/>
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:id="@+id/edit_maxCoststop"
             android:hint="0"
@@ -127,8 +125,8 @@
             android:layout_alignBottom="@+id/edit_minCoststop"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
-            android:paddingRight="170dp"
-            android:paddingLeft="10dp"/>
+            android:paddingLeft="10dp"
+            android:textAlignment="textStart"/>
 
 
         <TextView
@@ -223,9 +221,6 @@
             android:paddingBottom="10dp"
             android:layout_marginRight="15dp"/>
 
-        <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"/>
 =
         <ImageButton
             android:layout_width="30dp"
@@ -236,6 +231,6 @@
             android:src="@drawable/calendar"
             android:layout_alignTop="@+id/text_timeLeave" />
 
-
-</LinearLayout>
+    </RelativeLayout>
+</ScrollView>
 
