@@ -216,17 +216,16 @@
             android:textSize="30dp"
             android:background="@color/windowBackground"
             android:layout_marginRight="5dp"/>
-
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/check_privateTour"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/check_privateTour"
         android:layout_below="@+id/chooseImg"
-        android:layout_marginTop="20dp"
+        android:hint="This is your private trip ?"
         android:layout_marginBottom="30dp"
-        android:hint="This is your private trip ?" />
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:layout_width="match_parent"
@@ -237,28 +236,6 @@
         android:textColor="@color/textColorPrimary"
         android:background="@drawable/style_btn_create_tour"/>
 
-    <Button
-        android:id="@+id/select1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_createTour"
-        android:layout_marginTop="348dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="22dp"
-        android:layout_toStartOf="@+id/select2"
-        android:text="Button" />
-
-    <Button
-        android:id="@+id/select2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_createTour"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="348dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginBottom="22dp"
-        android:text="Button" />
-
-
 </RelativeLayout>
+
 </ScrollView>
