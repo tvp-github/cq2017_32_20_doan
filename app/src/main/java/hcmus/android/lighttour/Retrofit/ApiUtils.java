@@ -1,6 +1,8 @@
 package hcmus.android.lighttour.Retrofit;
 
 import hcmus.android.lighttour.APIService.CreateToursService;
+import hcmus.android.lighttour.APIService.GetPointStarsService;
+import hcmus.android.lighttour.APIService.GetStopPointFeedbackService;
 import hcmus.android.lighttour.APIService.GetStopPointService;
 import hcmus.android.lighttour.APIService.ListToursService;
 import hcmus.android.lighttour.APIService.LoginGGService;
@@ -38,4 +40,11 @@ public class ApiUtils {
         return RetrofitClient.getClient(BASE_URL).create(GetStopPointService.class);
     }
 
+    public static GetStopPointFeedbackService getGetStopPointFeedbackService() {
+        return RetrofitClient.getClient(BASE_URL).create(GetStopPointFeedbackService.class);
+    }
+
+    public static GetPointStarsService getGetPointStarsService() {
+        return RetrofitClient.getClient(BASE_URL).create(GetPointStarsService.class);
+    }
 }

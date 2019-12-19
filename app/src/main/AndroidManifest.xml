@@ -51,6 +51,7 @@
         <activity android:name=".CreateSpotPointActivity" />
         <activity android:name=".PointInformationActivity" />
         <activity android:name=".WriteReviewActivity" />
+        <activity android:name=".ExploreActivity" />
 </application>
 
 </manifest>

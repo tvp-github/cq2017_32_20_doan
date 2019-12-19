@@ -4,7 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import androidx.annotation.Nullable;
 
-public class StopPoint {
+import java.io.Serializable;
+
+public class StopPoint implements Serializable {
 
     @SerializedName("id")
     @Expose
