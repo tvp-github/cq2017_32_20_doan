@@ -3,12 +3,27 @@ package hcmus.android.lighttour;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import hcmus.android.lighttour.APIService.GetStopPointFeedbackService;
+import hcmus.android.lighttour.Adapter.ListFeedbackAdapter;
+import hcmus.android.lighttour.AppUtils.ListFeedback;
+import hcmus.android.lighttour.Response.Feedback;
+import hcmus.android.lighttour.Response.StopPoint;
+import hcmus.android.lighttour.Retrofit.ApiUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -30,7 +45,14 @@ public class tab2_review extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    List<Feedback> listFeedbackData;
+    ListView listFeedback;
+    ListFeedbackAdapter listFeedbackAdapter;
+    ImageView imgUserAva;
+    StopPoint stopPoint;
+    GetStopPointFeedbackService listFeedbackService;
+    String token;
+    int serviceId;
     public tab2_review() {
         // Required empty public constructor
     }
@@ -66,6 +88,38 @@ public class tab2_review extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view=inflater.inflate(R.layout.fragment_tab2_review, container, false);
+        stopPoint= (StopPoint) getArguments().getSerializable("stopPoint");
+        serviceId= stopPoint.getId();
+
+        listFeedbackData = new ArrayList<Feedback>();
+        listFeedback = view.findViewById(R.id.listFeedback);
+        listFeedbackService = ApiUtils.getGetStopPointFeedbackService();
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        token = myApplication.getToken();
+            //Gọi Retrofit Service để lấy dữ liệu từ API
+
+            listFeedbackService.sendData(token,serviceId,1,"10").enqueue(new Callback<ListFeedback>() {
+                @Override
+                public void onResponse(Call<ListFeedback> call, Response<ListFeedback> response) {
+                    Log.d("AAA", "onResponse: "+response.code() + response.body().toString());
+                    if(response.code()==200){
+                        //Nhập vào danh sách dữ liệu
+                        listFeedbackData.addAll(response.body().getFeedbacks());
+                        //Cập nhật tại listView
+                        listFeedbackAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ListFeedback> call, Throwable t) {
+                    Log.d("AAA", "onFailure: ");
+                }
+            });
+            //Init Adapter, set Adapter to listTour
+            listFeedbackAdapter = new ListFeedbackAdapter( getActivity(), R.layout.feedback_item,listFeedbackData);
+            listFeedback.setAdapter(listFeedbackAdapter);
+
         return inflater.inflate(R.layout.fragment_tab2_review, container, false);
     }
 
