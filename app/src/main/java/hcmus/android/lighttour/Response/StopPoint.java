@@ -1,4 +1,5 @@
 package hcmus.android.lighttour.Response;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -151,4 +152,34 @@ public class StopPoint {
         this.landingTimesOfUser = landingTimesOfUser;
     }
 
+    public StopPoint(Integer id, String name, String address, Integer provinceId, String contact, String lat, String _long, String minCost, String maxCost, Integer serviceTypeId, Object avatar, String landingTimesOfUser) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.provinceId = provinceId;
+        this.contact = contact;
+        this.lat = lat;
+        this._long = _long;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.serviceTypeId = serviceTypeId;
+        this.avatar = avatar;
+        this.landingTimesOfUser = landingTimesOfUser;
+    }
+
+    public StopPoint(LatLng latLng) {
+
+        this.id = null;
+        this.name = "";
+        this.address = "";
+        this.provinceId = 0;
+        this.contact = "";
+        this.lat = ""+latLng.latitude;
+        this._long = ""+latLng.longitude;
+        this.minCost = "";
+        this.maxCost = "";
+        this.serviceTypeId = 0;
+        this.avatar = null;
+        this.landingTimesOfUser = "";
+    }
 }

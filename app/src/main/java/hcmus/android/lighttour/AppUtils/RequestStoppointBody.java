@@ -1,10 +1,10 @@
 package hcmus.android.lighttour.AppUtils;
 
-public class MyBody {
+public class RequestStoppointBody {
     Boolean hasOneCoordinate;
     OneCoord coordList;
 
-    public MyBody(Boolean hasOneCoordinate, OneCoord oneCoord) {
+    public RequestStoppointBody(Boolean hasOneCoordinate, OneCoord oneCoord) {
         this.hasOneCoordinate = hasOneCoordinate;
         this.coordList = oneCoord;
     }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import hcmus.android.lighttour.Response.StopPoint;
 
-public class MyResponse {
+public class GetStopPoints {
     public List<StopPoint> getStopPoints() {
         return stopPoints;
     }
