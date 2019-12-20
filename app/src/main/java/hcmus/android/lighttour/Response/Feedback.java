@@ -8,6 +8,11 @@ public class Feedback {
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    public Feedback(String feedback) {
+        this.feedback = feedback;
+    }
+
     @SerializedName("name")
     @Expose
     private String name;

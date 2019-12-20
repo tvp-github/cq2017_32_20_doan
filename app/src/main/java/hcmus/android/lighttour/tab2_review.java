@@ -45,7 +45,7 @@ public class tab2_review extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    List<Feedback> listFeedbackData;
+    static ArrayList<Feedback> listFeedbackData;
     ListView listFeedback;
     ListFeedbackAdapter listFeedbackAdapter;
     ImageView imgUserAva;
@@ -88,12 +88,18 @@ public class tab2_review extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("FFF", "onCreateView: VL");
         View view=inflater.inflate(R.layout.fragment_tab2_review, container, false);
         stopPoint= (StopPoint) getArguments().getSerializable("stopPoint");
         serviceId= stopPoint.getId();
 
         listFeedbackData = new ArrayList<Feedback>();
+        listFeedbackData.add(new Feedback("ABCXYZ"));
         listFeedback = view.findViewById(R.id.listFeedback);
+        //Init Adapter, set Adapter to listFeedback
+        listFeedbackAdapter = new ListFeedbackAdapter( getActivity(), R.layout.feedback_item,listFeedbackData);
+        listFeedback.setAdapter(listFeedbackAdapter);
+
         listFeedbackService = ApiUtils.getGetStopPointFeedbackService();
         MyApplication myApplication = (MyApplication) getActivity().getApplication();
         token = myApplication.getToken();
@@ -101,13 +107,10 @@ public class tab2_review extends Fragment {
 
             listFeedbackService.sendData(token,serviceId,1,"10").enqueue(new Callback<ListFeedback>() {
                 @Override
-                public void onResponse(Call<ListFeedback> call, Response<ListFeedback> response) {
+                public synchronized void onResponse(Call<ListFeedback> call, Response<ListFeedback> response) {
                     Log.d("AAA", "onResponse: "+response.code() + response.body().toString());
                     if(response.code()==200){
-                        //Nhập vào danh sách dữ liệu
-                        listFeedbackData.addAll(response.body().getFeedbacks());
-                        //Cập nhật tại listView
-                        listFeedbackAdapter.notifyDataSetChanged();
+                        updateListView(response.body().getFeedbacks());
                     }
                 }
 
@@ -116,13 +119,14 @@ public class tab2_review extends Fragment {
                     Log.d("AAA", "onFailure: ");
                 }
             });
-            //Init Adapter, set Adapter to listTour
-            listFeedbackAdapter = new ListFeedbackAdapter( getActivity(), R.layout.feedback_item,listFeedbackData);
-            listFeedback.setAdapter(listFeedbackAdapter);
+
 
         return inflater.inflate(R.layout.fragment_tab2_review, container, false);
     }
-
+    private void updateListView(List<Feedback> listFeedback){
+        listFeedbackData.addAll(listFeedback);
+        listFeedbackAdapter.notifyDataSetChanged();
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

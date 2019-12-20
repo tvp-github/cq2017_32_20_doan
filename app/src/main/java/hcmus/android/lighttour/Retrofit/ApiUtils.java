@@ -8,6 +8,8 @@ import hcmus.android.lighttour.APIService.ListToursService;
 import hcmus.android.lighttour.APIService.LoginGGService;
 import hcmus.android.lighttour.APIService.LoginService;
 import hcmus.android.lighttour.APIService.RegisterService;
+import hcmus.android.lighttour.APIService.SendFeedbackService;
+
 //Tạo các Service từ RetrofitClient để lấy dữ liệu thông qua các Service này
 public class ApiUtils {
 
@@ -46,5 +48,9 @@ public class ApiUtils {
 
     public static GetPointStarsService getGetPointStarsService() {
         return RetrofitClient.getClient(BASE_URL).create(GetPointStarsService.class);
+    }
+
+    public static SendFeedbackService getSendFeedbackService() {
+        return RetrofitClient.getClient(BASE_URL).create(SendFeedbackService.class);
     }
 }

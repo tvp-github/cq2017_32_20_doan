@@ -63,6 +63,8 @@ public class tab1_general extends Fragment {
     TextView numberReviewer;
     RatingBar ratingBar;
     String token;
+    int total=0;
+    int point=0;
     int raters[] = new int[5];
     int colors[] = new int[]{
             Color.parseColor("#0e9d58"),
@@ -100,6 +102,7 @@ public class tab1_general extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent write_review_intent = new Intent(getActivity(), WriteReviewActivity.class);
+                write_review_intent.putExtra("stopPoint", stopPoint);
                 startActivity(write_review_intent );
             }
         });
@@ -117,6 +120,7 @@ public class tab1_general extends Fragment {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     Intent write_review_intent = new Intent(getActivity(), WriteReviewActivity.class);
+                    write_review_intent.putExtra("stopPoint", stopPoint);
                     startActivity(write_review_intent);
                 }
                 return true;
@@ -192,15 +196,19 @@ public class tab1_general extends Fragment {
                 Log.d("AAA", "onResponse: Xong cmnr"+response.code());
                 if(response.code()==200){
                     List<PointStars> otherlist = response.body().getPointStars();
-                    int total=0;
-                    int point=0;
-                    for (int i = 0; i<otherlist.size();i++){
+                    point=0;
+                    total=0;
+                    for (int i = otherlist.size()-1; i>=0;i--){
                         PointStars pointStars=otherlist.get(i);
-                        raters[pointStars.getPoint()-1]=pointStars.getTotal();
-                        point=point + i*pointStars.getTotal();
-                        total=total + pointStars.getTotal();
-                    }
+                        raters[5-pointStars.getPoint()]=pointStars.getTotal();
+                        Log.d("AAA", "rater: "+raters[i] +"  "+i +"  "+ pointStars.getPoint());
 
+                        point=point + (5-i)*raters[i];
+                        total=total + pointStars.getTotal();
+
+                    }
+                    Log.d("AAA", "total: "+total);
+                    Log.d("AAA", "point: "+point);
 //                    for (int i = 0; i<otherlist.size();i++){
 //                        PointStars pointStars=otherlist.get(i);
 //                        raters[pointStars.getPoint()-1]=(int) (raters[pointStars.getPoint()-1] * 100 /total);
@@ -208,12 +216,14 @@ public class tab1_general extends Fragment {
                     Log.d("AAA", "onResponse: "+total);
                     ratingReviews.createRatingBars(total, BarLabels.STYPE1, colors, raters);
                     if (total != 0) {
-                        ratingPoint.setText(Math.round((point/(5*total))*10)/10);
-                        ratingBar.setNumStars(Math.round((point/(5*total))*10)/10);
+                        float ratingpoint = Math.round(((float) point/(5*total))*100)/20;
+                        Log.d("AAA", "rating point: "+ratingpoint);
+                        ratingPoint.setText(String.valueOf(ratingpoint));
+                        ratingBar.setRating(ratingpoint);
                     }
                     else {
                         ratingPoint.setText("0");
-                        ratingBar.setNumStars(0);
+                        ratingBar.setRating(0);
                     }
                     numberReviewer.setText(total + " reviewers");
                 }
