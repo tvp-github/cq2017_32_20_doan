@@ -5,15 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".tab2_review"
     android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="abcxyz">
-        </TextView>
         <ListView
-            android:background="@drawable/style_border"
-            android:id="@+id/listFeedback"
+            android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

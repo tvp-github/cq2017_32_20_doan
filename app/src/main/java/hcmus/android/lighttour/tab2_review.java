@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.fragment.app.ListFragment;
 import hcmus.android.lighttour.APIService.GetStopPointFeedbackService;
 import hcmus.android.lighttour.Adapter.ListFeedbackAdapter;
 import hcmus.android.lighttour.AppUtils.ListFeedback;
@@ -34,7 +35,8 @@ import retrofit2.Response;
  * Use the {@link tab2_review#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class tab2_review extends Fragment {
+public class tab2_review extends ListFragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -94,11 +96,9 @@ public class tab2_review extends Fragment {
         serviceId= stopPoint.getId();
 
         listFeedbackData = new ArrayList<Feedback>();
-        listFeedbackData.add(new Feedback("ABCXYZ"));
-        listFeedback = view.findViewById(R.id.listFeedback);
         //Init Adapter, set Adapter to listFeedback
         listFeedbackAdapter = new ListFeedbackAdapter( getActivity(), R.layout.feedback_item,listFeedbackData);
-        listFeedback.setAdapter(listFeedbackAdapter);
+        setListAdapter(listFeedbackAdapter);
 
         listFeedbackService = ApiUtils.getGetStopPointFeedbackService();
         MyApplication myApplication = (MyApplication) getActivity().getApplication();

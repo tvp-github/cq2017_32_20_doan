@@ -34,9 +34,9 @@ import java.util.List;
 import java.util.Locale;
 
 import hcmus.android.lighttour.APIService.GetStopPointService;
-import hcmus.android.lighttour.AppUtils.MyBody;
-import hcmus.android.lighttour.AppUtils.MyResponse;
 import hcmus.android.lighttour.AppUtils.OneCoord;
+import hcmus.android.lighttour.AppUtils.RequestStoppointBody;
+import hcmus.android.lighttour.Response.GetStopPoints;
 import hcmus.android.lighttour.Response.StopPoint;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
@@ -205,9 +205,9 @@ public class ExploreActivity extends FragmentActivity implements OnMapReadyCallb
                 LatLng latLng = mMap.getCameraPosition().target;
                 MyApplication myApplication = (MyApplication) getApplication();
                 final String token = myApplication.getToken();
-                getStopPointService.sendData(token, new MyBody(true,new OneCoord(latLng.latitude, latLng.longitude))).enqueue(new Callback<MyResponse>() {
+                getStopPointService.sendData(token, new RequestStoppointBody(true,new OneCoord(latLng.latitude, latLng.longitude))).enqueue(new Callback<GetStopPoints>() {
                         @Override
-                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                        public void onResponse(Call<GetStopPoints> call, Response<GetStopPoints> response) {
                                 if (response.code() == 200){
                                         List<StopPoint> otherlist = response.body().getStopPoints();
                                         for (int i = 0; i<otherlist.size();i++){
@@ -240,7 +240,7 @@ public class ExploreActivity extends FragmentActivity implements OnMapReadyCallb
                         }
 
                         @Override
-                        public void onFailure(Call<MyResponse> call, Throwable t) {
+                        public void onFailure(Call<GetStopPoints> call, Throwable t) {
                         }
                 });
         }
