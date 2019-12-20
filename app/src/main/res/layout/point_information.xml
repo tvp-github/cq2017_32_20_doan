@@ -4,10 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginRight="30dp"
-    android:layout_marginLeft="30dp"
-    android:layout_marginBottom="30dp"
-    android:layout_marginTop="70dp"
     android:gravity="center_vertical"
     android:background="@color/windowBackground">
 
@@ -16,27 +12,61 @@
         layout="@layout/toolbar">
     </include>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:tabTextColor="@color/textColorPrimary">
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/Tab1"
-            android:text="General"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/Tab2"
-            android:text="Review"/>
-    </com.google.android.material.tabs.TabLayout>
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-    <androidx.viewpager.widget.ViewPager
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/viewpager">
-    </androidx.viewpager.widget.ViewPager>
+        <Button
+            android:id="@+id/Tab1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/textColorPrimary"
+            android:text="General" />
+
+        <Button
+            android:id="@+id/Tab2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/textColorPrimary"
+            android:text="Review" />
+    </LinearLayout>
+
+
+
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/tab_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        app:tabTextColor="@color/textColorPrimary">-->
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/Tab1"-->
+<!--            android:text="General"/>-->
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/Tab2"-->
+<!--            android:text="Review"/>-->
+<!--    </com.google.android.material.tabs.TabLayout>-->
+
+<!--    <androidx.viewpager.widget.ViewPager-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/viewpager">-->
+<!--    </androidx.viewpager.widget.ViewPager>-->
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    </FrameLayout>
 </LinearLayout>
