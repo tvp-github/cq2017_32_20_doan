@@ -1,4 +1,4 @@
-package hcmus.android.lighttour.AppUtils;
+package hcmus.android.lighttour.Response;
 
 import java.util.List;
 

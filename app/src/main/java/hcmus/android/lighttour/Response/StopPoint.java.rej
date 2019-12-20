@@ -1,0 +1,12 @@
+diff a/app/src/main/java/hcmus/android/lighttour/Response/StopPoint.java b/app/src/main/java/hcmus/android/lighttour/Response/StopPoint.java	(rejected hunks)
+@@ -4,7 +4,9 @@
+ 
+ import androidx.annotation.Nullable;
+ 
+-public class StopPoint {
++import java.io.Serializable;
++
++public class StopPoint implements Serializable {
+ 
+     @SerializedName("id")
+     @Expose

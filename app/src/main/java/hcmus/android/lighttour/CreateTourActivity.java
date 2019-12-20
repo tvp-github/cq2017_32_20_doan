@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +31,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import hcmus.android.lighttour.APIService.CreateToursService;
+import hcmus.android.lighttour.AppUtils.CreateTourBody;
+import hcmus.android.lighttour.AppUtils.Message;
+import hcmus.android.lighttour.Response.CreateTours;
+import hcmus.android.lighttour.Response.Tour;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +42,7 @@ import retrofit2.Response;
 
 public class CreateTourActivity extends AppCompatActivity {
     private static final int SECOND_ACTIVITY_REQUEST_CODE = 0;
-    CreateToursService CreateToursService;
+    CreateToursService createToursService;
     EditText edtName;
     TextView txtStartDate;
     TextView txtEndDate;
@@ -65,9 +71,9 @@ public class CreateTourActivity extends AppCompatActivity {
         btnCreateTour = findViewById(R.id.btn_createTour);
         btnStartDate = findViewById(R.id.btnStartDate);
         btnEndDate = findViewById(R.id.btnEndDate);
-        CreateToursService = ApiUtils.getCreateToursService();
-        btnSelectStart = findViewById(R.id.select1);
-        btnSelectEnd = findViewById(R.id.select2);
+        createToursService = ApiUtils.getCreateToursService();
+//        btnSelectStart = findViewById(R.id.select1);
+//        btnSelectEnd = findViewById(R.id.select2);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,12 @@ public class CreateTourActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_tour);
         init();
+        //test create stoppoint
+        Intent intent;
+        intent = new Intent(CreateTourActivity.this, MapsActivity.class);
+        intent.putExtra("tourId","4525");
+        startActivity(intent);
+        finish();
 
         //Khởi tạo toolbar cho activity
         Toolbar toolbar =findViewById(R.id.toolbar_create_tour);
@@ -85,20 +97,20 @@ public class CreateTourActivity extends AppCompatActivity {
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     //
-        btnSelectStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CreateTourActivity.this, MapsActivity.class);
-                intent.putExtra("type",1);
-                startActivityForResult(intent,001);
-            }
-        });
-        btnSelectEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        btnSelectStart.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(CreateTourActivity.this, MapsActivity.class);
+//                intent.putExtra("type",1);
+//                startActivityForResult(intent,001);
+//            }
+//        });
+//        btnSelectEnd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
     //
         //Khi người dùng bấm nút Create Tour
         btnCreateTour.setOnClickListener(new View.OnClickListener() {
@@ -120,10 +132,41 @@ public class CreateTourActivity extends AppCompatActivity {
 //                int minCost = Integer.parseInt(validate(edtMinCost.getText().toString()));
 //                int maxCost = Integer.parseInt(validate(edtMaxCost.getText().toString()));
 //                boolean isPrivate = checkPrivate.isChecked();
-                Intent intent;
-                intent = new Intent(CreateTourActivity.this, MapsActivity.class);
-                startActivity(intent);
+                //Send to server
+                CreateToursService createToursService = ApiUtils.getCreateToursService();
+                MyApplication myApplication = (MyApplication) getApplication();
+                String token = myApplication.getToken();
+                String name = edtName.getText().toString();
+                long startDate = ((Calendar)(txtStartDate.getTag())).getTimeInMillis();
+                long endDate = ((Calendar)(txtEndDate.getTag())).getTimeInMillis();
+                Boolean isPrivate = checkPrivate.isChecked();
+                int adults = Integer.parseInt(edtAdults.getText().toString());
+                int children = Integer.parseInt(edtChildren.getText().toString());
+                int minCost = Integer.parseInt(edtMinCost.getText().toString());
+                int maxCost = Integer.parseInt(edtMaxCost.getText().toString());
+                Log.d("AAA", "onClick: "+'-'+token+'-'+startDate+'-'+endDate+'-'+isPrivate+'-'+name+'-'+adults+'-'+children+'-'+minCost+'-'+maxCost);
+                createToursService.sendData(token,new CreateTourBody(name,startDate,endDate,0,0,0,0,isPrivate,adults,children,minCost,maxCost,null)).enqueue(new Callback<Tour>() {
+                    @Override
+                    public void onResponse(Call<Tour> call, Response<Tour> response) {
+                        Log.d("AAA", "onResponse: "+response.code());
+                        if(response.code()==200){
+                            goToAddStopPoint(response.body().getId());
+                        }
+                        else {
+                            try {
+                                Log.d("AAA", "onResponse: "+response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<Tour> call, Throwable t) {
+                        Log.d("AAA", "onFailure: "+call.request().toString());
+                        Toast.makeText(CreateTourActivity.this, "Failed to connect to server", Toast.LENGTH_SHORT).show();
+                    }
+                });
                // sendCreateTour(name,startDate,endDate,adults,childs,minCost,maxCost);
 
             }
@@ -133,19 +176,20 @@ public class CreateTourActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Tạo calendar lưu giá trị nhập vào
-                final Calendar calendar = Calendar.getInstance();
+                final Calendar calendarStart = Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         //cập nhật calendar
-                        calendar.set(Calendar.YEAR, i);
-                        calendar.set(Calendar.MONTH, i1);
-                        calendar.set(Calendar.DATE, i2);
+                        calendarStart.set(Calendar.YEAR, i);
+                        calendarStart.set(Calendar.MONTH, i1);
+                        calendarStart.set(Calendar.DATE, i2);
                         //Xuất ra
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        txtStartDate.setText(simpleDateFormat.format(calendar.getTime()));
+                        txtStartDate.setText(simpleDateFormat.format(calendarStart.getTime()));
+                        txtStartDate.setTag(calendarStart);
                     }
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+                }, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DATE));
                 datePickerDialog.show();
             }
         });
@@ -153,19 +197,20 @@ public class CreateTourActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Tạo calendar lưu giá trị nhập vào
-                final Calendar calendar = Calendar.getInstance();
+                final Calendar calendarEnd = Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         //cập nhật calendar
-                        calendar.set(Calendar.YEAR, i);
-                        calendar.set(Calendar.MONTH, i1);
-                        calendar.set(Calendar.DATE, i2);
+                        calendarEnd.set(Calendar.YEAR, i);
+                        calendarEnd.set(Calendar.MONTH, i1);
+                        calendarEnd.set(Calendar.DATE, i2);
                         //Xuất ra
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        txtEndDate.setText(simpleDateFormat.format(calendar.getTime()));
+                        txtEndDate.setText(simpleDateFormat.format(calendarEnd.getTime()));
+                        txtEndDate.setTag(calendarEnd);
                     }
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+                }, calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH), calendarEnd.get(Calendar.DATE));
                 datePickerDialog.show();
             }
         });
@@ -207,5 +252,12 @@ public class CreateTourActivity extends AppCompatActivity {
     private String validate(String s){
         if (s.length()>0) return s;
         else return null;
+    }
+    private void goToAddStopPoint(int tourId){
+        Intent intent;
+        intent = new Intent(CreateTourActivity.this, MapsActivity.class);
+        intent.putExtra("tourId","4525");
+        startActivity(intent);
+        finish();
     }
 }

@@ -178,6 +178,28 @@ public class CreateTours {
         return avatar;
     }
 
+    @Override
+    public String toString() {
+        return "CreateTours{" +
+                "hostId='" + hostId + '\'' +
+                ", status=" + status +
+                ", name='" + name + '\'' +
+                ", minCost=" + minCost +
+                ", maxCost=" + maxCost +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", adults=" + adults +
+                ", childs=" + childs +
+                ", sourceLat=" + sourceLat +
+                ", sourceLong=" + sourceLong +
+                ", desLat=" + desLat +
+                ", desLong=" + desLong +
+                ", id=" + id +
+                ", isPrivate=" + isPrivate +
+                ", avatar='" + avatar + '\'' +
+                '}';
+    }
+
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }

@@ -8,6 +8,9 @@ public class Tour {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("hostId")
+    @Expose
+    private Integer hostId;
     @SerializedName("status")
     @Expose
     private Integer status;
@@ -38,6 +41,33 @@ public class Tour {
     @SerializedName("avatar")
     @Expose
     private String avatar;
+    @SerializedName("createdOn")
+    @Expose
+    private long createdOn;
+
+    public Integer getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(Integer hostId) {
+        this.hostId = hostId;
+    }
+
+    public Boolean getPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(Boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public long getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(long createdOn) {
+        this.createdOn = createdOn;
+    }
 
     public Integer getId() {
         return id;

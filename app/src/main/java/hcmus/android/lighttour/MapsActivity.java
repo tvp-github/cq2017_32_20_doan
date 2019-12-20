@@ -4,9 +4,10 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import hcmus.android.lighttour.APIService.GetStopPointService;
-import hcmus.android.lighttour.AppUtils.MyBody;
-import hcmus.android.lighttour.AppUtils.MyResponse;
+import hcmus.android.lighttour.Adapter.ListStopPointAdapter;
 import hcmus.android.lighttour.AppUtils.OneCoord;
+import hcmus.android.lighttour.AppUtils.RequestStoppointBody;
+import hcmus.android.lighttour.Response.GetStopPoints;
 import hcmus.android.lighttour.Response.StopPoint;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
@@ -15,6 +16,7 @@ import retrofit2.Response;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.DatePickerDialog;
 import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,14 +27,14 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,16 +43,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,31 +62,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private TextView mTapTextView;
     private TextView mCameraTextView;
-    int type;
+//    int type;
+    String tourId;
     final int RESULT_OK = 001;
     EditText edtSearch;
     Button btnSearch;
+    FloatingActionButton floatingActionButton;
     Geocoder geocoder;
     GetStopPointService getStopPointService;
     List<StopPoint> list;
     List<StopPoint> returnList;
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    private void init(){
         Intent intent = getIntent();
-        type = intent.getIntExtra("type",-1);
+        tourId = intent.getStringExtra("type");
         edtSearch = findViewById(R.id.searchLocation);
         btnSearch = findViewById(R.id.btnSearchLocation);
+        floatingActionButton = findViewById(R.id.btnListStopPoint);
         getStopPointService = ApiUtils.getGetStopPointService();
         list = new ArrayList<StopPoint>();
         returnList = new ArrayList<StopPoint>();
         geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+        init();
+        //show list stoppoint
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayListStopPoint();
+            }
+        });
+        //Search location by geocoder
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,67 +106,186 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         });
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
 
 
-    @Override
-    public void onMapClick(LatLng point) {
-        if(type == 1) {
-            Intent result = new Intent();
-            result.putExtra("lat", point.latitude);
-            result.putExtra("long", point.longitude);
-            setResult(RESULT_OK,result);
-            MapsActivity.this.finish();
-        }
-    }
-
-
-    public void displayCreateStopPointDialog(LatLng latLng) {
+    public void displayListStopPoint(){
         LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.create_stop_point, null);
-        Spinner spinnerService = alertLayout.findViewById(R.id.spinner_serviceType);
-        Spinner spinnerProvice = alertLayout.findViewById(R.id.spinner_provice);
-        String[] service = {"Restaurant","Hotel","Rest station","Other"};
-        String[] provice = {"Hồ Chí Minh","Hà Nội","Đà Nẵng","Bình Dương","Đồng Nai","Khánh Hòa","Hải Phòng","Long An","Quảng Nam","Bà Rịa Vũng Tàu","Đắk Lắk","Cần Thơ","Bình Thuận","Lâm Đồng","Thừa Thiên Huế","Kiên Giang","Bắc Ninh","Quảng Ninh","Thanh Hóa","Nghệ An","Hải Dương","Gia Lai","Bình Phước","Hưng Yên","Bình Định","Tiền Giang","Thái Bình","Bắc Giang","Hòa Bình","An Giang","Vĩnh Phúc","Tây Ninh","Thái Nguyên","Lào Cai","Nam Định","Quảng Ngãi","Bến Tre","Đắk Nông","Cà Mau","Vĩnh Long","Ninh Bình","Phú Thọ","Ninh Thuận","Phú Yên","Hà Nam","Hà Tĩnh","Đồng Tháp","Sóc Trăng","Kon Tum","Quảng Bình","Quảng Trị","Trà Vinh","Hậu Giang","Sơn La","Bạc Liêu","Yên Bái","Tuyên Quang","Điện Biên","Lai Châu","Lạng Sơn","Hà Giang","Bắc Kạn","Cao Bằng"};
-        ArrayAdapter<String> serviceAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,service);
-        ArrayAdapter<String> proviceAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,provice);
-        spinnerService.setAdapter(serviceAdapter);
-        spinnerProvice.setAdapter(proviceAdapter);
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Create stop point");
-        alert.setView(alertLayout);
-        alert.setCancelable(false);
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
+        View layout = inflater.inflate(R.layout.list_stop_points,null);
+        ListView lstStopPoints = layout.findViewById(R.id.listStopPoint);
+        final ListStopPointAdapter adapter = new ListStopPointAdapter(MapsActivity.this,R.layout.list_stop_points_item,returnList);
+        lstStopPoints.setAdapter(adapter);
+        lstStopPoints.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> adapterView, View view, final int li, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+                builder.setTitle("Delete this stop point from list?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        MapsActivity.this.finish();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                builder.create().show();
             }
         });
-        AlertDialog dialog = alert.create();
+
+        AlertDialog.Builder view = new AlertDialog.Builder(this);
+        view.setTitle("List Stop Points");
+        view.setView(layout);
+        view.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        view.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Add stoppoint to tour
+                returnList.clear();
+                finish();
+            }
+        });
+        AlertDialog dialog = view.create();
         dialog.show();
     }
-    public void displayAddStopPointDialog(LatLng latLng) {
+    public void displayStopPointDialog(final StopPoint stopPoint, final boolean addStopPoint) {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.create_stop_point, null);
+        //Ánh xạ các view từ layout
+        final Spinner spinnerService = alertLayout.findViewById(R.id.spinner_serviceType);
+        final Spinner spinnerProvice = alertLayout.findViewById(R.id.spinner_provice);
+        final EditText edtName = alertLayout.findViewById(R.id.edit_stopPointname);
+        final EditText edtAddress = alertLayout.findViewById(R.id.edit_address);
+        final EditText edtMinCost = alertLayout.findViewById(R.id.edit_minCoststop);
+        final EditText edtMaxCost = alertLayout.findViewById(R.id.edit_maxCoststop);
+        final TextView txtDateArrive = alertLayout.findViewById(R.id.text_dateArrive);
+        final TextView txtDateLeave = alertLayout.findViewById(R.id.text_dateLeave);
+        EditText edtTimeArrive = alertLayout.findViewById(R.id.text_timeArrive);
+        EditText edtTimeLeave = alertLayout.findViewById(R.id.text_timeLeave);
+        ImageButton btnDateArrive = alertLayout.findViewById(R.id.btn_calendar_arrive);
+        ImageButton btnDateLeave = alertLayout.findViewById(R.id.btn_calendar_leave);
+        btnDateArrive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MapsActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        //cập nhật calendar
+                        calendar.set(Calendar.YEAR,i);
+                        calendar.set(Calendar.MONTH,i1);
+                        calendar.set(Calendar.DATE,i2);
+                        //Xuất ra
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        txtDateArrive.setText(simpleDateFormat.format(calendar.getTime()));
+                        txtDateArrive.setTag(calendar);
+                    }
+                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
+                datePickerDialog.show();
+
+            }
+        });
+        btnDateLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MapsActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        //cập nhật calendar
+                        calendar.set(Calendar.YEAR,i);
+                        calendar.set(Calendar.MONTH,i1);
+                        calendar.set(Calendar.DATE,i2);
+                        //Xuất ra
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        txtDateLeave.setText(simpleDateFormat.format(calendar.getTime()));
+                        txtDateLeave.setTag(calendar);
+                    }
+                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
+                datePickerDialog.show();
+            }
+        });
+        //Đổ data cho spinner
+        String[] service = {"Restaurant","Hotel","Rest station","Other"};
+        String[] province = {"Hồ Chí Minh","Hà Nội","Đà Nẵng","Bình Dương","Đồng Nai","Khánh Hòa","Hải Phòng",
+                "Long An","Quảng Nam","Bà Rịa Vũng Tàu","Đắk Lắk","Cần Thơ","Bình Thuận","Lâm Đồng","Thừa Thiên Huế",
+                "Kiên Giang","Bắc Ninh","Quảng Ninh","Thanh Hóa","Nghệ An","Hải Dương","Gia Lai","Bình Phước","Hưng Yên",
+                "Bình Định","Tiền Giang","Thái Bình","Bắc Giang","Hòa Bình","An Giang","Vĩnh Phúc","Tây Ninh","Thái Nguyên",
+                "Lào Cai","Nam Định","Quảng Ngãi","Bến Tre","Đắk Nông","Cà Mau","Vĩnh Long","Ninh Bình","Phú Thọ","Ninh Thuận",
+                "Phú Yên","Hà Nam","Hà Tĩnh","Đồng Tháp","Sóc Trăng","Kon Tum","Quảng Bình","Quảng Trị","Trà Vinh","Hậu Giang",
+                "Sơn La","Bạc Liêu","Yên Bái","Tuyên Quang","Điện Biên","Lai Châu","Lạng Sơn","Hà Giang","Bắc Kạn","Cao Bằng"};
+        ArrayAdapter<String> serviceAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,service);
+        ArrayAdapter<String> proviceAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,province);
+        spinnerService.setAdapter(serviceAdapter);
+        spinnerProvice.setAdapter(proviceAdapter);
+        //Đổ dữ liệu ra widget
+        spinnerProvice.setSelection(Math.max(stopPoint.getProvinceId()-1,0));
+        spinnerService.setSelection(Math.max(stopPoint.getServiceTypeId()-1,0));
+        edtName.setText(stopPoint.getName());
+        edtAddress.setText(stopPoint.getAddress());
+        edtMinCost.setText(stopPoint.getMinCost());
+        edtMaxCost.setText(stopPoint.getMaxCost());
+        //Tạo khung thông báo
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Create stop point");
+        if(addStopPoint)
+            alert.setTitle("Create stop point");
+        else
+            alert.setTitle("Add new stop point");
         alert.setView(alertLayout);
         alert.setCancelable(false);
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
             }
         });
+        alert.setPositiveButton(addStopPoint? "Create": "Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(addStopPoint)
+                        {
+                            stopPoint.setId(null);
+                            stopPoint.setName(edtName.getText().toString());
+                            stopPoint.setAddress(edtAddress.getText().toString());
+                            stopPoint.setServiceTypeId(spinnerService.getSelectedItemPosition()+1);
+                            stopPoint.setProvinceId(spinnerProvice.getSelectedItemPosition()+1);
+                            stopPoint.setMinCost(edtMinCost.getText().toString());
+                            stopPoint.setMaxCost(edtMaxCost.getText().toString());
+                            //Arrive and leave Time
+                            LatLng markerPosition = new LatLng(Double.parseDouble(stopPoint.getLat()), Double.parseDouble(stopPoint.getLong()));
+                            int resId;
+                            switch (stopPoint.getServiceTypeId()){
+                                case 1: resId = R.drawable.restaurant;
+                                    break;
+                                case 2: resId = R.drawable.hotel;
+                                    break;
+                                case 3: resId = R.drawable.rest_station;
+                                    break;
+                                default: resId = R.drawable.other;
+                            }
+                            Marker current = mMap.addMarker(new MarkerOptions().position(markerPosition).title(stopPoint.getName()).icon(BitmapDescriptorFactory.fromResource(resId)));
+                            current.setTag(stopPoint);
+                            list.add(stopPoint);
+                        }
+
+                        else {
+                            if(!returnList.contains(stopPoint))
+                            returnList.add(stopPoint);
+                        }
+                    }
+                });
         AlertDialog dialog = alert.create();
         dialog.show();
     }
@@ -174,20 +304,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney and move the camera
-        LatLng hochiminh = new LatLng(10.7628247, 106.6813572);
-//        Marker hcmus = mMap.addMarker(new MarkerOptions().position(hochiminh).title("Marker in Ho Chi Minh"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hochiminh, 15.0f));
+        LatLng hcmus = new LatLng(10.7628247, 106.6813572);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15.0f));
         mMap.setOnMarkerClickListener(this);
-        mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnCameraIdleListener(this);
+        mMap.setOnMapClickListener(this);
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        displayCreateStopPointDialog(latLng);
+        displayStopPointDialog(new StopPoint(latLng),true);
     }
 
     @Override
@@ -195,9 +323,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng latLng = mMap.getCameraPosition().target;
         MyApplication myApplication = (MyApplication) getApplication();
         final String token = myApplication.getToken();
-        getStopPointService.sendData(token, new MyBody(true,new OneCoord(latLng.latitude, latLng.longitude))).enqueue(new Callback<MyResponse>() {
+        getStopPointService.sendData(token, new RequestStoppointBody(true,new OneCoord(latLng.latitude, latLng.longitude))).enqueue(new Callback<GetStopPoints>() {
             @Override
-            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+            public void onResponse(Call<GetStopPoints> call, Response<GetStopPoints> response) {
                 if (response.code() == 200){
                     List<StopPoint> otherlist = response.body().getStopPoints();
                     for (int i = 0; i<otherlist.size();i++){
@@ -230,7 +358,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onFailure(Call<MyResponse> call, Throwable t) {
+            public void onFailure(Call<GetStopPoints> call, Throwable t) {
+                Toast.makeText(MapsActivity.this, "Unable to get data", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -238,9 +367,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(Marker marker) {
         StopPoint markerStopPoint = (StopPoint) marker.getTag();
-        displayAddStopPointDialog(new LatLng(Double.parseDouble(markerStopPoint.getLat())
-                                     ,Double.parseDouble(markerStopPoint.getLong()))
-        );
+        displayStopPointDialog(markerStopPoint, false);
         return false;
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+//  e
     }
 }
