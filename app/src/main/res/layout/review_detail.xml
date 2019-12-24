@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:id="@+id/item_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/style_border_no_radius"
+        android:layout_marginBottom="5dp"
+        android:text="Report"
+        android:fontFamily="@font/roboto"
+        >
+    </Button>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/style_border_no_radius"
+        android:layout_marginBottom="20dp"
+        android:text="Infomation"
+        android:fontFamily="@font/roboto">
+    </Button>
+</LinearLayout>
