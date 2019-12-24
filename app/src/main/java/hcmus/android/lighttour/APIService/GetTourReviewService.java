@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 public interface GetTourReviewService {
     @GET("/tour/get/review-list")
     Call<ListReview> sendData(@Header("Authorization") String token,
-                              @Query("serviceId") int serviceId,
+                              @Query("tourId") int tourId,
                               @Query("pageIndex") int pageIndex,
                               @Query("pageSize") String pageSize
     );

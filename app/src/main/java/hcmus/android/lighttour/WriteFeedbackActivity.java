@@ -40,6 +40,12 @@ public class WriteFeedbackActivity extends AppCompatActivity {
     SendFeedbackService sendFeedbackService;
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_review);
@@ -49,6 +55,7 @@ public class WriteFeedbackActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Write feedback");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);

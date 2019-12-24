@@ -101,7 +101,7 @@ public class tourinfo_tab2_review extends ListFragment {
         token = myApplication.getToken();
         //Gọi Retrofit Service để lấy dữ liệu từ API
 
-        listReviewService.sendData(token,tourId,1,"10").enqueue(new Callback<ListReview>() {
+        listReviewService.sendData(token,tourId,1,"200").enqueue(new Callback<ListReview>() {
             @Override
             public synchronized void onResponse(Call<ListReview> call, Response<ListReview> response) {
                 Log.d("AAA", "onResponse: "+response.code() );

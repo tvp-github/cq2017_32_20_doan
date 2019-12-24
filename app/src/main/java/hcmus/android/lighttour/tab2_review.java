@@ -105,7 +105,7 @@ public class tab2_review extends ListFragment {
         token = myApplication.getToken();
             //Gọi Retrofit Service để lấy dữ liệu từ API
 
-            listFeedbackService.sendData(token,serviceId,1,"10").enqueue(new Callback<ListFeedback>() {
+            listFeedbackService.sendData(token,serviceId,1,"200").enqueue(new Callback<ListFeedback>() {
                 @Override
                 public synchronized void onResponse(Call<ListFeedback> call, Response<ListFeedback> response) {
                     Log.d("AAA", "onResponse: "+response.code() + response.body().toString());

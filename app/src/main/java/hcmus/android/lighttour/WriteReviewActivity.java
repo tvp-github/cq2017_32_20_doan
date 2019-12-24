@@ -3,6 +3,7 @@ package hcmus.android.lighttour;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +44,12 @@ public class WriteReviewActivity extends AppCompatActivity {
     SendReviewService sendReviewService;
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_review);
@@ -52,9 +59,12 @@ public class WriteReviewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Write review");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
 
         mRatingBar = (RatingBar) findViewById(R.id.rating_bar);
         mRatingScale = (TextView) findViewById(R.id.tvRatingScale);

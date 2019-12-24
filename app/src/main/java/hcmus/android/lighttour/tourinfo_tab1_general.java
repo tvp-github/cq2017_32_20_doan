@@ -27,8 +27,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import hcmus.android.lighttour.APIService.GetPointStarsService;
+import hcmus.android.lighttour.APIService.GetReviewPointStarsService;
 import hcmus.android.lighttour.AppUtils.ListPointStars;
 import hcmus.android.lighttour.Response.PointStars;
+import hcmus.android.lighttour.Response.Review;
 import hcmus.android.lighttour.Response.StopPoint;
 import hcmus.android.lighttour.Response.Tour;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
@@ -45,7 +47,7 @@ public class tourinfo_tab1_general extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private GetPointStarsService PointStarsService;
+    private GetReviewPointStarsService ReviewPointStarsService;
     private tourinfo_tab1_general.OnFragmentInteractionListener mListener;
 
     TextView txtPrice;
@@ -135,7 +137,7 @@ public class tourinfo_tab1_general extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.tourinfo_tab1_general, container, false);
         tour= (Tour) getArguments().getSerializable("tour");
-        PointStarsService = ApiUtils.getGetPointStarsService();
+        ReviewPointStarsService = ApiUtils.getGetReviewPointStarsService();
 
         //Ánh xạ
         txtPrice = view.findViewById(R.id.txtprice);
@@ -200,7 +202,7 @@ public class tourinfo_tab1_general extends Fragment {
     }
 
     public void sendTourId(int tourId ){
-        PointStarsService.sendData(token,tourId).enqueue(new Callback<ListPointStars>() {
+        ReviewPointStarsService.sendData(token,tourId).enqueue(new Callback<ListPointStars>() {
             @Override
             public synchronized void onResponse(Call<ListPointStars> call, Response<ListPointStars> response) {
                 Log.d("AAA", "onResponse: Xong cmnr"+response.code());

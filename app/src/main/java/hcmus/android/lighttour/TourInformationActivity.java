@@ -32,6 +32,13 @@ public class TourInformationActivity extends AppCompatActivity
     FragmentTransaction fragmentTransaction;
     public PageAdapter pageAdapter;
 
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +76,7 @@ public class TourInformationActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Tour information");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.close);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
