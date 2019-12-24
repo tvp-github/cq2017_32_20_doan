@@ -44,6 +44,7 @@ public class ListTourActivity extends AppCompatActivity {
     Button btnNextPage;
     Menu menu;
     ImageButton imgbtnHistory;
+    ImageButton btnSettings;
     int ROWPERPAGE = 30;
     int currentPage = 1;
     int total;
@@ -129,6 +130,15 @@ public class ListTourActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ListTourActivity.this,HistoryActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        // Chuyển màn hình sang settings
+        btnSettings = findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListTourActivity.this, SettingsActivity.class));
             }
         });
     }

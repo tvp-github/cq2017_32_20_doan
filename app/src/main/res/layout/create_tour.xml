@@ -49,7 +49,8 @@
             android:text="End Date"
             android:layout_below="@+id/edit_tour_name"
             android:layout_toRightOf="@+id/text_startDate"
-            android:layout_alignLeft="@+id/endDate" />
+            android:layout_alignLeft="@+id/endDate"
+            android:textAlignment="center"/>
 
 
         <TextView
@@ -61,8 +62,8 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/style_border"
             android:gravity="center"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="60dp"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"/>
 
@@ -75,30 +76,33 @@
             android:layout_toLeftOf="@+id/btnEndDate"
             android:layout_marginRight="10dp"
             android:layout_alignTop="@+id/startDate"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="60dp"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:background="@drawable/style_border"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textAlignment="center"/>
 
         <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:id="@+id/btnStartDate"
             android:src="@drawable/calendar"
             android:layout_below="@id/text_startDate"
             android:layout_toRightOf="@+id/startDate"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"/>
 
         <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:id="@+id/btnEndDate"
             android:src="@drawable/calendar"
             android:layout_below="@id/text_endDate"
             android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/endDate"/>
+            android:layout_alignTop="@+id/endDate"
+            android:layout_marginTop="5dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -120,15 +124,16 @@
             android:layout_alignTop="@+id/text_adults"/>
 
         <EditText
+            android:id="@+id/edit_adults"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
-            android:id="@+id/edit_adults"
-            android:hint="0"
             android:layout_below="@+id/text_adults"
-            android:textAlignment="center"
-            android:paddingBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/style_border"
+            android:hint="0"
             android:paddingTop="15dp"
-            android:background="@drawable/style_border"/>
+            android:paddingBottom="15dp"
+            android:textAlignment="center" />
 
         <EditText
             android:layout_width="170dp"

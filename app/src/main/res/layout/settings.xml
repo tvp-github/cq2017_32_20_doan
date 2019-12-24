@@ -80,7 +80,8 @@
             android:layout_alignTop="@+id/txt_switchLang"
             android:layout_alignBottom="@+id/txt_switchLang"
             android:layout_toRightOf="@+id/txt_switchLang"
-            android:background="@drawable/style_spinner"/>
+            android:background="@drawable/style_spinner"
+            android:paddingLeft="10dp"/>
     </RelativeLayout>
 
     <Button
@@ -92,7 +93,7 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/textColorPrimary"
         android:background="@drawable/style_btn_create_tour"/>
-    <View
+    <!--View
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_above="@+id/menubar"
@@ -104,7 +105,7 @@
         android:id="@+id/menubar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"/-->
 
 
 </RelativeLayout>
