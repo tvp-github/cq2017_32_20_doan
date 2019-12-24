@@ -55,6 +55,8 @@
         <activity
             android:name=".HistoryActivity"
             android:parentActivityName=".ListTourActivity" />
-    </application>
+        <activity android:name=".TourInformationActivity" />
+        <activity android:name=".WriteFeedbackActivity" />
+</application>
 
 </manifest>

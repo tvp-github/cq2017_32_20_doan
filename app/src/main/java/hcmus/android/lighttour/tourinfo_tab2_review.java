@@ -10,32 +10,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.ListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.fragment.app.ListFragment;
 import hcmus.android.lighttour.APIService.GetStopPointFeedbackService;
+import hcmus.android.lighttour.APIService.GetTourReviewService;
 import hcmus.android.lighttour.Adapter.ListFeedbackAdapter;
+import hcmus.android.lighttour.Adapter.ListReviewAdapter;
 import hcmus.android.lighttour.AppUtils.ListFeedback;
+import hcmus.android.lighttour.AppUtils.ListReview;
 import hcmus.android.lighttour.Response.Feedback;
+import hcmus.android.lighttour.Response.Review;
 import hcmus.android.lighttour.Response.StopPoint;
+import hcmus.android.lighttour.Response.Tour;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link tab2_review.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link tab2_review#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class tab2_review extends ListFragment {
+public class tourinfo_tab2_review extends ListFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,16 +41,16 @@ public class tab2_review extends ListFragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
-    static ArrayList<Feedback> listFeedbackData;
-    ListView listFeedback;
-    ListFeedbackAdapter listFeedbackAdapter;
+    private tourinfo_tab2_review.OnFragmentInteractionListener mListener;
+    static ArrayList<Review> listReviewData;
+    ListView listReview;
+    ListReviewAdapter listReviewAdapter;
     ImageView imgUserAva;
-    StopPoint stopPoint;
-    GetStopPointFeedbackService listFeedbackService;
+    Tour tour;
+    GetTourReviewService listReviewService;
     String token;
-    int serviceId;
-    public tab2_review() {
+    int tourId;
+    public tourinfo_tab2_review() {
         // Required empty public constructor
     }
 
@@ -68,8 +63,8 @@ public class tab2_review extends ListFragment {
      * @return A new instance of fragment tab2_review.
      */
     // TODO: Rename and change types and number of parameters
-    public static tab2_review newInstance(String param1, String param2) {
-        tab2_review fragment = new tab2_review();
+    public static tourinfo_tab2_review newInstance(String param1, String param2) {
+        tourinfo_tab2_review fragment = new tourinfo_tab2_review();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -91,41 +86,42 @@ public class tab2_review extends ListFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d("FFF", "onCreateView: VL");
-        View view=inflater.inflate(R.layout.fragment_tab2_review, container, false);
-        stopPoint= (StopPoint) getArguments().getSerializable("stopPoint");
-        serviceId= stopPoint.getId();
+        View view=inflater.inflate(R.layout.tourinfo_tab2_review, container, false);
+        tour= (Tour) getArguments().getSerializable("tour");
+        Log.d("FFF", "onCreateView: VL" + tour.toString());
+        tourId= tour.getId();
 
-        listFeedbackData = new ArrayList<Feedback>();
-        //Init Adapter, set Adapter to listFeedback
-        listFeedbackAdapter = new ListFeedbackAdapter( getActivity(), R.layout.feedback_item,listFeedbackData);
-        setListAdapter(listFeedbackAdapter);
+        listReviewData = new ArrayList<Review>();
+        //Init Adapter, set Adapter to listReview
+        listReviewAdapter = new ListReviewAdapter( getActivity(), R.layout.review_item,listReviewData);
+        setListAdapter(listReviewAdapter);
 
-        listFeedbackService = ApiUtils.getGetStopPointFeedbackService();
+        listReviewService = ApiUtils.getGetTourReviewService();
         MyApplication myApplication = (MyApplication) getActivity().getApplication();
         token = myApplication.getToken();
-            //Gọi Retrofit Service để lấy dữ liệu từ API
+        //Gọi Retrofit Service để lấy dữ liệu từ API
 
-            listFeedbackService.sendData(token,serviceId,1,"200").enqueue(new Callback<ListFeedback>() {
-                @Override
-                public synchronized void onResponse(Call<ListFeedback> call, Response<ListFeedback> response) {
-                    Log.d("AAA", "onResponse: "+response.code() + response.body().toString());
-                    if(response.code()==200){
-                        updateListView(response.body().getFeedbacks());
-                    }
+        listReviewService.sendData(token,tourId,1,"200").enqueue(new Callback<ListReview>() {
+            @Override
+            public synchronized void onResponse(Call<ListReview> call, Response<ListReview> response) {
+                Log.d("AAA", "onResponse: "+response.code() );
+                if(response.code()==200){
+                    updateListView(response.body().getReviews());
                 }
+            }
 
-                @Override
-                public void onFailure(Call<ListFeedback> call, Throwable t) {
-                    Log.d("AAA", "onFailure: ");
-                }
-            });
+            @Override
+            public void onFailure(Call<ListReview> call, Throwable t) {
+                Log.d("AAA", "onFailure: ");
+            }
+        });
 
 
         return inflater.inflate(R.layout.fragment_tab2_review, container, false);
     }
-    private void updateListView(List<Feedback> listFeedback){
-        listFeedbackData.addAll(listFeedback);
-        listFeedbackAdapter.notifyDataSetChanged();
+    private void updateListView(List<Review> listReview){
+        listReviewData.addAll(listReview);
+        listReviewAdapter.notifyDataSetChanged();
     }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -137,8 +133,8 @@ public class tab2_review extends ListFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof tourinfo_tab2_review.OnFragmentInteractionListener) {
+            mListener = (tourinfo_tab2_review.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

@@ -18,15 +18,16 @@ import com.google.android.material.tabs.TabLayout;
 
 import hcmus.android.lighttour.Adapter.PageAdapter;
 import hcmus.android.lighttour.Response.StopPoint;
+import hcmus.android.lighttour.Response.Tour;
 
-public class PointInformationActivity extends AppCompatActivity
-        implements tab1_general.OnFragmentInteractionListener, tab2_review.OnFragmentInteractionListener, View.OnClickListener{
+public class TourInformationActivity extends AppCompatActivity
+        implements tourinfo_tab1_general.OnFragmentInteractionListener, tourinfo_tab2_review.OnFragmentInteractionListener, View.OnClickListener{
     private TabLayout tablayout;
     private ViewPager viewPager;
     private Button tab1, tab2;
     Intent intent;
-    StopPoint stopPoint;
-    Bundle stPoint;
+    Tour tour;
+    Bundle infoTour;
     private static FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     public PageAdapter pageAdapter;
@@ -41,21 +42,21 @@ public class PointInformationActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.point_information);
+        setContentView(R.layout.tour_information);
 
 
 
         fragmentManager = this.getSupportFragmentManager();//Get Fragment Manager
 
         Intent intent=getIntent();
-        stopPoint= (StopPoint) intent.getSerializableExtra("stopPoint");
+        tour= (Tour) intent.getSerializableExtra("tour");
 
-        Fragment tab1_general = new tab1_general();//Get Fragment Instance
-        stPoint = new Bundle();
-        stPoint.putSerializable("stopPoint", stopPoint);
-        tab1_general.setArguments(stPoint);
+        Fragment tourinfo_tab1_general = new tourinfo_tab1_general();//Get Fragment Instance
+        infoTour = new Bundle();
+        infoTour.putSerializable("tour", tour);
+        tourinfo_tab1_general.setArguments(infoTour);
         //Replace default fragment
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tab1_general).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tourinfo_tab1_general).commit();
 
         //Find Ids
         tab1 = (Button) findViewById(R.id.Tab1);
@@ -71,9 +72,9 @@ public class PointInformationActivity extends AppCompatActivity
 //        stPoint.putSerializable("stopPoint", stopPoint);
 
         //Khởi tạo toolbar cho activity
-        Toolbar toolbar =findViewById(R.id.toolbar_pt_info);
+        Toolbar toolbar =findViewById(R.id.toolbar_tour_info);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Point information");
+        getSupportActionBar().setTitle("Tour information");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.close);
@@ -130,19 +131,19 @@ public class PointInformationActivity extends AppCompatActivity
             case R.id.Tab1:
 
 
-                Fragment tab1_general = new tab1_general();//Get Fragment Instance
-                stPoint.putSerializable("stopPoint", stopPoint);
-                tab1_general.setArguments(stPoint);
+                Fragment tourinfo_tab1_general = new tourinfo_tab1_general();//Get Fragment Instance
+                infoTour.putSerializable("tour", tour);
+                tourinfo_tab1_general.setArguments(infoTour);
 
                 //Replace default fragment
-                fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tab1_general).commit();
+                fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tourinfo_tab1_general).commit();
                 break;
             case R.id.Tab2:
 
-                Fragment tab2_review = new tab2_review();//Get Fragment Instance
-                stPoint.putSerializable("stopPoint", stopPoint);
-                tab2_review.setArguments(stPoint);
-                fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tab2_review).commit();//now replace the argument fragment
+                Fragment tourinfo_tab2_review = new tourinfo_tab2_review();//Get Fragment Instance
+                infoTour.putSerializable("tour", tour);
+                tourinfo_tab2_review.setArguments(infoTour);
+                fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tourinfo_tab2_review).commit();//now replace the argument fragment
 
                 /**  Note: If you are passing argument in fragment then don't use below code always replace fragment instance where we had set bundle as argument as we had done above else it will give exception  **/
                 //   fragmentManager.beginTransaction().replace(R.id.fragmentContainer, new ArgumentFragment()).commit();

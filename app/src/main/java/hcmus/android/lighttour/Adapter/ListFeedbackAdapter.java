@@ -70,7 +70,7 @@ public class ListFeedbackAdapter extends ArrayAdapter {
             if(feedback.getAvatar()!=null && feedback.getAvatar().length()>0)
                 Glide.with(context).load(listFeedback.get(i).getAvatar()).into(imgAvatar);
             txtName .setText(feedback.getName());
-            ratingBar.setNumStars(Integer.parseInt(feedback.getPoint()) );
+            ratingBar.setRating(Integer.parseInt(feedback.getPoint()) );
             txtFeedback.setText(feedback.getFeedback());
             Log.d("RRR", "getView: "+ feedback.getFeedback() );
             return view;
