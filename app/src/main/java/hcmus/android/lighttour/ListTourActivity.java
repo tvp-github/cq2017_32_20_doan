@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -75,6 +76,19 @@ public class ListTourActivity extends AppCompatActivity {
         //Init Adapter, set Adapter to listTour
         listTourAdapter = new ListTourAdapter(ListTourActivity.this, R.layout.list_item,listTourData);
         listTour.setAdapter(listTourAdapter);
+        //Log.d("AAA", "onResponse: "+(listTour.getItemAtPosition(1).toString()));
+        listTour.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               Tour tour=(Tour) listTourData.get(position);
+               Log.d("AAA", "onResponse: "+ position);
+                Log.d("AAA", "onResponse: "+ tour.getId());
+               Log.d("AAA", "onResponse: "+((Tour)  listTourData.get(position)).toString());
+                Intent intent = new Intent(ListTourActivity.this, TourInformationActivity.class);
+                intent.putExtra("tour", tour);
+                startActivity(intent);
+            }
+        });
         //Chuyển màn hình sang tạo tour
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override

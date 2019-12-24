@@ -20,27 +20,24 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import hcmus.android.lighttour.APIService.SendFeedbackService;
-import hcmus.android.lighttour.APIService.SendReviewService;
 import hcmus.android.lighttour.AppUtils.SendFeedbackBody;
-import hcmus.android.lighttour.AppUtils.SendReviewBody;
 import hcmus.android.lighttour.Response.Feedback;
 import hcmus.android.lighttour.Response.Message;
 import hcmus.android.lighttour.Response.StopPoint;
-import hcmus.android.lighttour.Response.Tour;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WriteReviewActivity extends AppCompatActivity {
+public class WriteFeedbackActivity extends AppCompatActivity {
 
     RatingBar mRatingBar;
     TextView mRatingScale;
-    EditText mReview;
-    Button mSendReview;;
-    Tour tour;
+    EditText mFeedback;
+    Button mSendFeedback;;
+    StopPoint stopPoint;
     String token;
-    SendReviewService sendReviewService;
+    SendFeedbackService sendFeedbackService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +47,7 @@ public class WriteReviewActivity extends AppCompatActivity {
         //Khởi tạo toolbar cho activity
         Toolbar toolbar =findViewById(R.id.toolbar_write_review);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Write review");
+        getSupportActionBar().setTitle("Write feedback");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
@@ -58,16 +55,15 @@ public class WriteReviewActivity extends AppCompatActivity {
 
         mRatingBar = (RatingBar) findViewById(R.id.rating_bar);
         mRatingScale = (TextView) findViewById(R.id.tvRatingScale);
-        mReview = (EditText) findViewById(R.id.edtFeedback);
-        mSendReview = (Button) findViewById(R.id.btnSubmit);
+        mFeedback = (EditText) findViewById(R.id.edtFeedback);
+        mSendFeedback = (Button) findViewById(R.id.btnSubmit);
 
-        Log.d("111", "tour info " );
         Intent intent=getIntent();
-        tour= (Tour) intent.getSerializableExtra("tour");
-        Log.d("111", "tour info " + tour.toString());
+        stopPoint= (StopPoint) intent.getSerializableExtra("stopPoint");
+        Log.d("111", "onResponse: fb ");
         MyApplication myApplication = (MyApplication) getApplication();
         token = myApplication.getToken();
-        sendReviewService= ApiUtils.getSendReviewService();
+        sendFeedbackService= ApiUtils.getSendFeedbackService();
         mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -94,35 +90,33 @@ public class WriteReviewActivity extends AppCompatActivity {
             }
         });
 
-        mSendReview.setOnClickListener(new View.OnClickListener() {
+        mSendFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mReview.getText().toString().isEmpty()) {
-                    Toast.makeText(WriteReviewActivity.this, "Please fill in review text box", Toast.LENGTH_LONG).show();
+                if (mFeedback.getText().toString().isEmpty()) {
+                    Toast.makeText(WriteFeedbackActivity.this, "Please fill in feedback text box", Toast.LENGTH_LONG).show();
                 } else {
                     DisableInputField();
-                    int tourId=tour.getId();
-                    String review=validate(mReview.getText().toString());
+                    int serviceID=stopPoint.getId();
+                    String feedback=validate(mFeedback.getText().toString());
                     int point= (int) mRatingBar.getRating();
-                    Log.d("AAA", "onResponse: "+tourId +" " + point + review );
-                    sendReview(token,tourId,point,review);
+                    sendFeedback(token,serviceID,feedback,point);
 //                    mFeedback.setText("");
 //                    mRatingBar.setRating(0);
-
-                    Toast.makeText(WriteReviewActivity.this, "Thank you for sharing your review", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WriteFeedbackActivity.this, "Thank you for sharing your feedback", Toast.LENGTH_SHORT).show();
                     finish();
 
                 }
             }
 
-            private void sendReview(String token, int tourId, final int point, String review) {
-                sendReviewService.sendData(token, new SendReviewBody(tourId,point,review)).enqueue(new Callback<Message>() {
+            private void sendFeedback(String token, int serviceID, String feedback, final int point) {
+                sendFeedbackService.sendData(token, new SendFeedbackBody(serviceID,feedback,point)).enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
                         Log.d("AAA", "onResponse: "+response.code());
                         if (response.code()==200){
                             Log.d("AAA", "total: "+point);
-                            Toast.makeText(WriteReviewActivity.this,"Send Review successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WriteFeedbackActivity.this,"Send Feedback successfully", Toast.LENGTH_SHORT).show();
 //                            Intent intent = new Intent(WriteReviewActivity.this, PointInformationActivity.class);
 //                            startActivity(intent);
                             finish();
@@ -139,7 +133,7 @@ public class WriteReviewActivity extends AppCompatActivity {
                                     else
                                         msg = msg + "\n"+ errorArray.getJSONObject(i).getString("msg");
                                 }
-                                Toast.makeText(WriteReviewActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(WriteFeedbackActivity.this, msg, Toast.LENGTH_SHORT).show();
                             } catch (JSONException | IOException e) {
                                 e.printStackTrace();
                             }
@@ -160,22 +154,22 @@ public class WriteReviewActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Message> call, Throwable t) {
-                        Toast.makeText(WriteReviewActivity.this, "Unable to connect to server", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WriteFeedbackActivity.this, "Unable to connect to server", Toast.LENGTH_SHORT).show();
                         EnableInputField();
                     }
                 });
             }
 
             private void DisableInputField() {
-                mReview.setEnabled(false);
+                mFeedback.setEnabled(false);
                 mRatingBar.setEnabled(false);
-                mSendReview.setEnabled(false);
+                mSendFeedback.setEnabled(false);
             }
 
             private void EnableInputField() {
-                mReview.setEnabled(true);
+                mFeedback.setEnabled(true);
                 mRatingBar.setEnabled(true);
-                mSendReview.setEnabled(true);
+                mSendFeedback.setEnabled(true);
             }
 
             private String validate(String s){

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -17,30 +18,25 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.taufiqrahman.reviewratings.BarLabels;
 import com.taufiqrahman.reviewratings.RatingReviews;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import hcmus.android.lighttour.APIService.GetPointStarsService;
 import hcmus.android.lighttour.AppUtils.ListPointStars;
 import hcmus.android.lighttour.Response.PointStars;
 import hcmus.android.lighttour.Response.StopPoint;
+import hcmus.android.lighttour.Response.Tour;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link tab1_general.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link tab1_general#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class tab1_general extends Fragment {
+public class tourinfo_tab1_general extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -50,18 +46,19 @@ public class tab1_general extends Fragment {
     private String mParam1;
     private String mParam2;
     private GetPointStarsService PointStarsService;
-    private OnFragmentInteractionListener mListener;
+    private tourinfo_tab1_general.OnFragmentInteractionListener mListener;
 
     TextView txtPrice;
     TextView txtName;
-    TextView txtAddress;
-    TextView txtContact;
-    StopPoint stopPoint;
+    TextView txtDate;
+    TextView txtnumpeople;
+    ImageView imgAvatar;
     RatingReviews ratingReviews;
     TextView text;
     TextView ratingPoint;
     TextView numberReviewer;
     RatingBar ratingBar;
+    Tour tour;
     String token;
     int total=0;
     int point=0;
@@ -73,7 +70,7 @@ public class tab1_general extends Fragment {
             Color.parseColor("#ef7e14"),
             Color.parseColor("#d36259")};
 
-    public tab1_general() {
+    public tourinfo_tab1_general() {
         // Required empty public constructor
     }
 
@@ -86,8 +83,8 @@ public class tab1_general extends Fragment {
      * @return A new instance of fragment tab1_general.
      */
     // TODO: Rename and change types and number of parameters
-    public static tab1_general newInstance(String param1, String param2) {
-        tab1_general fragment = new tab1_general();
+    public static tourinfo_tab1_general newInstance(String param1, String param2) {
+        tourinfo_tab1_general fragment = new tourinfo_tab1_general();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -101,26 +98,20 @@ public class tab1_general extends Fragment {
         rate_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent write_review_intent = new Intent(getActivity(), WriteFeedbackActivity.class);
-                write_review_intent.putExtra("stopPoint", stopPoint);
+                Intent write_review_intent = new Intent(getActivity(), WriteReviewActivity.class);
+                write_review_intent.putExtra("tour", tour);
                 startActivity(write_review_intent );
             }
         });
 
         RatingBar ratingBar = (RatingBar) getView().findViewById(R.id.rb_rate_now);
-//        ratingBar.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                Intent write_review_intent = new Intent(getActivity(), WriteReviewActivity.class);
-////                startActivity(write_review_intent );
-////            }
-////        });
+
         ratingBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Intent write_review_intent = new Intent(getActivity(), WriteFeedbackActivity.class);
-                    write_review_intent.putExtra("stopPoint", stopPoint);
+                    Intent write_review_intent = new Intent(getActivity(), WriteReviewActivity.class);
+                    write_review_intent.putExtra("tour", tour);
                     startActivity(write_review_intent);
                 }
                 return true;
@@ -142,24 +133,36 @@ public class tab1_general extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_tab1_general, container, false);
-        stopPoint= (StopPoint) getArguments().getSerializable("stopPoint");
+        View view=inflater.inflate(R.layout.tourinfo_tab1_general, container, false);
+        tour= (Tour) getArguments().getSerializable("tour");
         PointStarsService = ApiUtils.getGetPointStarsService();
 
         //Ánh xạ
         txtPrice = view.findViewById(R.id.txtprice);
-        txtName = view.findViewById(R.id.txtName);
-        txtAddress = view.findViewById(R.id.txtAddress);
-        txtContact = view.findViewById(R.id.txtContact);
+        txtName = view.findViewById(R.id.txtname);
+        txtnumpeople = view.findViewById(R.id.txtnumpeople);
+        txtDate = view.findViewById(R.id.txtDate);
+        imgAvatar = view.findViewById(R.id.imgAvatar);
         ratingPoint = view.findViewById(R.id.ratingPoint);
         numberReviewer = view.findViewById(R.id.numberReviewer);
         ratingBar = view.findViewById(R.id.ratingBar);
 
-        txtPrice.setText(stopPoint.getMinCost()+" - "+stopPoint.getMaxCost());
-        txtName.setText(stopPoint.getName());
-        txtContact.setText(stopPoint.getContact());
-        txtAddress.setText(stopPoint.getAddress());
-        text=view.findViewById(R.id.text);
+        //Đổ dữ liệu
+        if(tour.getAvatar()!=null && tour.getAvatar().length()>0)
+        Glide.with(this).load(tour.getAvatar()).into(imgAvatar);
+        txtPrice.setText(tour.getMinCost()+" - "+tour.getMaxCost());
+        txtName .setText(tour.getName());
+        txtnumpeople.setText(tour.getAdults()+" Adults - "+tour.getChilds() + " Children");
+        Calendar startDate, endDate;
+        startDate = Calendar.getInstance();
+        endDate = Calendar.getInstance();
+        if(tour.getStartDate()!=null)
+            startDate.setTimeInMillis(Long.parseLong(tour.getStartDate()));
+        else startDate.setTimeInMillis(0);
+        if(tour.getEndDate()!=null)
+            endDate.setTimeInMillis(Long.parseLong(tour.getEndDate()));
+        else endDate.setTimeInMillis(0);
+        txtDate.setText(formatCalendar(startDate)+" - "+ formatCalendar(endDate));
 
         ratingReviews = (RatingReviews) view.findViewById(R.id.rating_reviews);
 
@@ -180,7 +183,7 @@ public class tab1_general extends Fragment {
 //
 //        ratingReviews.createRatingBars(100, BarLabels.STYPE1, colors, raters);
 
-        int TourId=stopPoint.getId();
+        int TourId=tour.getId();
         MyApplication myApplication = (MyApplication) getActivity().getApplication();
         token = myApplication.getToken();
         sendTourId(TourId);
@@ -189,10 +192,17 @@ public class tab1_general extends Fragment {
         return view;
     }
 
+    String formatCalendar(Calendar calendar){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String result = simpleDateFormat.format(calendar.getTime());
+
+        return result;
+    }
+
     public void sendTourId(int tourId ){
         PointStarsService.sendData(token,tourId).enqueue(new Callback<ListPointStars>() {
             @Override
-           public synchronized void onResponse(Call<ListPointStars> call, Response<ListPointStars> response) {
+            public synchronized void onResponse(Call<ListPointStars> call, Response<ListPointStars> response) {
                 Log.d("AAA", "onResponse: Xong cmnr"+response.code());
                 if(response.code()==200){
                     List<PointStars> otherlist = response.body().getPointStars();
@@ -273,8 +283,8 @@ public class tab1_general extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof tourinfo_tab1_general.OnFragmentInteractionListener) {
+            mListener = (tourinfo_tab1_general.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

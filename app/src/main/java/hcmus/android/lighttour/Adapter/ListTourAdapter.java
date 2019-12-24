@@ -1,6 +1,8 @@
 package hcmus.android.lighttour.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +16,19 @@ import com.bumptech.glide.Glide;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+
+import hcmus.android.lighttour.ExploreActivity;
+import hcmus.android.lighttour.ListTourActivity;
+import hcmus.android.lighttour.PointInformationActivity;
 import hcmus.android.lighttour.R;
+import hcmus.android.lighttour.Response.StopPoint;
 import hcmus.android.lighttour.Response.Tour;
+import hcmus.android.lighttour.TourInformationActivity;
 
 public class ListTourAdapter extends BaseAdapter{
     Context context;
     int layout;
+    Tour tour;
     List<Tour> listTour;
     public ListTourAdapter(Context context, int layout, List<Tour> listTour) {
         this.context = context;
@@ -60,8 +69,10 @@ public class ListTourAdapter extends BaseAdapter{
         txtnumpeople = view.findViewById(R.id.txtnumpeople);
         txtDate = view.findViewById(R.id.txtDate);
         imgAvatar = view.findViewById(R.id.imgAvatar);
+
+
         //Đổ dữ liệu
-        Tour tour = listTour.get(i);
+        tour = listTour.get(i);
         if(tour.getAvatar()!=null && tour.getAvatar().length()>0)
             Glide.with(context).load(listTour.get(i).getAvatar()).into(imgAvatar);
         txtPrice.setText(tour.getMinCost()+" - "+tour.getMaxCost());
