@@ -81,12 +81,6 @@ public class CreateTourActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_tour);
         init();
-        //test create stoppoint
-        Intent intent;
-        intent = new Intent(CreateTourActivity.this, MapsActivity.class);
-        intent.putExtra("tourId","4525");
-        startActivity(intent);
-        finish();
 
         //Khởi tạo toolbar cho activity
         Toolbar toolbar =findViewById(R.id.toolbar_create_tour);

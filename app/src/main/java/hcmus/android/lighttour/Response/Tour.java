@@ -44,7 +44,29 @@ public class Tour {
     @SerializedName("createdOn")
     @Expose
     private long createdOn;
+    @SerializedName("isHost")
+    @Expose
+    private boolean isHost;
 
+    public boolean isHost() {
+        return isHost;
+    }
+
+    public void setHost(boolean host) {
+        isHost = host;
+    }
+
+    public boolean isKicked() {
+        return isKicked;
+    }
+
+    public void setKicked(boolean kicked) {
+        isKicked = kicked;
+    }
+
+    @SerializedName("isKicked")
+    @Expose
+    private boolean isKicked;
     public Integer getHostId() {
         return hostId;
     }

@@ -8,7 +8,36 @@ import androidx.annotation.Nullable;
 import java.io.Serializable;
 
 public class StopPoint implements Serializable {
+    public long getArrivalAt() {
+        return arrivalAt;
+    }
 
+    public void setArrivalAt(long arrivalAt) {
+        this.arrivalAt = arrivalAt;
+    }
+
+    public long getLeaveAt() {
+        return leaveAt;
+    }
+
+    public void setLeaveAt(long leaveAt) {
+        this.leaveAt = leaveAt;
+    }
+
+    public String get_long() {
+        return _long;
+    }
+
+    public void set_long(String _long) {
+        this._long = _long;
+    }
+
+    @SerializedName("arrivalAt")
+    @Expose
+    private long arrivalAt;
+    @SerializedName("leaveAt")
+    @Expose
+    private long leaveAt;
     @SerializedName("id")
     @Expose
     private Integer id;

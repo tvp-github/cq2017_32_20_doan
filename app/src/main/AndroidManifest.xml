@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".UpdateTourActivity" android:parentActivityName=".HistoryActivity"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -52,6 +52,9 @@
         <activity android:name=".PointInformationActivity" />
         <activity android:name=".WriteReviewActivity" />
         <activity android:name=".ExploreActivity" />
-</application>
+        <activity
+            android:name=".HistoryActivity"
+            android:parentActivityName=".ListTourActivity" />
+    </application>
 
 </manifest>

@@ -1,14 +1,17 @@
 package hcmus.android.lighttour.Retrofit;
 
+import hcmus.android.lighttour.APIService.AddStopPointsService;
 import hcmus.android.lighttour.APIService.CreateToursService;
 import hcmus.android.lighttour.APIService.GetPointStarsService;
 import hcmus.android.lighttour.APIService.GetStopPointFeedbackService;
 import hcmus.android.lighttour.APIService.GetStopPointService;
+import hcmus.android.lighttour.APIService.HistoryTourService;
 import hcmus.android.lighttour.APIService.ListToursService;
 import hcmus.android.lighttour.APIService.LoginGGService;
 import hcmus.android.lighttour.APIService.LoginService;
 import hcmus.android.lighttour.APIService.RegisterService;
 import hcmus.android.lighttour.APIService.SendFeedbackService;
+import hcmus.android.lighttour.HistoryActivity;
 
 //Tạo các Service từ RetrofitClient để lấy dữ liệu thông qua các Service này
 public class ApiUtils {
@@ -53,4 +56,11 @@ public class ApiUtils {
     public static SendFeedbackService getSendFeedbackService() {
         return RetrofitClient.getClient(BASE_URL).create(SendFeedbackService.class);
     }
+    public static AddStopPointsService getAddStopPointsService() {
+        return RetrofitClient.getClient(BASE_URL).create(AddStopPointsService.class);
+    }
+    public static HistoryTourService getHistoryTourService() {
+        return RetrofitClient.getClient(BASE_URL).create(HistoryTourService.class);
+    }
+
 }

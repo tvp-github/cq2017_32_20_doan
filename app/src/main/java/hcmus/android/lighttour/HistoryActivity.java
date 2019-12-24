@@ -3,23 +3,24 @@ package hcmus.android.lighttour;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import hcmus.android.lighttour.APIService.HistoryTourService;
 import hcmus.android.lighttour.APIService.ListToursService;
 import hcmus.android.lighttour.Adapter.ListTourAdapter;
 import hcmus.android.lighttour.Response.ListTours;
@@ -29,70 +30,31 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListTourActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity {
     List<Tour> listTourData;
-    ListView listTour;
     ListTourAdapter listTourAdapter;
-    ImageView imgUserAva;
-    ListToursService listToursService;
-    String token;
-    ImageButton btnCreate;
-    ImageButton btnExplore;
-    FloatingActionButton btnAddTour;
-    Button btnPrevPage;
     Button btnNextPage;
-    Menu menu;
-    ImageButton imgbtnHistory;
-    int ROWPERPAGE = 30;
+    Button btnPrevPage;
+    ListView listTour;
+    HistoryTourService historyTourService;
+    String token;
+    int pageSize = 30;
     int currentPage = 1;
     int total;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_tour);
+        setContentView(R.layout.history);
         init();
-        //Gọi khởi tạo toolbar
+        getData();
+        //tool bar
         Toolbar toolbar =findViewById(R.id.toolbar_list_tour);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Travel Assistant");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getData();
-
-        //Init Adapter, set Adapter to listTour
-        listTourAdapter = new ListTourAdapter(ListTourActivity.this, R.layout.list_item,listTourData);
-        listTour.setAdapter(listTourAdapter);
-        //Chuyển màn hình sang tạo tour
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ListTourActivity.this, CreateTourActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnExplore = (ImageButton) findViewById(R.id.btnExplore);
-        btnExplore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ListTourActivity.this, ExploreActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //Chuyển màn hình sang tạo tour
-        btnAddTour = (FloatingActionButton) findViewById(R.id.btnAddTour);
-
-        btnAddTour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ListTourActivity.this, CreateTourActivity.class);
-                startActivity(intent);
-            }
-        });
 
         btnPrevPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,31 +72,29 @@ public class ListTourActivity extends AppCompatActivity {
                 listTour.smoothScrollToPosition(0);
             }
         });
-        imgbtnHistory.setOnClickListener(new View.OnClickListener() {
+        listTour.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ListTourActivity.this,HistoryActivity.class);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(HistoryActivity.this, UpdateTourActivity.class);
+                intent.putExtra("tour",new Gson().toJson(listTourData.get(i)));
                 startActivity(intent);
             }
         });
     }
-
-
     private void init() {
         listTourData = new ArrayList<Tour>();
         listTour = findViewById(R.id.listTour);
-        imgUserAva = findViewById(R.id.avatarUser);
-        btnCreate = findViewById(R.id.btnCreate);
+        listTourAdapter = new ListTourAdapter(HistoryActivity.this,R.layout.list_item,listTourData);
+        listTour.setAdapter(listTourAdapter);
         btnNextPage = findViewById(R.id.btnNextPage_listtour);
         btnPrevPage = findViewById(R.id.btnPrevPage_listtour);
-        imgbtnHistory = findViewById(R.id.btnHistory);
-        listToursService = ApiUtils.getListToursAPIService();
+        historyTourService = ApiUtils.getHistoryTourService();
         MyApplication myApplication = (MyApplication) getApplication();
         token = myApplication.getToken();
     }
     private void getData(){
         //Gọi Retrofit Service để lấy dữ liệu từ API
-        listToursService.sendData(token,ROWPERPAGE,currentPage,null,true).enqueue(new Callback<ListTours>() {
+        historyTourService.sendData(token,currentPage,pageSize).enqueue(new Callback<ListTours>() {
             @Override
             public void onResponse(Call<ListTours> call, Response<ListTours> response) {
                 Log.d("AAA", "onResponse: " + response.body().getTours().get(0).getId());
@@ -145,7 +105,7 @@ public class ListTourActivity extends AppCompatActivity {
                     total = response.body().getTotal();
                     //Cập nhật tại listView
                     listTourAdapter.notifyDataSetChanged();
-                    int totalPage = (total / ROWPERPAGE) + (total%ROWPERPAGE == 0 ? 0 : 1);
+                    int totalPage = (total / pageSize) + (total%pageSize == 0 ? 0 : 1);
                     btnNextPage.setEnabled(true);
                     btnPrevPage.setEnabled(true);
                     if(currentPage == totalPage) btnNextPage.setEnabled(false);
@@ -155,7 +115,7 @@ public class ListTourActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ListTours> call, Throwable t) {
-                Toast.makeText(ListTourActivity.this, "Unable to load list of tours", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HistoryActivity.this, "Unable to load list of tours", Toast.LENGTH_SHORT).show();
             }
         });
     }

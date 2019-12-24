@@ -3,8 +3,11 @@ package hcmus.android.lighttour;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
+import hcmus.android.lighttour.APIService.AddStopPointsService;
 import hcmus.android.lighttour.APIService.GetStopPointService;
 import hcmus.android.lighttour.Adapter.ListStopPointAdapter;
+import hcmus.android.lighttour.AppUtils.AddStopPointsBody;
+import hcmus.android.lighttour.AppUtils.Message;
 import hcmus.android.lighttour.AppUtils.OneCoord;
 import hcmus.android.lighttour.AppUtils.RequestStoppointBody;
 import hcmus.android.lighttour.Response.GetStopPoints;
@@ -74,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     List<StopPoint> returnList;
     private void init(){
         Intent intent = getIntent();
-        tourId = intent.getStringExtra("type");
+        tourId = intent.getStringExtra("tourId");
         edtSearch = findViewById(R.id.searchLocation);
         btnSearch = findViewById(R.id.btnSearchLocation);
         floatingActionButton = findViewById(R.id.btnListStopPoint);
@@ -128,8 +131,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
-                        MapsActivity.this.finish();
+                        returnList.remove(li);
+                        adapter.notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -152,9 +155,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         view.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //Add stoppoint to tour
-                returnList.clear();
-                finish();
+                AddStopPointsService addStopPointsService = ApiUtils.getAddStopPointsService();
+                String token = ((MyApplication)getApplication()) .getToken();
+                addStopPointsService.sendData(token , new AddStopPointsBody(tourId,returnList,null)).enqueue(new Callback<Message>() {
+                    @Override
+                    public synchronized void onResponse(Call<Message> call, Response<Message> response) {
+                        if(response.code()==200){
+                            Toast.makeText(MapsActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            returnList.clear();
+                            //finish();
+                        }
+                        else {
+                            try {
+                                Log.d("AAA", "onResponse: "+tourId);
+                                Toast.makeText(MapsActivity.this, ""+response.code()+'-'+response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Message> call, Throwable t) {
+
+                    }
+                });
+
             }
         });
         AlertDialog dialog = view.create();
@@ -172,8 +198,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final EditText edtMaxCost = alertLayout.findViewById(R.id.edit_maxCoststop);
         final TextView txtDateArrive = alertLayout.findViewById(R.id.text_dateArrive);
         final TextView txtDateLeave = alertLayout.findViewById(R.id.text_dateLeave);
-        EditText edtTimeArrive = alertLayout.findViewById(R.id.text_timeArrive);
-        EditText edtTimeLeave = alertLayout.findViewById(R.id.text_timeLeave);
+        final EditText edtTimeArrive = alertLayout.findViewById(R.id.text_timeArrive);
+        final EditText edtTimeLeave = alertLayout.findViewById(R.id.text_timeLeave);
         ImageButton btnDateArrive = alertLayout.findViewById(R.id.btn_calendar_arrive);
         ImageButton btnDateLeave = alertLayout.findViewById(R.id.btn_calendar_leave);
         btnDateArrive.setOnClickListener(new View.OnClickListener() {
@@ -254,15 +280,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         alert.setPositiveButton(addStopPoint? "Create": "Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Calendar arrivalAt = (Calendar)(txtDateArrive.getTag());
+                        Calendar leaveAt = (Calendar)(txtDateLeave.getTag());
+                        int hour, minute;
+                        String[] time;
+                        //get Arrival Time
+                        time = edtTimeArrive.getText().toString().split(":");
+                        hour = Integer.parseInt(time[0]);
+                        minute = Integer.parseInt(time[1]);
+                        //set arrivalTime
+                        arrivalAt.set(Calendar.HOUR,hour);
+                        arrivalAt.set(Calendar.MINUTE,minute);
+                        //getLeaveTime
+                        time = edtTimeLeave.getText().toString().split(":");
+                        hour = Integer.parseInt(time[0]);
+                        minute = Integer.parseInt(time[1]);
+                        //setLeaveTime
+                        leaveAt.set(Calendar.HOUR,hour);
+                        leaveAt.set(Calendar.MINUTE,minute);
+                        //set Time date
+                        stopPoint.setArrivalAt(arrivalAt.getTimeInMillis());
+                        stopPoint.setLeaveAt(leaveAt.getTimeInMillis());
+
+                        stopPoint.setName(edtName.getText().toString());
+                        stopPoint.setAddress(edtAddress.getText().toString());
+                        stopPoint.setServiceTypeId(spinnerService.getSelectedItemPosition()+1);
+                        stopPoint.setProvinceId(spinnerProvice.getSelectedItemPosition()+1);
+
+                        stopPoint.setMinCost(edtMinCost.getText().toString());
+                        stopPoint.setMaxCost(edtMaxCost.getText().toString());
+
                         if(addStopPoint)
                         {
                             stopPoint.setId(null);
-                            stopPoint.setName(edtName.getText().toString());
-                            stopPoint.setAddress(edtAddress.getText().toString());
-                            stopPoint.setServiceTypeId(spinnerService.getSelectedItemPosition()+1);
-                            stopPoint.setProvinceId(spinnerProvice.getSelectedItemPosition()+1);
-                            stopPoint.setMinCost(edtMinCost.getText().toString());
-                            stopPoint.setMaxCost(edtMaxCost.getText().toString());
                             //Arrive and leave Time
                             LatLng markerPosition = new LatLng(Double.parseDouble(stopPoint.getLat()), Double.parseDouble(stopPoint.getLong()));
                             int resId;
@@ -278,6 +328,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Marker current = mMap.addMarker(new MarkerOptions().position(markerPosition).title(stopPoint.getName()).icon(BitmapDescriptorFactory.fromResource(resId)));
                             current.setTag(stopPoint);
                             list.add(stopPoint);
+                            returnList.add(stopPoint);
                         }
 
                         else {
