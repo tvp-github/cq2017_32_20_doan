@@ -141,6 +141,7 @@ public class ListTourActivity extends AppCompatActivity {
             @Override public void onClick(View v) {
                startActivity(new Intent(ListTourActivity.this, SettingsActivity.class));
            }
+
         });
 
         search_tour.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
