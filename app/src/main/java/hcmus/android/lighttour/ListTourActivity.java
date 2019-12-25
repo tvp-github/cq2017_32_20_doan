@@ -136,10 +136,9 @@ public class ListTourActivity extends AppCompatActivity {
         // Chuyển màn hình sang settings
         btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ListTourActivity.this, SettingsActivity.class));
-            }
+            @Override public void onClick(View v) {
+               startActivity(new Intent(ListTourActivity.this, SettingsActivity.class));
+           }
         });
     }
 

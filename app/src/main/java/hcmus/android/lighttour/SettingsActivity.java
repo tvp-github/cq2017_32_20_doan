@@ -1,5 +1,8 @@
 package hcmus.android.lighttour;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,23 +13,21 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 public class SettingsActivity extends AppCompatActivity {
     Spinner spinner;
     Button logout;
-    public void init(){
-        spinner = findViewById(R.id.switchLang);
-    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
-        init();
+
+
 
         //Khởi tạo toolbar
-        Toolbar toolbar =findViewById(R.id.toolbar_list_tour);
+        Toolbar toolbar =findViewById(R.id.toolbar_settings);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Settings");
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
@@ -34,6 +35,8 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //Switch Language
+
+        spinner = findViewById(R.id.switchLang);
         final String[] gen = {"Vietnamese", "English", "Japanese", "Thai"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,gen);
         spinner.setAdapter(arrayAdapter);
@@ -49,6 +52,6 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
-
     }
+
 }
