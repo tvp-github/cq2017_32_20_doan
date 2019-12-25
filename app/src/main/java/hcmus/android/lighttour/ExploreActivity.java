@@ -3,7 +3,6 @@ package hcmus.android.lighttour;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,15 +28,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+import hcmus.android.lighttour.APIService.GetSearchStopPointService;
 import hcmus.android.lighttour.APIService.GetStopPointService;
 import hcmus.android.lighttour.AppUtils.OneCoord;
 import hcmus.android.lighttour.AppUtils.RequestStoppointBody;
 import hcmus.android.lighttour.Response.GetStopPoints;
+import hcmus.android.lighttour.Response.SearchStopPoint;
 import hcmus.android.lighttour.Response.StopPoint;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
@@ -54,8 +54,11 @@ public class ExploreActivity extends FragmentActivity implements OnMapReadyCallb
         Button btnSearch;
         Geocoder geocoder;
         GetStopPointService getStopPointService;
+        GetSearchStopPointService getSearchStopPointService;
         List<StopPoint> list;
         List<StopPoint> returnList;
+        SearchView searchStopPoint;
+        String token;
         @Override
         public void onBackPressed() {
                 super.onBackPressed();
@@ -72,6 +75,12 @@ public class ExploreActivity extends FragmentActivity implements OnMapReadyCallb
                 getStopPointService = ApiUtils.getGetStopPointService();
                 list = new ArrayList<StopPoint>();
                 returnList = new ArrayList<StopPoint>();
+                searchStopPoint = findViewById(R.id.search_StopPoint);
+                getSearchStopPointService = ApiUtils.getGetSearchStopPointService();
+                MyApplication myApplication = (MyApplication) getApplication();
+                token = myApplication.getToken();
+                searchStopPoint.setSubmitButtonEnabled(true);
+
 //                geocoder = new Geocoder(ExploreActivity.this, Locale.getDefault());
 //                btnSearch.setOnClickListener(new View.OnClickListener() {
 //                        @Override
@@ -180,7 +189,6 @@ public class ExploreActivity extends FragmentActivity implements OnMapReadyCallb
         @Override
         public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
-
                 // Add a marker in Sydney and move the camera
                 LatLng hochiminh = new LatLng(10.7628247, 106.6813572);
 //        Marker hcmus = mMap.addMarker(new MarkerOptions().position(hochiminh).title("Marker in Ho Chi Minh"));
@@ -241,6 +249,64 @@ public class ExploreActivity extends FragmentActivity implements OnMapReadyCallb
 
                         @Override
                         public void onFailure(Call<GetStopPoints> call, Throwable t) {
+                        }
+                });
+
+                searchStopPoint.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                                return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                                getSearchStopPointService.sendData(token,newText, 1,1000).enqueue(new Callback<SearchStopPoint>() {
+                                        @Override
+                                        public void onResponse(Call<SearchStopPoint> call, Response<SearchStopPoint> response) {
+                                                Log.d("111","onResponse: "+response.code());
+                                                if (response.code() == 200){
+                                                        mMap.clear();
+
+                                                        LatLng latLng = mMap.getCameraPosition().target;
+                                                        Log.d("111","total: "+response.body().getTotal());
+                                                        Log.d("111","body: "+response.body().toString());
+                                                        List<StopPoint> otherlist = response.body().getStopPoints();
+                                                        Log.d("AAA","total list: "+otherlist.size());
+                                                        for (int i = 0; i<otherlist.size();i++){
+                                                                StopPoint stopPoint = otherlist.get(i);
+                                                                Log.d("AAA","total list: "+stopPoint.getId());
+                                                                LatLng markerPosition = new LatLng(Double.parseDouble(stopPoint.getLat()), Double.parseDouble(stopPoint.getLong()));
+                                                                int resId;
+                                                                switch (stopPoint.getServiceTypeId()){
+                                                                        case 1: resId = R.drawable.restaurant;
+                                                                                break;
+                                                                        case 2: resId = R.drawable.hotel;
+                                                                                break;
+                                                                        case 3: resId = R.drawable.rest_station;
+                                                                                break;
+                                                                        default: resId = R.drawable.other;
+                                                                }
+                                                                Marker current = mMap.addMarker(new MarkerOptions().position(markerPosition).title(stopPoint.getName()).icon(BitmapDescriptorFactory.fromResource(resId)));
+                                                                current.setTag(stopPoint);
+                                                                list.add(stopPoint);
+
+                                                        }
+                                                }
+                                                else{
+                                                        try {
+                                                                Log.d("FFF", "onResponse: "+response.errorBody().string());
+                                                        } catch (IOException e) {
+                                                                e.printStackTrace();
+                                                        }
+                                                }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<SearchStopPoint> call, Throwable t) {
+
+                                        }
+                                });
+                                return false;
                         }
                 });
         }
