@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar_forgot_password"
+        layout="@layout/toolbar">
+    </include>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Select which contact details should we use to reset your password."
+        android:layout_margin="20dp"
+        android:fontFamily="@font/roboto"
+        android:textSize="20sp">
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/btnViaSms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/style_border"
+            android:drawableLeft="@drawable/sms"
+            android:drawablePadding="16dp"
+            android:padding="12dp"
+            android:text="Via sms"
+            android:textColor="#000" />
+
+        <Button
+            android:id="@+id/btnViaEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_review"
+            android:drawableLeft="@drawable/gmail"
+            android:drawablePadding="16dp"
+            android:padding="12dp"
+            android:text="Via email"
+            android:textColor="#000" />
+    </LinearLayout>
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/style_border"
+        android:drawableLeft="@drawable/email"
+        android:drawablePadding="16dp"
+        android:inputType="text"
+        android:padding="16dp"
+        android:hint="Please enter your phone number"
+        android:textColor="#000" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/style_btn_create_tour"
+        android:drawablePadding="16dp"
+        android:inputType="text"
+        android:padding="12dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Submit"
+        android:textColor="#fff" />
+</LinearLayout>

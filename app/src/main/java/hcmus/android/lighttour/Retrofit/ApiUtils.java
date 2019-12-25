@@ -15,7 +15,9 @@ import hcmus.android.lighttour.APIService.RegisterService;
 import hcmus.android.lighttour.APIService.SendFeedbackService;
 import hcmus.android.lighttour.APIService.SendReportFeedbackService;
 import hcmus.android.lighttour.APIService.SendReportReviewService;
+import hcmus.android.lighttour.APIService.SendRequestOTPService;
 import hcmus.android.lighttour.APIService.SendReviewService;
+import hcmus.android.lighttour.APIService.SendVerifyOTPService;
 
 //Tạo các Service từ RetrofitClient để lấy dữ liệu thông qua các Service này
 public class ApiUtils {
@@ -87,5 +89,13 @@ public class ApiUtils {
 
     public static SendReportFeedbackService getSendReportFeedbackService() {
         return RetrofitClient.getClient(BASE_URL).create(SendReportFeedbackService.class);
+    }
+
+    public static SendRequestOTPService getSendRequestOTPService() {
+        return RetrofitClient.getClient(BASE_URL).create(SendRequestOTPService.class);
+    }
+
+    public static SendVerifyOTPService getSendVerifyOTPService() {
+        return RetrofitClient.getClient(BASE_URL).create(SendVerifyOTPService.class);
     }
 }

@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class ListTourActivity extends AppCompatActivity {
     Menu menu;
     ImageButton imgbtnHistory;
     ImageButton btnSettings;
+    SearchView search_tour;
     int ROWPERPAGE = 30;
     int currentPage = 1;
     int total;
@@ -136,9 +138,20 @@ public class ListTourActivity extends AppCompatActivity {
         // Chuyển màn hình sang settings
         btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+               startActivity(new Intent(ListTourActivity.this, SettingsActivity.class));
+           }
+        });
+
+        search_tour.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ListTourActivity.this, SettingsActivity.class));
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
     }
@@ -147,11 +160,10 @@ public class ListTourActivity extends AppCompatActivity {
     private void init() {
         listTourData = new ArrayList<Tour>();
         listTour = findViewById(R.id.listTour);
-        imgUserAva = findViewById(R.id.avatarUser);
-        btnCreate = findViewById(R.id.btnCreate);
         btnNextPage = findViewById(R.id.btnNextPage_listtour);
         btnPrevPage = findViewById(R.id.btnPrevPage_listtour);
         imgbtnHistory = findViewById(R.id.btnHistory);
+        search_tour = findViewById(R.id.search_tour);
         listToursService = ApiUtils.getListToursAPIService();
         MyApplication myApplication = (MyApplication) getApplication();
         token = myApplication.getToken();

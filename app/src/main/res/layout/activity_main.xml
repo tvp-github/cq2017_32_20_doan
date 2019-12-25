@@ -8,25 +8,22 @@
     android:paddingTop="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:id="@+id/layout"
-    android:background="@drawable/backgroud">
+    android:background="@drawable/backgroud"
+    android:weightSum="10"
+   >
    <LinearLayout
+       android:layout_weight="9"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:orientation="vertical">
-
-       <!--       <TextView-->
-<!--           android:layout_width="match_parent"-->
-<!--           android:layout_height="wrap_content"-->
-<!--           android:gravity="center"-->
-<!--           android:textSize="30dp"-->
-<!--           android:text="LOGIN"/>-->
        <ImageView
            android:layout_width="186dp"
            android:layout_height="66dp"
-           android:layout_gravity="center"
-           android:background="@drawable/logo"></ImageView>
+           android:layout_gravity="center_horizontal"
+           android:background="@drawable/logo">
+       </ImageView>
 
        <EditText
            android:layout_width="match_parent"
@@ -68,71 +65,77 @@
            android:layout_marginRight="25dp"
            android:layout_gravity="right">
        </TextView>
+       <Button
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="LOGIN"
+           android:id="@+id/btnlogin"
+           android:background="@drawable/btnformate"
+           android:layout_marginBottom="15dp"
+           android:textAlignment="center"
+           android:padding="14dp"
+           android:layout_marginTop="20dp"
+           android:layout_gravity="center_horizontal"
+           android:textSize="16dp"
+           android:textColor="#fff">
+       </Button>
+       <TextView
+           android:layout_gravity="center_horizontal"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="OR"
+           android:layout_marginBottom="15dp"
+           android:textAlignment="center"
+           android:gravity="center"
+           android:textSize="13dp"
+           android:textColor="#fff">
+       </TextView>
+       <LinearLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_gravity="center_horizontal">
+           <ImageButton
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@drawable/facebook"
+               android:layout_marginRight="10dp">
+           </ImageButton>
+
+           <ImageButton
+               android:id="@+id/btnsignin_gg"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@drawable/google">
+           </ImageButton>
+       </LinearLayout>
    </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="30dp"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LOGIN"
-            android:id="@+id/btnlogin"
-            android:background="@drawable/btnformate"
-            android:layout_marginBottom="15dp"
-            android:textAlignment="center"
-            android:padding="14dp"
-            android:gravity="center"
-            android:textSize="16dp"
-            android:textColor="#fff">
-        </Button>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="OR"
-            android:layout_marginBottom="15dp"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:textSize="13dp"
-            android:textColor="#fff">
-        </TextView>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/facebook"
-                android:layout_marginRight="10dp">
-            </ImageButton>
 
-            <ImageButton
-                android:id="@+id/btnsignin_gg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/google"></ImageButton>
-        </LinearLayout>
         <TextView
             android:id="@+id/act"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+
             android:text="Don't have an account?"
-            android:textSize="16dp"
             android:textColor="#fff"
-            android:layout_marginTop="160dp"
-            android:layout_gravity="center">
-        </TextView>
+            android:textSize="16dp"></TextView>
+
         <TextView
             android:id="@+id/txtSignup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Sign up"
-            android:textColor="@android:color/holo_blue_dark"/>
+            android:textColor="@android:color/holo_blue_dark" />
     </LinearLayout>
 </LinearLayout>
 

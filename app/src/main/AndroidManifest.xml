@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hcmus.android.lighttour">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -19,7 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UpdateTourActivity" android:parentActivityName=".HistoryActivity"></activity>
+
+        <activity
+            android:name=".UpdateTourActivity"
+            android:parentActivityName=".HistoryActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,7 +36,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".CreateTourActivity"
             android:parentActivityName=".ListTourActivity" />
@@ -50,14 +52,28 @@
         <activity android:name=".ListTourActivity" />
         <activity android:name=".CreateSpotPointActivity" />
         <activity android:name=".PointInformationActivity" />
-        <activity android:name=".WriteReviewActivity" />
-        <activity android:name=".ExploreActivity" />
+        <activity
+            android:name=".WriteReviewActivity"
+            android:parentActivityName=".TourInformationActivity"/>
+        <activity
+            android:name=".ExploreActivity"
+            android:parentActivityName=".ListTourActivity"/>
         <activity
             android:name=".HistoryActivity"
             android:parentActivityName=".ListTourActivity" />
-        <activity android:name=".TourInformationActivity" />
-        <activity android:name=".WriteFeedbackActivity" />
-        <activity android:name=".SettingsActivity" />
-</application>
+
+        <activity
+            android:name=".TourInformationActivity"
+            android:parentActivityName=".ListTourActivity"/>
+        <activity
+            android:name=".WriteFeedbackActivity"
+            android:parentActivityName=".PointInformationActivity"/>
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".ListTourActivity"/>
+        <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".VerifyOTPActivity" />
+    </application>
+
 
 </manifest>

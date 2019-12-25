@@ -5,7 +5,7 @@
         android:width="3dp"
         android:color="@color/borderBackground" />
 
-    <solid android:color="@color/windowBackground" />
+
     <corners android:radius="20dp"/>
 
 </shape>

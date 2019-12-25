@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     String token;
     Integer userId;
     TextView txtSignup;
+    TextView txtForgotPassword;
     ImageButton imgbtnGGLogin;
     private LoginService loginService;
     private LoginGGService loginGGService;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         edtEmailPhone = findViewById(R.id.edtlogin_user);
         edtPassword = findViewById(R.id.edtlogin_password);
         txtSignup =findViewById(R.id.txtSignup);
+        txtForgotPassword=findViewById(R.id.txtforgotpass);
         loginService = ApiUtils.getLoginAPIService();
         loginGGService = ApiUtils.getLoginGGService();
         imgbtnGGLogin = findViewById(R.id.btnsignin_gg);
@@ -211,6 +213,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Go to sign up view
                 Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
+        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
             }
         });

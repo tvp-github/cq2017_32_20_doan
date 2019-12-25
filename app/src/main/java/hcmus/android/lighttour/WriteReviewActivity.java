@@ -43,6 +43,7 @@ public class WriteReviewActivity extends AppCompatActivity {
     String token;
     SendReviewService sendReviewService;
 
+    //enable backpress
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

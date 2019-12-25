@@ -44,8 +44,6 @@ public class TourInformationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tour_information);
 
-
-
         fragmentManager = this.getSupportFragmentManager();//Get Fragment Manager
 
         Intent intent=getIntent();

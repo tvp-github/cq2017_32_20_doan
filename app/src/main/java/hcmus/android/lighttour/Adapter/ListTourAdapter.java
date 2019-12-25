@@ -96,5 +96,6 @@ public class ListTourAdapter extends BaseAdapter{
 
         return result;
     }
+
 }
 
