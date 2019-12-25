@@ -4,9 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/windowBackground"
     android:layout_marginLeft="7dp"
     android:layout_marginRight="7dp">
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar_editProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100dp"
@@ -16,7 +23,8 @@
         android:src="@drawable/sydney"
         app:civ_border_width="2dp"
         app:civ_border_color="#FFFFFF"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/toolbar_editProfile"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_below="@+id/fullName"
-        android:background="#B6B4B4"
+        android:background="@color/borderBackground"
         android:layout_marginTop="10dp"/>
 
     <TextView
@@ -82,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_below="@+id/dob"
-        android:background="#B6B4B4"
+        android:background="@color/borderBackground"
         android:layout_marginTop="10dp"/>
 
     <TextView
@@ -106,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_below="@+id/email"
-        android:background="#B6B4B4"
+        android:background="@color/borderBackground"
         android:layout_marginTop="10dp"/>
 
     <TextView
@@ -130,14 +138,14 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_below="@+id/phone"
-        android:background="#B6B4B4"
+        android:background="@color/borderBackground"
         android:layout_marginTop="10dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/address"
-        android:hint="0909544123"
+        android:hint="ABC Street, X district, Y city"
         android:textSize="15dp"
         android:layout_below="@+id/phone"
         android:layout_marginTop="20dp"
@@ -154,7 +162,7 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_below="@+id/address"
-        android:background="#B6B4B4"
+        android:background="@color/borderBackground"
         android:layout_marginTop="10dp"/>
 
     <CheckBox
@@ -194,7 +202,7 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_below="@+id/isMale"
-        android:background="#B6B4B4"
+        android:background="@color/borderBackground"
         android:layout_marginTop="10dp"/>
 
     <Button

@@ -16,8 +16,7 @@ import android.widget.TextView;
 public class SettingsActivity extends AppCompatActivity {
     Spinner spinner;
     Button logout;
-
-
+    Button editProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +50,15 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.remove("token").apply();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
+        });
+
+        // Chuyển sang màn hình edit profile
+        editProfile = findViewById(R.id.btn_editProfile);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, EditProfileActivity.class));
+            }
+
         });
     }
 
