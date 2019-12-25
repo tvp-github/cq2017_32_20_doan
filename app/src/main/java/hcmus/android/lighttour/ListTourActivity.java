@@ -2,6 +2,7 @@ package hcmus.android.lighttour;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -46,6 +47,7 @@ public class ListTourActivity extends AppCompatActivity {
     Menu menu;
     ImageButton imgbtnHistory;
     ImageButton btnSettings;
+    TextView txtTotalTour;
     SearchView search_tour;
     int ROWPERPAGE = 30;
     int currentPage = 1;
@@ -83,13 +85,6 @@ public class ListTourActivity extends AppCompatActivity {
             }
         });
         //Chuyển màn hình sang tạo tour
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ListTourActivity.this, CreateTourActivity.class);
-                startActivity(intent);
-            }
-        });
 
         btnExplore = (ImageButton) findViewById(R.id.btnExplore);
         btnExplore.setOnClickListener(new View.OnClickListener() {
@@ -144,14 +139,20 @@ public class ListTourActivity extends AppCompatActivity {
 
         });
 
+        listTour.setTextFilterEnabled(true);
+        search_tour.setSubmitButtonEnabled(true);
         search_tour.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                Log.d("AAA","change");
+                listTourAdapter.filter(newText);
+                txtTotalTour.setText(listTourAdapter.getCount() + " Results");
                 return false;
             }
         });
@@ -165,6 +166,7 @@ public class ListTourActivity extends AppCompatActivity {
         btnPrevPage = findViewById(R.id.btnPrevPage_listtour);
         imgbtnHistory = findViewById(R.id.btnHistory);
         search_tour = findViewById(R.id.search_tour);
+        txtTotalTour = findViewById(R.id.txtTotaltour);
         listToursService = ApiUtils.getListToursAPIService();
         MyApplication myApplication = (MyApplication) getApplication();
         token = myApplication.getToken();
@@ -177,11 +179,14 @@ public class ListTourActivity extends AppCompatActivity {
                 Log.d("AAA", "onResponse: " + response.body().getTours().get(0).getId());
                 if(response.code()==200){
                     //Nhập vào danh sách dữ liệu
+                    txtTotalTour.setText(response.body().getTotal().toString() + " Tours");
                     listTourData.clear();
                     listTourData.addAll(response.body().getTours());
                     total = response.body().getTotal();
                     //Cập nhật tại listView
                     listTourAdapter.notifyDataSetChanged();
+                    listTourAdapter = new ListTourAdapter(ListTourActivity.this, R.layout.list_item,listTourData);
+                    listTour.setAdapter(listTourAdapter);
                     int totalPage = (total / ROWPERPAGE) + (total%ROWPERPAGE == 0 ? 0 : 1);
                     btnNextPage.setEnabled(true);
                     btnPrevPage.setEnabled(true);
@@ -196,4 +201,25 @@ public class ListTourActivity extends AppCompatActivity {
             }
         });
     }
+
+//    @Override
+//    public boolean onQueryTextSubmit(String query) {
+////        if(listTourData.contains(query)){
+////            listTourAdapter.getFilter().filter(query);
+////        }else{
+////            Toast.makeText(ListTourActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+////        }
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean onQueryTextChange(String newText) {
+////        Log.d("AAA","change" + newText);
+////          listTourAdapter.getFilter().filter( newText);
+//          listTourAdapter.filter(newText);
+//          txtTotalTour.setText(listTourAdapter.getCount() + " Results");
+//        return true;
+//
+//    }
+
 }

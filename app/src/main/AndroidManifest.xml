@@ -18,8 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".EditProfileActivity" />
+
         <activity
             android:name=".UpdateTourActivity"
             android:parentActivityName=".HistoryActivity" />
@@ -55,24 +54,27 @@
         <activity android:name=".PointInformationActivity" />
         <activity
             android:name=".WriteReviewActivity"
-            android:parentActivityName=".TourInformationActivity" />
+            android:parentActivityName=".TourInformationActivity"/>
         <activity
             android:name=".ExploreActivity"
-            android:parentActivityName=".ListTourActivity" />
+            android:parentActivityName=".ListTourActivity"/>
         <activity
             android:name=".HistoryActivity"
             android:parentActivityName=".ListTourActivity" />
+
         <activity
             android:name=".TourInformationActivity"
-            android:parentActivityName=".ListTourActivity" />
+            android:parentActivityName=".ListTourActivity"/>
         <activity
             android:name=".WriteFeedbackActivity"
-            android:parentActivityName=".PointInformationActivity" />
+            android:parentActivityName=".PointInformationActivity"/>
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".ListTourActivity" />
+            android:parentActivityName=".ListTourActivity"/>
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".VerifyOTPActivity" />
     </application>
+
+
 
 </manifest>

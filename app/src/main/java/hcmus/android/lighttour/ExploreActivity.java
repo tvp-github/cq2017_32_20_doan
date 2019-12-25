@@ -67,25 +67,25 @@ public class ExploreActivity extends FragmentActivity implements OnMapReadyCallb
                 setContentView(R.layout.activity_maps);
                 Intent intent = getIntent();
                 type = intent.getIntExtra("type",-1);
-                edtSearch = findViewById(R.id.searchLocation);
-                btnSearch = findViewById(R.id.btnSearchLocation);
+//                edtSearch = findViewById(R.id.searchLocation);
+//                btnSearch = findViewById(R.id.btnSearchLocation);
                 getStopPointService = ApiUtils.getGetStopPointService();
                 list = new ArrayList<StopPoint>();
                 returnList = new ArrayList<StopPoint>();
-                geocoder = new Geocoder(ExploreActivity.this, Locale.getDefault());
-                btnSearch.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                                try {
-                                        List<Address> fromLocationName = geocoder.getFromLocationName(edtSearch.getText().toString(), 1, 8.5, 102.1833333, 23.283333, 109.45);
-                                        LatLng location = new LatLng(fromLocationName.get(0).getLatitude(),fromLocationName.get(0).getLongitude());
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
-                                } catch (IOException e) {
-                                        e.printStackTrace();
-                                }
-
-                        }
-                });
+//                geocoder = new Geocoder(ExploreActivity.this, Locale.getDefault());
+//                btnSearch.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                                try {
+//                                        List<Address> fromLocationName = geocoder.getFromLocationName(edtSearch.getText().toString(), 1, 8.5, 102.1833333, 23.283333, 109.45);
+//                                        LatLng location = new LatLng(fromLocationName.get(0).getLatitude(),fromLocationName.get(0).getLongitude());
+//                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
+//                                } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                }
+//
+//                        }
+//                });
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.map);
                 mapFragment.getMapAsync(this);

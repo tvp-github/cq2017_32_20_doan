@@ -78,8 +78,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void init(){
         Intent intent = getIntent();
         tourId = intent.getStringExtra("tourId");
-        edtSearch = findViewById(R.id.searchLocation);
-        btnSearch = findViewById(R.id.btnSearchLocation);
+//        edtSearch = findViewById(R.id.searchLocation);
+//        btnSearch = findViewById(R.id.btnSearchLocation);
         floatingActionButton = findViewById(R.id.btnListStopPoint);
         getStopPointService = ApiUtils.getGetStopPointService();
         list = new ArrayList<StopPoint>();
@@ -99,18 +99,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         //Search location by geocoder
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    List<Address> fromLocationName = geocoder.getFromLocationName(edtSearch.getText().toString(), 1, 8.5, 102.1833333, 23.283333, 109.45);
-                    LatLng location = new LatLng(fromLocationName.get(0).getLatitude(),fromLocationName.get(0).getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        btnSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    List<Address> fromLocationName = geocoder.getFromLocationName(edtSearch.getText().toString(), 1, 8.5, 102.1833333, 23.283333, 109.45);
+//                    LatLng location = new LatLng(fromLocationName.get(0).getLatitude(),fromLocationName.get(0).getLongitude());
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
