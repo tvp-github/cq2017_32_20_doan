@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/bg_listitem"
+    >
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:weightSum="10">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="10">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/user"
+                    android:id="@+id/review_avatar" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="vertical"
+                android:weightSum="3">
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/txtNoti"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chung Tuyet"
+                    android:textStyle="bold|normal"
+                    android:paddingBottom="10dp"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="20sp"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/txtDate"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="10sp"
+                    android:text="12/12/2019 at 17:00">
+                </TextView>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <Button
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:text="Confirm"
+                        android:fontFamily="@font/roboto"
+                        android:background="@drawable/style_btn_create_tour"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp">
+                    </Button>
+                    <Button
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:text="Confirm"
+                        android:fontFamily="@font/roboto"
+                        android:background="@drawable/btn_delete"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp">
+                    </Button>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+<!--        <ImageButton-->
+<!--            android:id="@+id/btn_report"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/report"-->
+<!--            android:background="#FFF"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_weight="1">-->
+
+<!--        </ImageButton>-->
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -47,6 +47,7 @@ public class ListTourActivity extends AppCompatActivity {
     Menu menu;
     ImageButton imgbtnHistory;
     ImageButton btnSettings;
+    ImageButton btnNoti;
     TextView txtTotalTour;
     SearchView search_tour;
     int ROWPERPAGE = 30;
@@ -85,9 +86,17 @@ public class ListTourActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        //Chuyển màn hình sang tạo tour
 
-        btnExplore = (ImageButton) findViewById(R.id.btnExplore);
+
+        btnNoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListTourActivity.this, NotificationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //Chuyển màn hình sang explore điểm dừng
         btnExplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,8 +106,6 @@ public class ListTourActivity extends AppCompatActivity {
         });
 
         //Chuyển màn hình sang tạo tour
-        btnAddTour = (FloatingActionButton) findViewById(R.id.btnAddTour);
-
         btnAddTour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,9 +210,12 @@ public class ListTourActivity extends AppCompatActivity {
         listData = new ArrayList<Tour>();
         listTour = findViewById(R.id.listTour);
         btnNextPage = findViewById(R.id.btnNextPage_listtour);
+        btnNoti = findViewById(R.id.btnNoti);
         btnPrevPage = findViewById(R.id.btnPrevPage_listtour);
         imgbtnHistory = findViewById(R.id.btnHistory);
+        btnAddTour = (FloatingActionButton) findViewById(R.id.btnAddTour);
         search_tour = findViewById(R.id.search_tour);
+        btnExplore = (ImageButton) findViewById(R.id.btnExplore);
         txtTotalTour = findViewById(R.id.txtTotaltour);
         listToursService = ApiUtils.getListToursAPIService();
         MyApplication myApplication = (MyApplication) getApplication();

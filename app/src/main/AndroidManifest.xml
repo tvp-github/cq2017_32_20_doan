@@ -71,6 +71,9 @@
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".ListTourActivity"/>
+        <activity
+            android:name=".NotificationActivity"
+            android:parentActivityName=".ListTourActivity"/>
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".VerifyOTPActivity" />
         <activity android:name=".ProfileActivity"/>
