@@ -48,6 +48,25 @@ public class ProfileActivity extends AppCompatActivity {
 
         });
 
+
+        //Set name
+        SharedPreferences sharedPreferences_name = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String accessToken_name = sharedPreferences_name.getString("token", null);
+        Call<UserInfo> call_name = ApiUtils.getUser().getinfo(accessToken_name);
+        name = findViewById(R.id.namePro);
+        call_name.enqueue(new Callback<UserInfo>() {
+            @Override
+            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                name.setText(response.body().getFullName());
+            }
+
+            @Override
+            public void onFailure(Call<UserInfo> call, Throwable t) {
+
+            }
+        });
+
+
         //Set gender
         SharedPreferences sharedPreferences_gender = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String accessToken_gender = sharedPreferences_gender.getString("token", null);
@@ -62,24 +81,6 @@ public class ProfileActivity extends AppCompatActivity {
                 else{
                     gender.setText("Male");
                 }
-            }
-
-            @Override
-            public void onFailure(Call<UserInfo> call, Throwable t) {
-
-            }
-        });
-
-
-        //Set name
-        SharedPreferences sharedPreferences_name = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String accessToken_name = sharedPreferences_name.getString("token", null);
-        Call<UserInfo> call_name = ApiUtils.getUser().getinfo(accessToken_name);
-        name = findViewById(R.id.namePro);
-        call_name.enqueue(new Callback<UserInfo>() {
-            @Override
-            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
-                name.setText(response.body().getFullName());
             }
 
             @Override
@@ -158,7 +159,7 @@ public class ProfileActivity extends AppCompatActivity {
                     birthday.setText("Empty");
                 }
                 else {
-                    birthday.setText(String.valueOf(dob));
+                    birthday.setText(firstEleven(String.valueOf(dob)));
                 }
             }
 
@@ -168,6 +169,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+    //Hàm lấy 10 ký tự đầu tiên
+    public String firstEleven(String str) {
+
+        if(str.length() == 10){
+            return str;
+        }
+        else{
+            return str.substring(0,10);
+        }
     }
 }
 

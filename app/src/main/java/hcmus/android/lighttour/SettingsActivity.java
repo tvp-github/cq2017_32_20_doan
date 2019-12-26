@@ -39,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //Switch Language
+        //Language
 
         spinner = findViewById(R.id.switchLang);
         final String[] gen = {"Vietnamese", "English", "Japanese", "Thai"};
