@@ -75,12 +75,14 @@ public class HistoryActivity extends AppCompatActivity {
         listTour.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(HistoryActivity.this, UpdateTourActivity.class);
-                intent.putExtra("tour",new Gson().toJson(listTourData.get(i)));
+                Intent intent = new Intent(HistoryActivity.this, TourInformationActivity.class);
+                intent.putExtra("tour", new Gson().toJson(listTourData.get(i)));
+                intent.putExtra("fromHistory",true);
                 startActivity(intent);
             }
         });
     }
+
     private void init() {
         listTourData = new ArrayList<Tour>();
         listTour = findViewById(R.id.listTour);
@@ -118,5 +120,12 @@ public class HistoryActivity extends AppCompatActivity {
                 Toast.makeText(HistoryActivity.this, "Unable to load list of tours", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        currentPage = 1;
+        getData();
     }
 }

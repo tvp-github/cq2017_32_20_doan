@@ -11,6 +11,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -73,7 +75,7 @@ public class WriteReviewActivity extends AppCompatActivity {
 
         Log.d("111", "tour info " );
         Intent intent=getIntent();
-        tour= (Tour) intent.getSerializableExtra("tour");
+        tour= new Gson().fromJson(intent.getStringExtra("tour"),Tour.class);
         Log.d("111", "tour info " + tour.toString());
         MyApplication myApplication = (MyApplication) getApplication();
         token = myApplication.getToken();

@@ -12,6 +12,7 @@ import hcmus.android.lighttour.AppUtils.OneCoord;
 import hcmus.android.lighttour.AppUtils.RequestStoppointBody;
 import hcmus.android.lighttour.Response.GetStopPoints;
 import hcmus.android.lighttour.Response.StopPoint;
+import hcmus.android.lighttour.Response.Tour;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +52,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -65,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private TextView mTapTextView;
     private TextView mCameraTextView;
-//    int type;
+    int type;
     String tourId;
     final int RESULT_OK = 001;
     EditText edtSearch;
@@ -75,15 +77,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     GetStopPointService getStopPointService;
     List<StopPoint> list;
     List<StopPoint> returnList;
+    SimpleDateFormat simpleDateFormat;
     private void init(){
         Intent intent = getIntent();
         tourId = intent.getStringExtra("tourId");
+        type = intent.getIntExtra("type",0);
         edtSearch = findViewById(R.id.searchLocation);
         btnSearch = findViewById(R.id.btnSearchLocation);
         floatingActionButton = findViewById(R.id.btnListStopPoint);
+        if (type ==1 ) floatingActionButton.hide();
         getStopPointService = ApiUtils.getGetStopPointService();
         list = new ArrayList<StopPoint>();
         returnList = new ArrayList<StopPoint>();
+        simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
     }
     @Override
@@ -157,13 +163,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(DialogInterface dialogInterface, int i) {
                 AddStopPointsService addStopPointsService = ApiUtils.getAddStopPointsService();
                 String token = ((MyApplication)getApplication()) .getToken();
+                Log.d("AAA", "onClick: " + new Gson().toJson(returnList) + "\n" + tourId);
                 addStopPointsService.sendData(token , new AddStopPointsBody(tourId,returnList,null)).enqueue(new Callback<Message>() {
                     @Override
                     public synchronized void onResponse(Call<Message> call, Response<Message> response) {
                         if(response.code()==200){
                             Toast.makeText(MapsActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             returnList.clear();
-                            //finish();
+                            if (type == 0)
+                            {
+                                setResult(001);
+                                finish();
+                            }
                         }
                         else {
                             try {
@@ -202,10 +213,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final EditText edtTimeLeave = alertLayout.findViewById(R.id.text_timeLeave);
         ImageButton btnDateArrive = alertLayout.findViewById(R.id.btn_calendar_arrive);
         ImageButton btnDateLeave = alertLayout.findViewById(R.id.btn_calendar_leave);
+
+        Calendar calendarArrive = Calendar.getInstance();
+        Calendar calendarLeave = Calendar.getInstance();
+        txtDateArrive.setText(simpleDateFormat.format(calendarArrive.getTime()));
+        txtDateArrive.setTag(calendarArrive);
+        txtDateLeave.setText(simpleDateFormat.format(calendarLeave.getTime()));
+        txtDateLeave.setTag(calendarLeave);
+
         btnDateArrive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Calendar calendar = Calendar.getInstance();
+                final Calendar calendar = (Calendar) txtDateArrive.getTag();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(MapsActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -214,7 +233,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         calendar.set(Calendar.MONTH,i1);
                         calendar.set(Calendar.DATE,i2);
                         //Xuất ra
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                         txtDateArrive.setText(simpleDateFormat.format(calendar.getTime()));
                         txtDateArrive.setTag(calendar);
                     }
@@ -226,7 +244,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnDateLeave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Calendar calendar = Calendar.getInstance();
+                final Calendar calendar = (Calendar) txtDateLeave.getTag();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(MapsActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -235,7 +253,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         calendar.set(Calendar.MONTH,i1);
                         calendar.set(Calendar.DATE,i2);
                         //Xuất ra
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
                         txtDateLeave.setText(simpleDateFormat.format(calendar.getTime()));
                         txtDateLeave.setTag(calendar);
                     }
@@ -277,71 +295,103 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(DialogInterface dialog, int which) {
             }
         });
-        alert.setPositiveButton(addStopPoint? "Create": "Add", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(addStopPoint? "Create": "Add", null);
+        final AlertDialog dialog = alert.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button btnAdd = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                btnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(View view) {
                         Calendar arrivalAt = (Calendar)(txtDateArrive.getTag());
                         Calendar leaveAt = (Calendar)(txtDateLeave.getTag());
-                        int hour, minute;
-                        String[] time;
-                        //get Arrival Time
-                        time = edtTimeArrive.getText().toString().split(":");
-                        hour = Integer.parseInt(time[0]);
-                        minute = Integer.parseInt(time[1]);
-                        //set arrivalTime
-                        arrivalAt.set(Calendar.HOUR,hour);
-                        arrivalAt.set(Calendar.MINUTE,minute);
-                        //getLeaveTime
-                        time = edtTimeLeave.getText().toString().split(":");
-                        hour = Integer.parseInt(time[0]);
-                        minute = Integer.parseInt(time[1]);
-                        //setLeaveTime
-                        leaveAt.set(Calendar.HOUR,hour);
-                        leaveAt.set(Calendar.MINUTE,minute);
-                        //set Time date
-                        stopPoint.setArrivalAt(arrivalAt.getTimeInMillis());
-                        stopPoint.setLeaveAt(leaveAt.getTimeInMillis());
+                        if(validate(edtName.getText().toString(),edtAddress.getText().toString(),edtMinCost.getText().toString(),edtMaxCost.getText().toString())
+                                &&validateHour(edtTimeArrive.getText().toString(),edtTimeLeave.getText().toString())) {
+                            int hour, minute;
+                            String[] time;
+                            //get Arrival Time
+                            time = edtTimeArrive.getText().toString().split(":");
+                            hour = Integer.parseInt(time[0]);
+                            minute = Integer.parseInt(time[1]);
+                            //set arrivalTime
+                            arrivalAt.set(Calendar.HOUR, hour);
+                            arrivalAt.set(Calendar.MINUTE, minute);
+                            //getLeaveTime
+                            time = edtTimeLeave.getText().toString().split(":");
+                            hour = Integer.parseInt(time[0]);
+                            minute = Integer.parseInt(time[1]);
+                            //setLeaveTime
+                            leaveAt.set(Calendar.HOUR, hour);
+                            leaveAt.set(Calendar.MINUTE, minute);
+                            //set Time date
+                            stopPoint.setArrivalAt(arrivalAt.getTimeInMillis());
+                            stopPoint.setLeaveAt(leaveAt.getTimeInMillis());
 
-                        stopPoint.setName(edtName.getText().toString());
-                        stopPoint.setAddress(edtAddress.getText().toString());
-                        stopPoint.setServiceTypeId(spinnerService.getSelectedItemPosition()+1);
-                        stopPoint.setProvinceId(spinnerProvice.getSelectedItemPosition()+1);
+                            stopPoint.setName(edtName.getText().toString());
+                            stopPoint.setAddress(edtAddress.getText().toString());
+                            stopPoint.setServiceTypeId(spinnerService.getSelectedItemPosition() + 1);
+                            stopPoint.setProvinceId(spinnerProvice.getSelectedItemPosition() + 1);
 
-                        stopPoint.setMinCost(edtMinCost.getText().toString());
-                        stopPoint.setMaxCost(edtMaxCost.getText().toString());
+                            stopPoint.setMinCost(edtMinCost.getText().toString());
+                            stopPoint.setMaxCost(edtMaxCost.getText().toString());
 
-                        if(addStopPoint)
-                        {
-                            stopPoint.setId(null);
-                            //Arrive and leave Time
-                            LatLng markerPosition = new LatLng(Double.parseDouble(stopPoint.getLat()), Double.parseDouble(stopPoint.getLong()));
-                            int resId;
-                            switch (stopPoint.getServiceTypeId()){
-                                case 1: resId = R.drawable.restaurant;
-                                    break;
-                                case 2: resId = R.drawable.hotel;
-                                    break;
-                                case 3: resId = R.drawable.rest_station;
-                                    break;
-                                default: resId = R.drawable.other;
+                            if (addStopPoint) {
+                                stopPoint.setId(null);
+                                //Arrive and leave Time
+                                LatLng markerPosition = new LatLng(Double.parseDouble(stopPoint.getLat()), Double.parseDouble(stopPoint.getLong()));
+                                int resId;
+                                switch (stopPoint.getServiceTypeId()) {
+                                    case 1:
+                                        resId = R.drawable.restaurant;
+                                        break;
+                                    case 2:
+                                        resId = R.drawable.hotel;
+                                        break;
+                                    case 3:
+                                        resId = R.drawable.rest_station;
+                                        break;
+                                    default:
+                                        resId = R.drawable.other;
+                                }
+                                Marker current = mMap.addMarker(new MarkerOptions().position(markerPosition).title(stopPoint.getName()).icon(BitmapDescriptorFactory.fromResource(resId)));
+                                current.setTag(stopPoint);
+                                list.add(stopPoint);
+                                returnList.add(stopPoint);
+                                
+                            } else {
+                                if (!returnList.contains(stopPoint)) {
+                                    stopPoint.setServiceId(stopPoint.getId());
+                                    stopPoint.setId(null);
+                                    returnList.add(stopPoint);
+                                }
                             }
-                            Marker current = mMap.addMarker(new MarkerOptions().position(markerPosition).title(stopPoint.getName()).icon(BitmapDescriptorFactory.fromResource(resId)));
-                            current.setTag(stopPoint);
-                            list.add(stopPoint);
-                            returnList.add(stopPoint);
+                            dialog.dismiss();
                         }
-
-                        else {
-                            if(!returnList.contains(stopPoint))
-                            returnList.add(stopPoint);
+                        else
+                        {
+                            Toast.makeText(MapsActivity.this, "Invalid input value", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-        AlertDialog dialog = alert.create();
+            }
+        });
         dialog.show();
     }
 
-
+    private boolean validateHour(String ...str){
+        for (int i = 0 ; i<str.length; i++) {
+            if (!str[i].matches("^([2][0-3]|[0-1][0-9]|[0-9]):([0-5][0-9]|[0-9])$"))
+                return false;
+        }
+        return true;
+    }
+    private boolean validate(String ...str) {
+        for (int i = 0 ; i< str.length ; i++ )
+            if (str[i].length() == 0)
+                return false;
+        return true;
+    }
 
     /**
      * Manipulates the map once available.
@@ -358,10 +408,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng hcmus = new LatLng(10.7628247, 106.6813572);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15.0f));
-        mMap.setOnMarkerClickListener(this);
-        mMap.setOnMapLongClickListener(this);
+        if(type == 1)
+        {
+            mMap.setOnMapClickListener(this);
+        }else
+        {
+            mMap.setOnMarkerClickListener(this);
+            mMap.setOnMapLongClickListener(this);
+        }
         mMap.setOnCameraIdleListener(this);
-        mMap.setOnMapClickListener(this);
     }
 
     @Override
@@ -424,6 +479,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapClick(LatLng latLng) {
-//  e
+        if(type == 1) {
+            Intent result = new Intent();
+            result.putExtra("lat", latLng.latitude);
+            result.putExtra("long", latLng.longitude);
+            setResult(RESULT_OK,result);
+            MapsActivity.this.finish();
+        }
     }
 }

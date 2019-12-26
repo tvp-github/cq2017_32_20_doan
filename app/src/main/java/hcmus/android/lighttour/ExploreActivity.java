@@ -95,13 +95,7 @@ public class ExploreActivity extends FragmentActivity implements OnMapReadyCallb
 
         @Override
         public void onMapClick(LatLng point) {
-                if(type == 1) {
-                        Intent result = new Intent();
-                        result.putExtra("lat", point.latitude);
-                        result.putExtra("long", point.longitude);
-                        setResult(RESULT_OK,result);
-                        ExploreActivity.this.finish();
-                }
+
         }
 
 
