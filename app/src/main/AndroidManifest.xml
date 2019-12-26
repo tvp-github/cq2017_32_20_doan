@@ -49,14 +49,31 @@
         <activity android:name=".ListTourActivity" />
         <activity android:name=".CreateSpotPointActivity" />
         <activity android:name=".PointInformationActivity" />
-        <activity android:name=".WriteReviewActivity" />
-        <activity android:name=".ExploreActivity" />
+        <activity
+            android:name=".WriteReviewActivity"
+            android:parentActivityName=".TourInformationActivity"/>
+        <activity
+            android:name=".ExploreActivity"
+            android:parentActivityName=".ListTourActivity"/>
         <activity
             android:name=".HistoryActivity"
             android:parentActivityName=".ListTourActivity" />
-        <activity android:name=".TourInformationActivity" />
-        <activity android:name=".WriteFeedbackActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+
+        <activity
+            android:name=".TourInformationActivity"
+            android:parentActivityName=".ListTourActivity"/>
+        <activity
+            android:name=".WriteFeedbackActivity"
+            android:parentActivityName=".PointInformationActivity"/>
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".ListTourActivity"/>
+        <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".VerifyOTPActivity" />
+        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".EditProfileActivity" />
     </application>
+
+
 
 </manifest>

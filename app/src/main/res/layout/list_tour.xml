@@ -37,102 +37,93 @@
 
 
         <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/avatarUser"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="30dp"
-                android:src="@drawable/user" />
-
             <SearchView
-                android:id="@+id/loginButton"
+                android:id="@+id/search_tour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/style_search"/>
+                android:hint="Search Tour"
+                android:background="@drawable/item_show"/>
         </LinearLayout>
+
 
         <LinearLayout
+            android:layout_weight="0.8"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/btnCreate"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="1" />
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="1" />
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="1" />
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="1" />
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:background="@drawable/item_show"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:paddingBottom="0dp"
+            android:weightSum="10">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/destination"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="10dp">
+            </ImageView>
+            <TextView
+                android:id="@+id/txtTotaltour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="14 Tours"
+                android:textSize="15dp"
+                android:textColor="#000"
+                android:textStyle="bold" />
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="8"
+            android:layout_weight="8.2"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <Button
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:id="@+id/btnPrevPage_listtour"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Previous Page" />
+                    android:text="Previous Page"
+                    android:background="@drawable/bg_review"/>
 
                 <Button
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:id="@+id/btnNextPage_listtour"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Next Page" />
+                    android:text="Next Page"
+                    android:background="@drawable/bg_review"/>
             </LinearLayout>
+
             <ListView
                 android:id="@+id/listTour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <LinearLayout

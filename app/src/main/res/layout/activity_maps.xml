@@ -2,26 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
+
+
+
     <LinearLayout
         android:id="@+id/search"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/searchLocation"
+        <SearchView
+            android:id="@+id/search_StopPoint"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Search location"
-            android:layout_weight="2"/>
-
-        <Button
-            android:id="@+id/btnSearchLocation"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Search"
-            android:textSize="14dp"
-            android:layout_weight="8"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:hint="Search Tour"
+            android:background="@drawable/item_show"/>
     </LinearLayout>
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"

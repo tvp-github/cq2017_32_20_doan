@@ -88,7 +88,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:id="@+id/btnStartDate"
-            android:src="@drawable/calendar"
+            android:background="@drawable/calendar"
             android:layout_below="@id/text_startDate"
             android:layout_toRightOf="@+id/startDate"
             android:layout_marginRight="5dp"

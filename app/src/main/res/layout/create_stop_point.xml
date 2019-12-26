@@ -186,7 +186,7 @@
             android:id="@+id/btn_calendar_arrive"
             android:layout_below="@+id/text_dateArrive"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/calendar"
+            android:background="@drawable/calendar"
             android:layout_alignTop="@+id/text_timeArrive" />
 
         <TextView
@@ -235,7 +235,7 @@
             android:id="@+id/btn_calendar_leave"
             android:layout_below="@+id/text_dateArrive"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/calendar"
+            android:background="@drawable/calendar"
             android:layout_alignTop="@+id/text_timeLeave" />
 
         <Button

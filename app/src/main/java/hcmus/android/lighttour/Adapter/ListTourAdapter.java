@@ -3,10 +3,12 @@ package hcmus.android.lighttour.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,13 +16,16 @@ import com.bumptech.glide.Glide;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import hcmus.android.lighttour.ExploreActivity;
 import hcmus.android.lighttour.ListTourActivity;
 import hcmus.android.lighttour.PointInformationActivity;
 import hcmus.android.lighttour.R;
+import hcmus.android.lighttour.Response.ListTours;
 import hcmus.android.lighttour.Response.StopPoint;
 import hcmus.android.lighttour.Response.Tour;
 import hcmus.android.lighttour.TourInformationActivity;
@@ -30,10 +35,13 @@ public class ListTourAdapter extends BaseAdapter{
     int layout;
     Tour tour;
     List<Tour> listTour;
+    List<Tour> list;
     public ListTourAdapter(Context context, int layout, List<Tour> listTour) {
         this.context = context;
         this.layout = layout;
         this.listTour = listTour;
+        this.list = new ArrayList<>();
+        this.list.addAll(listTour);
     }
 
 
@@ -96,5 +104,62 @@ public class ListTourAdapter extends BaseAdapter{
 
         return result;
     }
+
+//    public Filter getFilter() {
+//        return new Filter() {
+//
+//            @Override
+//            protected FilterResults performFiltering(CharSequence constraint) {
+//                final FilterResults oReturn = new FilterResults();
+//                final ArrayList<Tour> results = new ArrayList<Tour>();
+//                if (list == null)
+//                    list = listTour;
+//                Log.d("AAA","size :"+list.size());
+//                if (constraint != null) {
+//                    if (list != null && list.size() > 0) {
+//                        for (final Tour tour : list) {
+//                            if (tour.getName().toLowerCase()
+//                                    .contains(constraint.toString()))
+//                                results.add(tour);
+//                        }
+//                    }
+//                    oReturn.values = results;
+//                }
+//                return oReturn;
+//            }
+//
+//            @SuppressWarnings("unchecked")
+//            @Override
+//            protected void publishResults(CharSequence constraint,
+//                                          FilterResults results) {
+//                listTour = (ArrayList<Tour>) results.values;
+//                notifyDataSetChanged();
+//            }
+//        };
+//    }
+
+     //Filter Class
+    public void filter(String name) {
+        Log.d("AAA","search");
+        name = name.toLowerCase();
+        listTour.clear();
+        Log.d("AAA","size :"+list.size());
+        Log.d("AAA","size :"+list.size());
+        if (name.length() == 0) {
+            listTour.addAll(list);
+        } else {
+            for (final Tour wp : list) {
+                Log.d("111",wp.toString());
+                if (wp.getName()!=null){
+                    if (wp.getName().toLowerCase().contains(name)) {
+                        listTour.add(wp);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+
 }
 

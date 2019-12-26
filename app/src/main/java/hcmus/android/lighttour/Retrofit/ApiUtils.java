@@ -2,8 +2,10 @@ package hcmus.android.lighttour.Retrofit;
 
 import hcmus.android.lighttour.APIService.AddStopPointsService;
 import hcmus.android.lighttour.APIService.CreateToursService;
+import hcmus.android.lighttour.APIService.GetInforUser;
 import hcmus.android.lighttour.APIService.GetPointStarsService;
 import hcmus.android.lighttour.APIService.GetReviewPointStarsService;
+import hcmus.android.lighttour.APIService.GetSearchStopPointService;
 import hcmus.android.lighttour.APIService.GetStopPointFeedbackService;
 import hcmus.android.lighttour.APIService.GetStopPointService;
 import hcmus.android.lighttour.APIService.GetTourInfoService;
@@ -16,8 +18,10 @@ import hcmus.android.lighttour.APIService.RegisterService;
 import hcmus.android.lighttour.APIService.SendFeedbackService;
 import hcmus.android.lighttour.APIService.SendReportFeedbackService;
 import hcmus.android.lighttour.APIService.SendReportReviewService;
+import hcmus.android.lighttour.APIService.SendRequestOTPService;
 import hcmus.android.lighttour.APIService.SendReviewService;
 import hcmus.android.lighttour.APIService.UpdateTourService;
+import hcmus.android.lighttour.APIService.SendVerifyOTPService;
 
 //Tạo các Service từ RetrofitClient để lấy dữ liệu thông qua các Service này
 public class ApiUtils {
@@ -94,7 +98,22 @@ public class ApiUtils {
         return RetrofitClient.getClient(BASE_URL).create(GetTourInfoService.class);
     }
 
-    public static UpdateTourService getUpdateTourService(){
+    public static UpdateTourService getUpdateTourService() {
         return RetrofitClient.getClient(BASE_URL).create(UpdateTourService.class);
+    }
+    public static SendRequestOTPService getSendRequestOTPService() {
+        return RetrofitClient.getClient(BASE_URL).create(SendRequestOTPService.class);
+    }
+
+    public static SendVerifyOTPService getSendVerifyOTPService() {
+        return RetrofitClient.getClient(BASE_URL).create(SendVerifyOTPService.class);
+    }
+
+    public static GetSearchStopPointService getGetSearchStopPointService() {
+        return RetrofitClient.getClient(BASE_URL).create(GetSearchStopPointService.class);
+    }
+
+    public static GetInforUser getUser() {
+        return RetrofitClient.getClient(BASE_URL).create(GetInforUser.class);
     }
 }

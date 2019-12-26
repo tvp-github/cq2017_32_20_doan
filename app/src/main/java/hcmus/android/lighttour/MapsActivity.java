@@ -1,32 +1,9 @@
 package hcmus.android.lighttour;
 
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentActivity;
-import hcmus.android.lighttour.APIService.AddStopPointsService;
-import hcmus.android.lighttour.APIService.GetStopPointService;
-import hcmus.android.lighttour.Adapter.ListStopPointAdapter;
-import hcmus.android.lighttour.AppUtils.AddStopPointsBody;
-import hcmus.android.lighttour.AppUtils.Message;
-import hcmus.android.lighttour.AppUtils.OneCoord;
-import hcmus.android.lighttour.AppUtils.RequestStoppointBody;
-import hcmus.android.lighttour.Response.GetStopPoints;
-import hcmus.android.lighttour.Response.StopPoint;
-import hcmus.android.lighttour.Response.Tour;
-import hcmus.android.lighttour.Retrofit.ApiUtils;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.DatePickerDialog;
-import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +39,23 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.fragment.app.FragmentActivity;
+import hcmus.android.lighttour.APIService.AddStopPointsService;
+import hcmus.android.lighttour.APIService.GetSearchStopPointService;
+import hcmus.android.lighttour.APIService.GetStopPointService;
+import hcmus.android.lighttour.Adapter.ListStopPointAdapter;
+import hcmus.android.lighttour.AppUtils.AddStopPointsBody;
+import hcmus.android.lighttour.AppUtils.Message;
+import hcmus.android.lighttour.AppUtils.OneCoord;
+import hcmus.android.lighttour.AppUtils.RequestStoppointBody;
+import hcmus.android.lighttour.Response.GetStopPoints;
+import hcmus.android.lighttour.Response.SearchStopPoint;
+import hcmus.android.lighttour.Response.StopPoint;
+import hcmus.android.lighttour.Retrofit.ApiUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 //, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraIdleListener
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
 
@@ -74,6 +69,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button btnSearch;
     FloatingActionButton floatingActionButton;
     Geocoder geocoder;
+    SearchView searchStopPoint;
+    GetSearchStopPointService getSearchStopPointService;
     GetStopPointService getStopPointService;
     List<StopPoint> list;
     List<StopPoint> returnList;
@@ -82,15 +79,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
         tourId = intent.getStringExtra("tourId");
         type = intent.getIntExtra("type",0);
-        edtSearch = findViewById(R.id.searchLocation);
-        btnSearch = findViewById(R.id.btnSearchLocation);
+        String token;
+        tourId = intent.getStringExtra("tourId");
         floatingActionButton = findViewById(R.id.btnListStopPoint);
         if (type ==1 ) floatingActionButton.hide();
         getStopPointService = ApiUtils.getGetStopPointService();
+        getSearchStopPointService = ApiUtils.getGetSearchStopPointService();
         list = new ArrayList<StopPoint>();
         returnList = new ArrayList<StopPoint>();
         simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
+        searchStopPoint = findViewById(R.id.search_StopPoint);
+        MyApplication myApplication = (MyApplication) getApplication();
+        token = myApplication.getToken();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,22 +105,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 displayListStopPoint();
             }
         });
+
+        searchStopPoint.setSubmitButtonEnabled(true);
+
         //Search location by geocoder
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    List<Address> fromLocationName = geocoder.getFromLocationName(edtSearch.getText().toString(), 1, 8.5, 102.1833333, 23.283333, 109.45);
-                    LatLng location = new LatLng(fromLocationName.get(0).getLatitude(),fromLocationName.get(0).getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        btnSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    List<Address> fromLocationName = geocoder.getFromLocationName(edtSearch.getText().toString(), 1, 8.5, 102.1833333, 23.283333, 109.45);
+//                    LatLng location = new LatLng(fromLocationName.get(0).getLatitude(),fromLocationName.get(0).getLongitude());
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
     }
 
 
@@ -127,7 +133,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.list_stop_points,null);
         ListView lstStopPoints = layout.findViewById(R.id.listStopPoint);
-        final ListStopPointAdapter adapter = new ListStopPointAdapter(MapsActivity.this,R.layout.list_stop_points_item,returnList);
+        final ListStopPointAdapter adapter = new ListStopPointAdapter(MapsActivity.this, R.layout.list_stop_points_item,returnList);
         lstStopPoints.setAdapter(adapter);
         lstStopPoints.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -270,8 +276,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 "Lào Cai","Nam Định","Quảng Ngãi","Bến Tre","Đắk Nông","Cà Mau","Vĩnh Long","Ninh Bình","Phú Thọ","Ninh Thuận",
                 "Phú Yên","Hà Nam","Hà Tĩnh","Đồng Tháp","Sóc Trăng","Kon Tum","Quảng Bình","Quảng Trị","Trà Vinh","Hậu Giang",
                 "Sơn La","Bạc Liêu","Yên Bái","Tuyên Quang","Điện Biên","Lai Châu","Lạng Sơn","Hà Giang","Bắc Kạn","Cao Bằng"};
-        ArrayAdapter<String> serviceAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,service);
-        ArrayAdapter<String> proviceAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,province);
+        ArrayAdapter<String> serviceAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item,service);
+        ArrayAdapter<String> proviceAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item,province);
         spinnerService.setAdapter(serviceAdapter);
         spinnerProvice.setAdapter(proviceAdapter);
         //Đổ dữ liệu ra widget
@@ -466,6 +472,64 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onFailure(Call<GetStopPoints> call, Throwable t) {
                 Toast.makeText(MapsActivity.this, "Unable to get data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        searchStopPoint.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                getSearchStopPointService.sendData(token,newText, 1,1000).enqueue(new Callback<SearchStopPoint>() {
+                    @Override
+                    public void onResponse(Call<SearchStopPoint> call, Response<SearchStopPoint> response) {
+                        Log.d("111","onResponse: "+response.code());
+                        if (response.code() == 200){
+                            mMap.clear();
+
+                            LatLng latLng = mMap.getCameraPosition().target;
+                            Log.d("111","total: "+response.body().getTotal());
+                            Log.d("111","body: "+response.body().toString());
+                            List<StopPoint> otherlist = response.body().getStopPoints();
+                            Log.d("AAA","total list: "+otherlist.size());
+                            for (int i = 0; i<otherlist.size();i++){
+                                StopPoint stopPoint = otherlist.get(i);
+                                Log.d("AAA","total list: "+stopPoint.getId());
+                                LatLng markerPosition = new LatLng(Double.parseDouble(stopPoint.getLat()), Double.parseDouble(stopPoint.getLong()));
+                                int resId;
+                                switch (stopPoint.getServiceTypeId()){
+                                    case 1: resId = R.drawable.restaurant;
+                                        break;
+                                    case 2: resId = R.drawable.hotel;
+                                        break;
+                                    case 3: resId = R.drawable.rest_station;
+                                        break;
+                                    default: resId = R.drawable.other;
+                                }
+                                Marker current = mMap.addMarker(new MarkerOptions().position(markerPosition).title(stopPoint.getName()).icon(BitmapDescriptorFactory.fromResource(resId)));
+                                current.setTag(stopPoint);
+                                list.add(stopPoint);
+
+                            }
+                        }
+                        else{
+                            try {
+                                Log.d("FFF", "onResponse: "+response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SearchStopPoint> call, Throwable t) {
+
+                    }
+                });
+                return false;
             }
         });
     }
