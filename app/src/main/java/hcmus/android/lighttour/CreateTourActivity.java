@@ -127,41 +127,47 @@ public class CreateTourActivity extends AppCompatActivity {
 //                int maxCost = Integer.parseInt(validate(edtMaxCost.getText().toString()));
 //                boolean isPrivate = checkPrivate.isChecked();
                 //Send to server
-                CreateToursService createToursService = ApiUtils.getCreateToursService();
-                MyApplication myApplication = (MyApplication) getApplication();
-                String token = myApplication.getToken();
-                String name = edtName.getText().toString();
-                long startDate = ((Calendar)(txtStartDate.getTag())).getTimeInMillis();
-                long endDate = ((Calendar)(txtEndDate.getTag())).getTimeInMillis();
-                Boolean isPrivate = checkPrivate.isChecked();
-                int adults = Integer.parseInt(edtAdults.getText().toString());
-                int children = Integer.parseInt(edtChildren.getText().toString());
-                int minCost = Integer.parseInt(edtMinCost.getText().toString());
-                int maxCost = Integer.parseInt(edtMaxCost.getText().toString());
-                Log.d("AAA", "onClick: "+'-'+token+'-'+startDate+'-'+endDate+'-'+isPrivate+'-'+name+'-'+adults+'-'+children+'-'+minCost+'-'+maxCost);
-                createToursService.sendData(token,new CreateTourBody(name,startDate,endDate,0,0,0,0,isPrivate,adults,children,minCost,maxCost,null)).enqueue(new Callback<Tour>() {
-                    @Override
-                    public void onResponse(Call<Tour> call, Response<Tour> response) {
-                        Log.d("AAA", "onResponse: "+response.code());
-                        if(response.code()==200){
-                            goToAddStopPoint(response.body().getId());
-                        }
-                        else {
-                            try {
-                                Log.d("AAA", "onResponse: "+response.errorBody().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
+
+                if(validate(edtName.getText().toString(),edtAdults.getText().toString(),edtChildren.getText().toString(),edtMinCost.getText().toString(),edtMaxCost.getText().toString(),txtStartDate.getText().toString(),txtEndDate.getText().toString())
+                )
+                {
+                    CreateToursService createToursService = ApiUtils.getCreateToursService();
+                    MyApplication myApplication = (MyApplication) getApplication();
+                    String token = myApplication.getToken();
+                    String name = edtName.getText().toString();
+                    long startDate = ((Calendar) (txtStartDate.getTag())).getTimeInMillis();
+                    long endDate = ((Calendar) (txtEndDate.getTag())).getTimeInMillis();
+                    Boolean isPrivate = checkPrivate.isChecked();
+                    int adults = Integer.parseInt(edtAdults.getText().toString());
+                    int children = Integer.parseInt(edtChildren.getText().toString());
+                    int minCost = Integer.parseInt(edtMinCost.getText().toString());
+                    int maxCost = Integer.parseInt(edtMaxCost.getText().toString());
+                    createToursService.sendData(token, new CreateTourBody(name, startDate, endDate, 0, 0, 0, 0, isPrivate, adults, children, minCost, maxCost, null)).enqueue(new Callback<Tour>() {
+                        @Override
+                        public void onResponse(Call<Tour> call, Response<Tour> response) {
+                            Log.d("AAA", "onResponse: " + response.code());
+                            if (response.code() == 200) {
+                                goToAddStopPoint(response.body().getId());
+                            } else {
+                                try {
+                                    Log.d("AAA", "onResponse: " + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Tour> call, Throwable t) {
-                        Log.d("AAA", "onFailure: "+call.request().toString());
-                        Toast.makeText(CreateTourActivity.this, "Failed to connect to server", Toast.LENGTH_SHORT).show();
-                    }
-                });
-               // sendCreateTour(name,startDate,endDate,adults,childs,minCost,maxCost);
+                        @Override
+                        public void onFailure(Call<Tour> call, Throwable t) {
+                            Log.d("AAA", "onFailure: " + call.request().toString());
+                            Toast.makeText(CreateTourActivity.this, "Failed to connect to server", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else
+                {
+                    Toast.makeText(CreateTourActivity.this, "Invalid input data", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -243,14 +249,16 @@ public class CreateTourActivity extends AppCompatActivity {
         btnCreateTour.setEnabled(true);
     }
 
-    private String validate(String s){
-        if (s.length()>0) return s;
-        else return null;
+    private boolean validate(String ...str) {
+        for (int i = 0 ; i< str.length ; i++ )
+            if (str[i].length() == 0)
+                return false;
+        return true;
     }
     private void goToAddStopPoint(int tourId){
         Intent intent;
         intent = new Intent(CreateTourActivity.this, MapsActivity.class);
-        intent.putExtra("tourId","4525");
+        intent.putExtra("tourId",""+tourId);
         startActivity(intent);
         finish();
     }

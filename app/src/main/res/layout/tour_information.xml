@@ -16,7 +16,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="3">
 
         <Button
             android:id="@+id/Tab1"
@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:textColor="@color/textColorPrimary"
-            android:text="General" />
+            android:text="Info" />
 
         <Button
             android:id="@+id/Tab2"
@@ -35,6 +35,37 @@
             android:background="@color/colorPrimary"
             android:textColor="@color/textColorPrimary"
             android:text="Review" />
+        <Button
+            android:id="@+id/Tab3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/textColorPrimary"
+            android:text="Comments" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+            <Button
+            android:id="@+id/Tab4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/textColorPrimary"
+            android:text="Members" />
+        <Button
+            android:id="@+id/Tab5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/textColorPrimary"
+            android:text="Stoppoints" />
     </LinearLayout>
 
 

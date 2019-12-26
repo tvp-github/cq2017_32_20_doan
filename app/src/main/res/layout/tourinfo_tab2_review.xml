@@ -5,6 +5,53 @@
     android:layout_height="match_parent"
     tools:context=".tab2_review"
     android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/add_memberbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:background="@drawable/style_border_no_radius">
+
+        <EditText
+            android:id="@+id/edtMemName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Invite person"
+            android:layout_weight="2"/>
+
+        <Button
+            android:id="@+id/btnAddMem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Invite"
+            android:textSize="14dp"
+            android:layout_weight="8"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ctrl_stop_point"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btn_add_stop_point"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Add Stop Points" />
+
+        <Button
+            android:id="@+id/btn_apply_changes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Apply changes"
+            android:visibility="gone" />
+    </LinearLayout>
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"

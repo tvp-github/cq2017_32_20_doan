@@ -1,34 +1,51 @@
 package hcmus.android.lighttour;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.Api;
+import com.google.gson.Gson;
 import com.taufiqrahman.reviewratings.BarLabels;
 import com.taufiqrahman.reviewratings.RatingReviews;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 import hcmus.android.lighttour.APIService.GetPointStarsService;
 import hcmus.android.lighttour.APIService.GetReviewPointStarsService;
+import hcmus.android.lighttour.APIService.UpdateTourService;
 import hcmus.android.lighttour.AppUtils.ListPointStars;
+import hcmus.android.lighttour.AppUtils.UpdateTourBody;
 import hcmus.android.lighttour.Response.PointStars;
 import hcmus.android.lighttour.Response.Review;
 import hcmus.android.lighttour.Response.StopPoint;
@@ -37,6 +54,8 @@ import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class tourinfo_tab1_general extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -49,6 +68,7 @@ public class tourinfo_tab1_general extends Fragment {
     private String mParam2;
     private GetReviewPointStarsService ReviewPointStarsService;
     private tourinfo_tab1_general.OnFragmentInteractionListener mListener;
+    UpdateTourService updateTourService;
 
     TextView txtPrice;
     TextView txtName;
@@ -60,10 +80,32 @@ public class tourinfo_tab1_general extends Fragment {
     TextView ratingPoint;
     TextView numberReviewer;
     RatingBar ratingBar;
+    Button btnEdit;
+    Button btnDelete;
+
+    ScrollView updateTour;
+    ConstraintLayout showTourInfo;
+    LinearLayout lnlControl;
+
+    //Update Tour View
+    EditText edtName;
+    TextView txtStartDate;
+    TextView txtEndDate;
+    EditText edtAdults;
+    EditText edtChildren;
+    EditText edtMinCost;
+    EditText edtMaxCost;
+    CheckBox checkPrivate;
+    Button btnUpdate;
+    Button btnCancel;
+    ImageButton btnStartDate;
+    ImageButton btnEndDate;
+
     Tour tour;
     String token;
     int total=0;
     int point=0;
+    boolean hasControl= false;
     int raters[] = new int[5];
     int colors[] = new int[]{
             Color.parseColor("#0e9d58"),
@@ -71,6 +113,8 @@ public class tourinfo_tab1_general extends Fragment {
             Color.parseColor("#ffc105"),
             Color.parseColor("#ef7e14"),
             Color.parseColor("#d36259")};
+
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public tourinfo_tab1_general() {
         // Required empty public constructor
@@ -101,7 +145,7 @@ public class tourinfo_tab1_general extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent write_review_intent = new Intent(getActivity(), WriteReviewActivity.class);
-                write_review_intent.putExtra("tour", tour);
+                write_review_intent.putExtra("tour", new Gson().toJson(tour));
                 startActivity(write_review_intent );
             }
         });
@@ -113,7 +157,7 @@ public class tourinfo_tab1_general extends Fragment {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     Intent write_review_intent = new Intent(getActivity(), WriteReviewActivity.class);
-                    write_review_intent.putExtra("tour", tour);
+                    write_review_intent.putExtra("tour", new Gson().toJson(tour));
                     startActivity(write_review_intent);
                 }
                 return true;
@@ -135,8 +179,13 @@ public class tourinfo_tab1_general extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("rrrr", "onCreateView: ABCXYZ");
         View view=inflater.inflate(R.layout.tourinfo_tab1_general, container, false);
-        tour= (Tour) getArguments().getSerializable("tour");
+        tour= new Gson(). fromJson(getArguments().getString("tour"),Tour.class);
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        int userId = myApplication.getIdUser();
+        token = myApplication.getToken();
+        hasControl = getArguments().getBoolean("fromHistory") && (tour.getHostId() == userId);
         ReviewPointStarsService = ApiUtils.getGetReviewPointStarsService();
 
         //Ánh xạ
@@ -148,8 +197,180 @@ public class tourinfo_tab1_general extends Fragment {
         ratingPoint = view.findViewById(R.id.ratingPoint);
         numberReviewer = view.findViewById(R.id.numberReviewer);
         ratingBar = view.findViewById(R.id.ratingBar);
-
+        lnlControl = view.findViewById(R.id.lnlControl);
         //Đổ dữ liệu
+        if ( hasControl ){
+            showTourInfo = view.findViewById(R.id.ShowTourInfo);
+            updateTour = view.findViewById(R.id.updateTour);
+
+            // Ánh xạ cho update tour
+            edtName = view.findViewById(R.id.edit_tour_name);
+            txtStartDate = view.findViewById(R.id.startDate);
+            txtEndDate = view.findViewById(R.id.endDate);
+            edtAdults = view.findViewById(R.id.edit_adults);
+            edtChildren = view.findViewById(R.id.edit_children);
+            edtMinCost = view.findViewById(R.id.edit_minCost);
+            edtMaxCost = view.findViewById(R.id.edit_maxCost);
+            checkPrivate = view.findViewById(R.id.check_privateTour);
+            btnUpdate = view.findViewById(R.id.btn_update_tour);
+            btnCancel = view.findViewById(R.id.btn_cancel);
+            btnStartDate = view.findViewById(R.id.btnStartDate);
+            btnEndDate = view.findViewById(R.id.btnEndDate);
+
+
+            lnlControl.setVisibility(View.VISIBLE);
+            updateTourService = ApiUtils.getUpdateTourService();
+            btnDelete = view.findViewById(R.id.btnDeleteTour);
+            btnEdit = view.findViewById(R.id.btnEditTour);
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Do you want to delete this tour?")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    updateTourService.sendData(token, new UpdateTourBody(tour.getId(),tour.getName(),Long.parseLong(tour.getStartDate()),
+                                            Long.parseLong(tour.getEndDate()),tour.getAdults(),tour.getChilds(),
+                                            Integer.parseInt(tour.getMinCost()),Integer.parseInt(tour.getMaxCost()),tour.getIsPrivate(),-1)).enqueue(new Callback<Tour>() {
+                                        @Override
+                                        public void onResponse(Call<Tour> call, Response<Tour> response) {
+                                            if(response.code()==200){
+                                                tourinfo_tab1_general.this.getActivity().finish();
+                                            }
+                                            else {
+                                                try {
+                                                    Toast.makeText(getActivity(), ""+ response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Tour> call, Throwable t) {
+
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .show();
+                }
+            });
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showTourInfo.setVisibility(View.INVISIBLE);
+                    updateTour.setVisibility(View.VISIBLE);
+
+
+                    //Đổ dữ liệu ra màn hình chỉnh sửa thông tin tour
+                    edtName.setText(tour.getName());
+                    Calendar calendarStartDate = Calendar.getInstance();
+                    calendarStartDate.setTimeInMillis(Long.parseLong(tour.getStartDate()));
+                    Calendar calendarEndDate = Calendar.getInstance();
+                    calendarEndDate.setTimeInMillis(Long.parseLong(tour.getEndDate()));
+
+                    txtStartDate.setText(simpleDateFormat.format(calendarStartDate.getTime()));
+                    txtStartDate.setTag(calendarStartDate);
+                    txtEndDate.setText(simpleDateFormat.format(calendarEndDate.getTime()));
+                    txtEndDate.setTag(calendarEndDate);
+                    Log.d(TAG, "onClick: "+ new Gson().toJson(tour));
+                    edtMinCost.setText(tour.getMinCost());
+                    edtMaxCost.setText(tour.getMaxCost());
+                    edtAdults.setText(""+tour.getAdults());
+                    edtChildren.setText(""+tour.getChilds());
+                    checkPrivate.setChecked(tour.getIsPrivate());
+                    btnStartDate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //Tạo calendar lưu giá trị nhập vào
+                            final Calendar calendarStart = (Calendar) txtStartDate.getTag();
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                    //cập nhật calendar
+                                    calendarStart.set(Calendar.YEAR, i);
+                                    calendarStart.set(Calendar.MONTH, i1);
+                                    calendarStart.set(Calendar.DATE, i2);
+                                    //Xuất ra
+                                    txtStartDate.setText(simpleDateFormat.format(calendarStart.getTime()));
+                                    txtStartDate.setTag(calendarStart);
+                                }
+                            }, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DATE));
+                            datePickerDialog.show();
+                        }
+                    });
+                    btnEndDate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //Tạo calendar lưu giá trị nhập vào
+                            final Calendar calendarEnd = (Calendar) txtEndDate.getTag();
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                    //cập nhật calendar
+                                    calendarEnd.set(Calendar.YEAR, i);
+                                    calendarEnd.set(Calendar.MONTH, i1);
+                                    calendarEnd.set(Calendar.DATE, i2);
+                                    //Xuất ra
+                                    txtEndDate.setText(simpleDateFormat.format(calendarEnd.getTime()));
+                                    txtEndDate.setTag(calendarEnd);
+                                }
+                            }, calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH), calendarEnd.get(Calendar.DATE));
+                            datePickerDialog.show();
+                        }
+                    });
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showTourInfo.setVisibility(View.VISIBLE);
+                            updateTour.setVisibility(View.GONE);
+                        }
+                    });
+                    btnUpdate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            String name = edtName.getText().toString();
+                            long startDate = ((Calendar)(txtStartDate.getTag())).getTimeInMillis();
+                            long endDate = ((Calendar)(txtEndDate.getTag())).getTimeInMillis();
+                            Boolean isPrivate = checkPrivate.isChecked();
+                            if(validate(name, edtAdults.getText().toString(), edtChildren.getText().toString(), edtMaxCost.getText().toString(), edtMinCost.getText().toString())) {
+                                int adults = Integer.parseInt(edtAdults.getText().toString());
+                                int children = Integer.parseInt(edtChildren.getText().toString());
+                                int minCost = Integer.parseInt(edtMinCost.getText().toString());
+                                int maxCost = Integer.parseInt(edtMaxCost.getText().toString());
+                                //Validate data
+                                updateTourService.sendData(token, new UpdateTourBody(tour.getId(), name, startDate, endDate, adults, children, minCost, maxCost, isPrivate, tour.getStatus())).enqueue(new Callback<Tour>() {
+                                    @Override
+                                    public void onResponse(Call<Tour> call, Response<Tour> response) {
+                                        if (response.code() == 200) {
+                                            getActivity().finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Tour> call, Throwable t) {
+                                        Toast.makeText(getActivity(), "Unable to connect to server", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                            else
+                                Toast.makeText(getActivity(), "Invalid value", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }
+
+
         if(tour.getAvatar()!=null && tour.getAvatar().length()>0)
         Glide.with(this).load(tour.getAvatar()).into(imgAvatar);
         txtPrice.setText(tour.getMinCost()+" - "+tour.getMaxCost());
@@ -186,12 +407,18 @@ public class tourinfo_tab1_general extends Fragment {
 //        ratingReviews.createRatingBars(100, BarLabels.STYPE1, colors, raters);
 
         int TourId=tour.getId();
-        MyApplication myApplication = (MyApplication) getActivity().getApplication();
         token = myApplication.getToken();
         sendTourId(TourId);
 
 
         return view;
+    }
+
+    private boolean validate(String ...str) {
+        for (int i = 0 ; i< str.length ; i++ )
+            if (str[i].length() == 0)
+                return false;
+        return true;
     }
 
     String formatCalendar(Calendar calendar){

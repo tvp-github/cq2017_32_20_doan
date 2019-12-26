@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     EditText edtEmailPhone;
     EditText edtPassword;
     String token;
-    Integer userId;
+    Integer idUser;
     TextView txtSignup;
     TextView txtForgotPassword;
     ImageButton imgbtnGGLogin;
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<LoginGG> call, Response<LoginGG> response) {
                 if(response.code()==200){
                     token = response.body().getToken();
-                    //Save token and userId
+                    //Save token and idUser
                     //Go to Home View
                 }
             }
@@ -232,11 +232,12 @@ public class MainActivity extends AppCompatActivity {
                 //Login success
                 if(response.code()==200) {
                     token = response.body().getToken();
-                    userId = response.body().getUserId();
-                    //Save token and userId
+                    idUser = response.body().getUserId();
+                    //Save token and idUser
                     //Go to Home View
                     MyApplication myApplication = (MyApplication) getApplication();
                     myApplication.setToken(token);
+                    myApplication.setIdUser(idUser);
                     Intent intent = new Intent(MainActivity.this, ListTourActivity.class);
                     startActivity(intent);
                     EnableInputField();

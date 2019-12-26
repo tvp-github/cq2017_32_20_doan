@@ -68,7 +68,17 @@ public class StopPoint implements Serializable {
     @SerializedName("serviceTypeId")
     @Expose
     private Integer serviceTypeId;
+    public Integer getServiceId() {
+        return serviceId;
+    }
 
+    public void setServiceId(Integer serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    @SerializedName("serviceId")
+    @Expose
+    private Integer serviceId;
     @Override
     public boolean equals(@Nullable Object obj) {
         boolean result = false;

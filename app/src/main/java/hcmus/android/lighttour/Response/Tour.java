@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Tour implements Serializable {
 
@@ -49,6 +50,40 @@ public class Tour implements Serializable {
     @SerializedName("isHost")
     @Expose
     private boolean isHost;
+
+    public List<StopPoint> getStopPoints() {
+        return stopPoints;
+    }
+
+    public void setStopPoints(List<StopPoint> stopPoints) {
+        this.stopPoints = stopPoints;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Member> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
+    }
+
+    @SerializedName("stopPoints")
+    @Expose
+    private List<StopPoint> stopPoints = null;
+    @SerializedName("comments")
+    @Expose
+    private List<Comment> comments = null;
+    @SerializedName("members")
+    @Expose
+    private List<Member> members = null;
 
     public boolean isHost() {
         return isHost;

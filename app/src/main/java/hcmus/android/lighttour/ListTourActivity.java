@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,7 @@ public class ListTourActivity extends AppCompatActivity {
                 Log.d("AAA", "onResponse: "+ tour.getId());
                Log.d("AAA", "onResponse: "+((Tour)  listTourData.get(position)).toString());
                 Intent intent = new Intent(ListTourActivity.this, TourInformationActivity.class);
-                intent.putExtra("tour", tour);
+                intent.putExtra("tour", new Gson().toJson(tour));
                 startActivity(intent);
             }
         });

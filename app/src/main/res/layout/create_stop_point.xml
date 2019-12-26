@@ -238,6 +238,15 @@
             android:background="@drawable/calendar"
             android:layout_alignTop="@+id/text_timeLeave" />
 
+        <Button
+            android:id="@+id/btn_choose_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_timeLeave"
+            android:layout_marginTop="10dp"
+            android:text="Choose Location"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 </ScrollView>
 
