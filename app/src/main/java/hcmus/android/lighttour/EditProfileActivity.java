@@ -3,13 +3,19 @@ package hcmus.android.lighttour;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import hcmus.android.lighttour.Response.UserInfo;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
@@ -19,7 +25,7 @@ import retrofit2.Response;
 
 public class EditProfileActivity extends AppCompatActivity {
     EditText  eName;
-    EditText  eDob;
+    TextView  eDob;
     EditText eEmail;
     EditText  ePhone;
     EditText eAddress;
@@ -39,7 +45,7 @@ public class EditProfileActivity extends AppCompatActivity {
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //Set hint name
+        //Set name
         SharedPreferences sharedPreferences_eName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String accessToken_eName = sharedPreferences_eName.getString("token", null);
         Call<UserInfo> call_eName = ApiUtils.getUser().getinfo(accessToken_eName);
@@ -47,7 +53,10 @@ public class EditProfileActivity extends AppCompatActivity {
         call_eName.enqueue(new Callback<UserInfo>() {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                if (response.body().getFullName() != null)
                 eName.setText(response.body().getFullName());
+                else
+                    eName.setText("");
             }
 
             @Override
@@ -56,7 +65,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Set hint birthay
+        //Set birthay
         SharedPreferences sharedPreferences_eDob = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String accessToken_eDob = sharedPreferences_eDob.getString("token", null);
         Call<UserInfo> call_eDob = ApiUtils.getUser().getinfo(accessToken_eDob);
@@ -64,8 +73,12 @@ public class EditProfileActivity extends AppCompatActivity {
         call_eDob.enqueue(new Callback<UserInfo>() {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
-                String edob = firstEleven(String.valueOf(response.body().getDob()));
-                eDob.setText(edob);
+                //String edob = firstTen(String.valueOf(response.body().getDob()));
+                Object edob = response.body().getDob();
+                if (edob != null)
+                eDob.setText(firstTen(String.valueOf(edob)));
+                else
+                    eDob.setText("Choose your date of birth");
             }
 
             @Override
@@ -74,7 +87,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Set hint email
+        //Set email
         SharedPreferences sharedPreferences_eEmail = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String accessToken_eEmail = sharedPreferences_eEmail.getString("token", null);
         Call<UserInfo> call_eMail = ApiUtils.getUser().getinfo(accessToken_eEmail);
@@ -83,6 +96,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                 eEmail.setText(response.body().getEmail());
+
             }
 
             @Override
@@ -91,7 +105,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Set hint phone number
+        //Set phone number
         SharedPreferences sharedPreferences_ePhone = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String accessToken_ePhone = sharedPreferences_ePhone.getString("token", null);
         Call<UserInfo> call_ePhone = ApiUtils.getUser().getinfo(accessToken_ePhone);
@@ -100,6 +114,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                 ePhone.setText(response.body().getPhone());
+
             }
 
             @Override
@@ -108,7 +123,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Set hint address
+        //Set address
         SharedPreferences sharedPreferences_eAddress = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String accessToken_eAdress = sharedPreferences_eAddress.getString("token", null);
         Call<UserInfo> call_eAddress = ApiUtils.getUser().getinfo(accessToken_eAdress);
@@ -116,7 +131,10 @@ public class EditProfileActivity extends AppCompatActivity {
         call_eAddress.enqueue(new Callback<UserInfo>() {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                if (response.body().getAddress() != null)
                 eAddress.setText(String.valueOf(response.body().getAddress()));
+                else
+                    eAddress.setText("");
             }
 
             @Override
@@ -134,11 +152,16 @@ public class EditProfileActivity extends AppCompatActivity {
         call_eGender.enqueue(new Callback<UserInfo>() {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
-                if (response.body().getGender() == 0){
-                    eFemale.setChecked(true);
-                }
+                if (response.body().getGender() != null){
+                    if (response.body().getGender() == 0) {
+                        eFemale.setChecked(true);
+                    } else {
+                        eMale.setChecked(true);
+                    }
+            }
                 else{
-                    eMale.setChecked(true);
+                    eFemale.setChecked(false);
+                    eMale.setChecked(false);
                 }
             }
 
@@ -166,10 +189,32 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        eDob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Tạo calendar lưu giá trị nhập vào
+                final Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(EditProfileActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        //cập nhật calendar
+                        calendar.set(Calendar.YEAR,i);
+                        calendar.set(Calendar.MONTH,i1);
+                        calendar.set(Calendar.DATE,i2);
+                        //Xuất ra
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        eDob.setText(simpleDateFormat.format(calendar.getTime()));
+                    }
+                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
+                datePickerDialog.show();
+            }
+        });
+
     }
 
     //Hàm lấy 10 ký tự đầu tiên
-    public String firstEleven(String str) {
+    public String firstTen(String str) {
 
         if(str.length() == 10){
             return str;
@@ -178,6 +223,7 @@ public class EditProfileActivity extends AppCompatActivity {
             return str.substring(0,10);
         }
     }
+
 
 }
 

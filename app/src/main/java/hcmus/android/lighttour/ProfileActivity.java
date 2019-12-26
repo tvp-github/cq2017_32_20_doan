@@ -75,12 +75,16 @@ public class ProfileActivity extends AppCompatActivity {
         call_gender.enqueue(new Callback<UserInfo>() {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
-                if (response.body().getGender() == 0){
-                    gender.setText("Female");
+                if(response.body().getGender() != null){
+                    if (response.body().getGender() == 0){
+                        gender.setText("Female");
+                    }
+                    else{
+                        gender.setText("Male");
+                    }
                 }
-                else{
-                    gender.setText("Male");
-                }
+                else
+                    gender.setText("Empty");
             }
 
             @Override
@@ -159,7 +163,7 @@ public class ProfileActivity extends AppCompatActivity {
                     birthday.setText("Empty");
                 }
                 else {
-                    birthday.setText(firstEleven(String.valueOf(dob)));
+                    birthday.setText(firstTen(String.valueOf(dob)));
                 }
             }
 
@@ -171,7 +175,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
     //Hàm lấy 10 ký tự đầu tiên
-    public String firstEleven(String str) {
+    public String firstTen(String str) {
 
         if(str.length() == 10){
             return str;

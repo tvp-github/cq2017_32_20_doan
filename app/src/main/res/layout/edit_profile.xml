@@ -49,14 +49,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/fullName"
         android:text="Light"
-        android:hint="Full Name"
+        android:hint="Full name"
         android:textSize="15dp"
         android:layout_below="@+id/avatar_edit"
         android:layout_marginTop="30dp"
         android:paddingLeft="10dp"/>
 
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dob"
@@ -66,6 +66,12 @@
         android:layout_below="@+id/fullName"
         android:layout_marginTop="20dp"
         android:paddingLeft="10dp"/>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/dob"
+        android:background="@color/colorPrimaryDark"
+        android:layout_marginTop="5dp" />
 
     <EditText
         android:layout_width="match_parent"
