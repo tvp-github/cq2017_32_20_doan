@@ -75,6 +75,7 @@
         <activity android:name=".VerifyOTPActivity" />
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".EditProfileActivity" />
+        <activity android:name=".FollowTourActivity" />
     </application>
 
 

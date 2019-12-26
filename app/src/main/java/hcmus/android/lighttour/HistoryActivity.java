@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +37,11 @@ public class HistoryActivity extends AppCompatActivity {
     Button btnNextPage;
     Button btnPrevPage;
     ListView listTour;
+    ImageButton btnSettings;
+    ImageButton btnNoti;
+    ImageButton btnExplore;
+    ImageButton btnHome;
+    LinearLayout lnl_history;
     HistoryTourService historyTourService;
     String token;
     int pageSize = 30;
@@ -55,6 +61,8 @@ public class HistoryActivity extends AppCompatActivity {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        lnl_history.setBackgroundResource(R.drawable.bg_review);
 
         btnPrevPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +89,40 @@ public class HistoryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btnNoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HistoryActivity.this, NotificationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //Chuyển màn hình sang explore điểm dừng
+        btnExplore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HistoryActivity.this, ExploreActivity.class);
+                startActivity(intent);
+            }
+        });
+        //Chuyển màn hình sang home
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HistoryActivity.this, ListTourActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Chuyển màn hình sang settings
+        btnSettings = findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                startActivity(new Intent(HistoryActivity.this, SettingsActivity.class));
+            }
+
+        });
     }
 
     private void init() {
@@ -91,6 +133,11 @@ public class HistoryActivity extends AppCompatActivity {
         btnNextPage = findViewById(R.id.btnNextPage_listtour);
         btnPrevPage = findViewById(R.id.btnPrevPage_listtour);
         historyTourService = ApiUtils.getHistoryTourService();
+        btnExplore =findViewById(R.id.btnExplore);
+        btnHome = findViewById(R.id.btnHome);
+        btnNoti = findViewById(R.id.btnNoti);
+        lnl_history = findViewById(R.id.lnl_history);
+        btnSettings = findViewById(R.id.btnSettings);
         MyApplication myApplication = (MyApplication) getApplication();
         token = myApplication.getToken();
     }
@@ -99,7 +146,7 @@ public class HistoryActivity extends AppCompatActivity {
         historyTourService.sendData(token,currentPage,pageSize).enqueue(new Callback<ListTours>() {
             @Override
             public void onResponse(Call<ListTours> call, Response<ListTours> response) {
-                Log.d("AAA", "onResponse: " + response.body().getTours().get(0).getId());
+                //Log.d("AAA", "onResponse: " + response.body().getTours().get(0).getId());
                 if(response.code()==200){
                     //Nhập vào danh sách dữ liệu
                     listTourData.clear();

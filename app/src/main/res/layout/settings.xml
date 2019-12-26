@@ -9,6 +9,7 @@
     android:layout_marginRight="7dp"
     tools:context=".SettingsActivity">
 
+
     <include
         layout="@layout/toolbar"
         android:id="@+id/toolbar_settings"
@@ -108,5 +109,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/-->
+
 
 </RelativeLayout>
