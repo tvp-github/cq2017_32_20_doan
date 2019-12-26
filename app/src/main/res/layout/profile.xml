@@ -20,7 +20,7 @@
         android:layout_below="@+id/toolbar_profile"
         android:background="@color/colorPrimary"
         android:layout_marginTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingBottom="15dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="100dp"
@@ -35,9 +35,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/userName_pro"
+                android:id="@+id/namePro"
                 android:layout_below="@+id/avatar"
-                android:text="User Name"
+                android:text="Name"
                 android:textSize="30dp"
                 android:textStyle="bold"
                 android:textColor="@color/textColorPrimary"
@@ -50,7 +50,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/bodyProfile"
         android:layout_below="@+id/headProfile"
-        android:layout_margin="30dp">
+        android:layout_margin="30dp"
+        android:padding="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -61,18 +62,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/body_name"
-            android:text="Name:"
+            android:id="@+id/body_gender"
+            android:text="Gender:"
             android:textStyle="bold"
             android:textSize="20dp"
             android:layout_marginRight="15dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/namePro"
-            android:layout_toRightOf="@+id/body_name"
-            android:layout_alignBottom="@+id/body_name"
-            android:layout_alignTop="@+id/body_name"/>
+            android:id="@+id/genderPro"
+            android:layout_toRightOf="@+id/body_gender"
+            android:layout_alignBottom="@+id/body_gender"
+            android:layout_alignTop="@+id/body_gender"
+            android:textSize="20dp"
+            android:gravity="center_vertical"/>
     </RelativeLayout>
 
         <RelativeLayout
@@ -81,7 +84,7 @@
             android:padding="10dp"
             android:id="@+id/body_2"
             android:layout_below="@+id/body_1"
-            android:background="@drawable/style_border_no_radius">>
+            android:background="@drawable/style_border_no_radius">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,10 +96,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/mailPro"
+                android:id="@+id/emailPro"
                 android:layout_toRightOf="@+id/body_email"
                 android:layout_alignBottom="@+id/body_email"
-                android:layout_alignTop="@+id/body_email"/>
+                android:layout_alignTop="@+id/body_email"
+                android:textSize="20dp"
+                android:gravity="center_vertical"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -120,7 +125,9 @@
             android:id="@+id/phonePro"
             android:layout_toRightOf="@+id/body_phone"
             android:layout_alignBottom="@+id/body_phone"
-            android:layout_alignTop="@+id/body_phone"/>
+            android:layout_alignTop="@+id/body_phone"
+            android:textSize="20dp"
+            android:gravity="center_vertical"/>
     </RelativeLayout>
 
         <RelativeLayout
@@ -144,7 +151,9 @@
                 android:id="@+id/addressPro"
                 android:layout_toRightOf="@+id/body_addr"
                 android:layout_alignBottom="@+id/body_addr"
-                android:layout_alignTop="@+id/body_addr"/>
+                android:layout_alignTop="@+id/body_addr"
+                android:textSize="20dp"
+                android:gravity="center_vertical"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -168,7 +177,9 @@
                 android:id="@+id/dobPro"
                 android:layout_toRightOf="@+id/body_dob"
                 android:layout_alignBottom="@+id/body_dob"
-                android:layout_alignTop="@+id/body_dob"/>
+                android:layout_alignTop="@+id/body_dob"
+                android:textSize="20dp"
+                android:gravity="center_vertical"/>
         </RelativeLayout>
 
 
@@ -177,6 +188,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/btn_edit_inPro"
         android:layout_below="@+id/bodyProfile"
         android:text="EDIT"
         android:textSize="15dp"

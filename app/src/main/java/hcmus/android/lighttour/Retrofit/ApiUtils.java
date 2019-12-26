@@ -2,6 +2,7 @@ package hcmus.android.lighttour.Retrofit;
 
 import hcmus.android.lighttour.APIService.AddStopPointsService;
 import hcmus.android.lighttour.APIService.CreateToursService;
+import hcmus.android.lighttour.APIService.GetInforUser;
 import hcmus.android.lighttour.APIService.GetPointStarsService;
 import hcmus.android.lighttour.APIService.GetReviewPointStarsService;
 import hcmus.android.lighttour.APIService.GetSearchStopPointService;
@@ -102,5 +103,9 @@ public class ApiUtils {
 
     public static GetSearchStopPointService getGetSearchStopPointService() {
         return RetrofitClient.getClient(BASE_URL).create(GetSearchStopPointService.class);
+    }
+
+    public static GetInforUser getUser() {
+        return RetrofitClient.getClient(BASE_URL).create(GetInforUser.class);
     }
 }
