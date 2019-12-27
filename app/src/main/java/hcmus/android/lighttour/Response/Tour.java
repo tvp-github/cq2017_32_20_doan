@@ -50,6 +50,50 @@ public class Tour implements Serializable {
     @SerializedName("isHost")
     @Expose
     private boolean isHost;
+    @SerializedName("hostName")
+    @Expose
+    private String hostName;
+    @SerializedName("hostPhone")
+    @Expose
+    private String hostPhone;
+    @SerializedName("hostEmail")
+    @Expose
+    private String hostEmail;
+    @SerializedName("hostAvatar")
+    @Expose
+    private String hostAvatar;
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
+    }
+
+    public String getHostPhone() {
+        return hostPhone;
+    }
+
+    public void setHostPhone(String hostPhone) {
+        this.hostPhone = hostPhone;
+    }
+
+    public String getHostEmail() {
+        return hostEmail;
+    }
+
+    public void setHostEmail(String hostEmail) {
+        this.hostEmail = hostEmail;
+    }
+
+    public String getHostAvatar() {
+        return hostAvatar;
+    }
+
+    public void setHostAvatar(String hostAvatar) {
+        this.hostAvatar = hostAvatar;
+    }
 
     public List<StopPoint> getStopPoints() {
         return stopPoints;
