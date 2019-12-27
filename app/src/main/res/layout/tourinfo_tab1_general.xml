@@ -564,34 +564,36 @@
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/btn_delete"/>
+
             <LinearLayout
-                android:layout_weight="1"
-                android:weightSum="2"
                 android:id="@+id/lnlControl"
-                android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="2">
 
                 <Button
                     android:id="@+id/btnDeleteTour"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:text="Delete Tour"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="20dp"
-                    android:background="@drawable/btn_delete"/>
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_delete"
+                    android:text="Delete Tour" />
 
                 <Button
                     android:id="@+id/btnEditTour"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_weight="1"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="40dp"
-                    android:text="Edit Tour"
-                    android:background="@drawable/btn_delete"/>
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_delete"
+                    android:text="Edit Tour" />
             </LinearLayout>
         </LinearLayout>
 

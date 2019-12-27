@@ -24,9 +24,10 @@
             android:id="@+id/btnAddMem"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:background="@drawable/btn_delete"
             android:text="Invite"
-            android:textSize="14dp"
-            android:layout_weight="8"/>
+            android:textSize="14dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -41,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/btn_delete"
             android:text="Add Stop Points" />
 
         <Button
@@ -48,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/btn_delete"
             android:text="Apply changes"
             android:visibility="gone" />
     </LinearLayout>

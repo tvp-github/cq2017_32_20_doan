@@ -209,7 +209,7 @@ public class tourinfo_tab2_review extends ListFragment {
                 listMemberData.addAll(tour.getMembers());
                 listMemberAdapter = new ListMemberAdapter(getActivity(),R.layout.review_item,listMemberData);
                 setListAdapter(listMemberAdapter);
-                if(hasControl){
+                if(fromHistory){
                     lnlAddMem.setVisibility(View.VISIBLE);
                     btnInvite = view.findViewById(R.id.btnAddMem);
                     edtInviteName = view.findViewById(R.id.edtMemName);
