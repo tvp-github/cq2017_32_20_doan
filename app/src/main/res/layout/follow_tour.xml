@@ -32,7 +32,7 @@
         android:layout_below="@+id/search"
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnMessage"
+        android:id="@+id/floatbtnMessage"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
         android:layout_marginEnd="20dp"
         android:src="@drawable/chat" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnRecord"
+        android:id="@+id/floatbtnRecord"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
         android:layout_marginEnd="20dp"
         android:src="@drawable/microphone" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnSpeed"
+        android:id="@+id/floatbtnSpeed"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
