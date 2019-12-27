@@ -11,10 +11,12 @@ import hcmus.android.lighttour.APIService.GetStopPointService;
 import hcmus.android.lighttour.APIService.GetTourInfoService;
 import hcmus.android.lighttour.APIService.HistoryTourService;
 import hcmus.android.lighttour.APIService.GetTourReviewService;
+import hcmus.android.lighttour.APIService.InviteService;
 import hcmus.android.lighttour.APIService.ListToursService;
 import hcmus.android.lighttour.APIService.LoginGGService;
 import hcmus.android.lighttour.APIService.LoginService;
 import hcmus.android.lighttour.APIService.RegisterService;
+import hcmus.android.lighttour.APIService.SearchUserService;
 import hcmus.android.lighttour.APIService.SendFeedbackService;
 import hcmus.android.lighttour.APIService.SendReportFeedbackService;
 import hcmus.android.lighttour.APIService.SendReportReviewService;
@@ -115,5 +117,13 @@ public class ApiUtils {
 
     public static GetInforUser getUser() {
         return RetrofitClient.getClient(BASE_URL).create(GetInforUser.class);
+    }
+
+    public static SearchUserService getSearchUserService(){
+        return RetrofitClient.getClient(BASE_URL).create(SearchUserService.class);
+    }
+
+    public static InviteService getInviteUserSevice(){
+        return RetrofitClient.getClient(BASE_URL).create(InviteService.class);
     }
 }

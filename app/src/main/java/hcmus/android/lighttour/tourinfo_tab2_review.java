@@ -45,21 +45,27 @@ import java.util.regex.Pattern;
 import hcmus.android.lighttour.APIService.AddStopPointsService;
 import hcmus.android.lighttour.APIService.GetStopPointFeedbackService;
 import hcmus.android.lighttour.APIService.GetTourReviewService;
+import hcmus.android.lighttour.APIService.InviteService;
+import hcmus.android.lighttour.APIService.SearchUserService;
 import hcmus.android.lighttour.Adapter.ListCommentAdapter;
 import hcmus.android.lighttour.Adapter.ListFeedbackAdapter;
 import hcmus.android.lighttour.Adapter.ListMemberAdapter;
 import hcmus.android.lighttour.Adapter.ListReviewAdapter;
 import hcmus.android.lighttour.Adapter.ListStopPointAdapter;
+import hcmus.android.lighttour.Adapter.UserAdapter;
 import hcmus.android.lighttour.AppUtils.AddStopPointsBody;
 import hcmus.android.lighttour.AppUtils.ListFeedback;
+import hcmus.android.lighttour.AppUtils.InviteBody;
 import hcmus.android.lighttour.AppUtils.ListReview;
 import hcmus.android.lighttour.AppUtils.Message;
 import hcmus.android.lighttour.Response.Comment;
 import hcmus.android.lighttour.Response.Feedback;
 import hcmus.android.lighttour.Response.Member;
 import hcmus.android.lighttour.Response.Review;
+import hcmus.android.lighttour.Response.SearchUsers;
 import hcmus.android.lighttour.Response.StopPoint;
 import hcmus.android.lighttour.Response.Tour;
+import hcmus.android.lighttour.Response.UserInfo;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,7 +97,17 @@ public class tourinfo_tab2_review extends ListFragment {
     Button btnApplyChanges;
     Button btnAddStopPoints;
     LinearLayout ctrlStopPoint;
+
+    EditText edtInviteName;
+    Button btnInvite;
     LinearLayout lnlAddMem;
+    ArrayList<UserInfo> listUserData;
+    UserAdapter userAdapter;
+    SearchUserService searchUserService;
+    Integer currentPage = 1;
+    Button btnNext;
+    Button btnPrev;
+
 
     int selectedPos;
     String newLat;
@@ -195,6 +211,60 @@ public class tourinfo_tab2_review extends ListFragment {
                 setListAdapter(listMemberAdapter);
                 if(hasControl){
                     lnlAddMem.setVisibility(View.VISIBLE);
+                    btnInvite = view.findViewById(R.id.btnAddMem);
+                    edtInviteName = view.findViewById(R.id.edtMemName);
+                    listUserData = new ArrayList<>();
+                    userAdapter = new UserAdapter(getActivity(),R.layout.users_list_item,listUserData);
+                    btnInvite.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            LayoutInflater layoutInflater = getLayoutInflater();
+                            View layout = layoutInflater.inflate(R.layout.list_user,null);
+                            ListView lvUser = layout.findViewById(R.id.lv_users);
+                            lvUser.setAdapter(userAdapter);
+                            lvUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, final int li, long l) {
+                                    AlertDialog.Builder confirm = new AlertDialog.Builder(getActivity());
+                                    confirm.setTitle("Do you want to invite this person?")
+                                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    sendInvite(listUserData.get(li).getId());
+                                                }
+                                            })
+                                            .setNegativeButton("No",null)
+                                            .create()
+                                            .show();
+                                }
+                            });
+                            btnNext = layout.findViewById(R.id.btn_nextPage);
+                            btnPrev = layout.findViewById(R.id.btn_prevPage);
+                            btnNext.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    currentPage++;
+                                    searchUser();
+                                }
+                            });
+                            btnPrev.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    currentPage--;
+                                    searchUser();
+                                }
+                            });
+                            //Show diaglog
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("User list")
+                                    .setView(layout)
+                                    .setNegativeButton("Continue",null)
+                                    .create()
+                                    .show();
+                            searchUserService = ApiUtils.getSearchUserService();
+                            searchUser();
+                        }
+                    });
                 }
                 break;
             case 5:
@@ -288,7 +358,49 @@ public class tourinfo_tab2_review extends ListFragment {
             selectedPos = position;
         }
     }
+    private void sendInvite(int userId){
+        InviteService inviteService = ApiUtils.getInviteUserSevice();
+        int tourId = tour.getId();
+        inviteService.sendData(token,new InviteBody(""+tourId,""+userId,true)).enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                if(response.code()==200)
+                    Toast.makeText(getActivity(), ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+
+            }
+        });
+    }
+    private void searchUser(){
+        btnPrev.setEnabled(true);
+        btnNext.setEnabled(true);
+        searchUserService.sendData(token,edtInviteName.getText().toString(),currentPage,5).enqueue(new Callback<SearchUsers>() {
+            @Override
+            public void onResponse(Call<SearchUsers> call, Response<SearchUsers> response) {
+                if(response.code() == 200){
+                    listUserData.clear();
+                    listUserData.addAll(response.body().getUsers());
+                    int total = Integer.parseInt(response.body().getTotal());
+                    int totalPage = (total / 5) + (total%5 == 0 ? 0 : 1);
+                    userAdapter.notifyDataSetChanged();
+                    if (currentPage == 1)
+                        btnPrev.setEnabled(false);
+                    if (currentPage == totalPage)
+                        btnNext.setEnabled(false);
+                    userAdapter.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchUsers> call, Throwable t) {
+
+            }
+        });
+    }
     private void displayStopPointDialog(final StopPoint stopPoint, boolean isShow) {
         final LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.create_stop_point, null);

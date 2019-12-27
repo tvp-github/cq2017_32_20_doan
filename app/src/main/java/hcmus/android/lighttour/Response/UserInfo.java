@@ -17,13 +17,13 @@ public class UserInfo {
     private String createdOn;
     @SerializedName("dob")
     @Expose
-    private Object dob;
+    private String dob;
     @SerializedName("gender")
     @Expose
     private Integer gender;
     @SerializedName("avatar")
     @Expose
-    private Object avatar;
+    private String avatar;
     @SerializedName("typeLogin")
     @Expose
     private Integer typeLogin;
@@ -35,7 +35,7 @@ public class UserInfo {
     private String phone;
     @SerializedName("address")
     @Expose
-    private Object address;
+    private String address;
 
     public Integer getId() {
         return id;
@@ -61,11 +61,11 @@ public class UserInfo {
         this.createdOn = createdOn;
     }
 
-    public Object getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Object dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 
@@ -77,11 +77,11 @@ public class UserInfo {
         this.gender = gender;
     }
 
-    public Object getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Object avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 
@@ -109,11 +109,11 @@ public class UserInfo {
         this.phone = phone;
     }
 
-    public Object getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Object address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
