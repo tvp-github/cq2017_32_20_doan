@@ -150,7 +150,14 @@ public class HistoryActivity extends AppCompatActivity {
                 if(response.code()==200){
                     //Nhập vào danh sách dữ liệu
                     listTourData.clear();
-                    listTourData.addAll(response.body().getTours());
+                    List<Tour> listTourtmp;
+                    listTourtmp = response.body().getTours();
+                    for (Tour T:listTourtmp){
+                        if(T.getStatus()!=-1)
+                            listTourData.add(T);
+                        else
+                            Log.d("AAA", "onResponse: "+T.getId());
+                    }
                     total = response.body().getTotal();
                     //Cập nhật tại listView
                     listTourAdapter.notifyDataSetChanged();
