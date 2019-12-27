@@ -37,7 +37,6 @@ public class InviteAdapter extends BaseAdapter {
     Activity context;
     int layout;
     List<Tour> listData;
-    Tour tour;
     public InviteAdapter(Activity context, int layout, List<Tour> listData) {
         this.context = context;
         this.layout = layout;
@@ -61,7 +60,7 @@ public class InviteAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        tour = listData.get(i);
+        Tour tour = listData.get(i);
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(layout,null);
         TextView txtHostName = view.findViewById(R.id.txt_host_name);
@@ -70,6 +69,9 @@ public class InviteAdapter extends BaseAdapter {
         Button btnTourInfo = view.findViewById(R.id.btn_tour_info);
         Button btnAccept = view.findViewById(R.id.btn_invite_accept);
         Button btnDec = view.findViewById(R.id.btn_invite_decline);
+        btnTourInfo.setTag(tour);
+        btnAccept.setTag(tour);
+        btnDec.setTag(tour);
         txtHostName.setText(tour.getHostName());
         txtTourName.setText("You're invited to tour: "+tour.getName());
         if(tour.getHostAvatar()!=null && tour.getHostAvatar().length()>0)
@@ -78,6 +80,7 @@ public class InviteAdapter extends BaseAdapter {
         btnTourInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Tour tour = (Tour) view.getTag();
                 Intent intent = new Intent(context, TourInformationActivity.class);
                 intent.putExtra("tour", new Gson().toJson(tour));
                 context.startActivity(intent);
@@ -86,24 +89,25 @@ public class InviteAdapter extends BaseAdapter {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendInviteResponse(true);
-
+                Tour tour = (Tour) view.getTag();
+                sendInviteResponse(""+tour.getId(),true);
             }
         });
         btnDec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendInviteResponse(false);
+                Tour tour = (Tour) view.getTag();
+                sendInviteResponse(""+tour.getId(), false);
             }
         });
         return view;
     }
 
-    private void sendInviteResponse(boolean b) {
+    private void sendInviteResponse(String tourId,boolean b) {
         MyApplication myApplication = (MyApplication) context.getApplication();
         String token = myApplication.getToken();
         ResponseInviteService responseInviteService = ApiUtils.getResponseInviteSevice();
-        responseInviteService.sendData(token, new ResponseInviteBody(tour.getId()+"" , b)).enqueue(new Callback<Message>() {
+        responseInviteService.sendData(token, new ResponseInviteBody(tourId , b)).enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
                 if(response.code()==200){
