@@ -11,6 +11,8 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,7 +27,11 @@ public class SettingsActivity extends AppCompatActivity {
     Button logout;
     Button editProfile;
     TextView userName;
-
+//    ImageButton btnHistory;
+//    ImageButton btnNoti;
+//    ImageButton btnExplore;
+//    ImageButton btnHome;
+//    LinearLayout lnl_setting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +44,46 @@ public class SettingsActivity extends AppCompatActivity {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+//        btnExplore =findViewById(R.id.btnExplore);
+//        btnHome = findViewById(R.id.btnHome);
+//        btnNoti = findViewById(R.id.btnNoti);
+//        btnHistory = findViewById(R.id.btnHistory);
+//        lnl_setting = findViewById(R.id.lnl_setting);
+//        lnl_setting.setBackgroundResource(R.drawable.bg_review);
+//
+//        btnNoti.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(SettingsActivity.this, NotificationActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        //Chuyển màn hình sang explore điểm dừng
+//        btnExplore.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(SettingsActivity.this, ExploreActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        //Chuyển màn hình sang explore điểm dừng
+//        btnHome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(SettingsActivity.this, ListTourActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        // Chuyển màn hình sang history
+//        btnHistory.setOnClickListener(new View.OnClickListener() {
+//            @Override public void onClick(View v) {
+//                startActivity(new Intent(SettingsActivity.this, HistoryActivity.class));
+//            }
+//
+//        });
 
         //Language
 

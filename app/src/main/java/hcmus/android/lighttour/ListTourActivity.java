@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class ListTourActivity extends AppCompatActivity {
     ImageButton imgbtnHistory;
     ImageButton btnSettings;
     ImageButton btnNoti;
+    LinearLayout lnl_home;
     TextView txtTotalTour;
     SearchView search_tour;
     int ROWPERPAGE = 30;
@@ -72,7 +74,7 @@ public class ListTourActivity extends AppCompatActivity {
         //Init Adapter, set Adapter to listTour
         listTourAdapter = new ListTourAdapter(ListTourActivity.this, R.layout.list_item,listTourData);
         listTour.setAdapter(listTourAdapter);
-
+        lnl_home.setBackgroundResource(R.drawable.bg_review);
 
         //Log.d("AAA", "onResponse: "+(listTour.getItemAtPosition(1).toString()));
         listTour.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -104,6 +106,15 @@ public class ListTourActivity extends AppCompatActivity {
                 Intent intent = new Intent(ListTourActivity.this, ExploreActivity.class);
                 startActivity(intent);
             }
+        });
+
+        // Chuyển màn hình sang settings
+        btnSettings = findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                startActivity(new Intent(ListTourActivity.this, SettingsActivity.class));
+            }
+
         });
 
         //Chuyển màn hình sang tạo tour
@@ -139,14 +150,7 @@ public class ListTourActivity extends AppCompatActivity {
             }
         });
 
-        // Chuyển màn hình sang settings
-        btnSettings = findViewById(R.id.btnSettings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-               startActivity(new Intent(ListTourActivity.this, SettingsActivity.class));
-           }
 
-        });
 
         listTour.setTextFilterEnabled(true);
         search_tour.setSubmitButtonEnabled(true);
@@ -217,6 +221,7 @@ public class ListTourActivity extends AppCompatActivity {
         btnAddTour = (FloatingActionButton) findViewById(R.id.btnAddTour);
         search_tour = findViewById(R.id.search_tour);
         btnExplore = (ImageButton) findViewById(R.id.btnExplore);
+        lnl_home = findViewById(R.id.lnl_home);
         txtTotalTour = findViewById(R.id.txtTotaltour);
         listToursService = ApiUtils.getListToursAPIService();
         MyApplication myApplication = (MyApplication) getApplication();

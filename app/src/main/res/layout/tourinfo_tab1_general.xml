@@ -277,8 +277,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="0dp"
                 android:orientation="vertical"
                 android:weightSum="2">
 
@@ -476,7 +475,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/ratingPoint"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.744"
+            app:layout_constraintVertical_bias="0.76"
             app:max_value="100"
             app:rounded="true"
             app:show_label="true"
@@ -550,27 +549,52 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <LinearLayout
-            android:id="@+id/lnlControl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone"
+            android:orientation="vertical"
+            android:weightSum="2"
             app:layout_constraintBottom_toBottomOf="parent">
-
             <Button
-                android:id="@+id/btnDeleteTour"
+                android:visibility="gone"
+                android:id="@+id/btnFollow"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:text="Follow Tour"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/btn_delete"/>
+            <LinearLayout
+                android:layout_weight="1"
+                android:weightSum="2"
+                android:id="@+id/lnlControl"
+                android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Delete Tour" />
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnEditTour"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Edit Tour" />
+                <Button
+                    android:id="@+id/btnDeleteTour"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="Delete Tour"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/btn_delete"/>
+
+                <Button
+                    android:id="@+id/btnEditTour"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="40dp"
+                    android:text="Edit Tour"
+                    android:background="@drawable/btn_delete"/>
+            </LinearLayout>
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

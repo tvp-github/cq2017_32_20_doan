@@ -74,6 +74,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnl_history"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="vertical"
@@ -94,6 +95,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnl_explore"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="vertical"
@@ -114,6 +116,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnl_noti"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1"
@@ -134,19 +137,20 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnl_setting"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="vertical"
             android:layout_weight="1">
 
             <ImageButton
+                android:id="@+id/btnSettings"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/settings"/>
 
             <TextView
-                android:id="@+id/btnSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

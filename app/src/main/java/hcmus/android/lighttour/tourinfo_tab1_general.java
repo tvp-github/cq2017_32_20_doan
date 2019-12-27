@@ -100,12 +100,14 @@ public class tourinfo_tab1_general extends Fragment {
     Button btnCancel;
     ImageButton btnStartDate;
     ImageButton btnEndDate;
+    Button btnFollow;
 
     Tour tour;
     String token;
     int total=0;
     int point=0;
     boolean hasControl= false;
+    boolean hasFollow = false;
     int raters[] = new int[5];
     int colors[] = new int[]{
             Color.parseColor("#0e9d58"),
@@ -185,6 +187,7 @@ public class tourinfo_tab1_general extends Fragment {
         MyApplication myApplication = (MyApplication) getActivity().getApplication();
         int userId = myApplication.getIdUser();
         token = myApplication.getToken();
+        hasFollow = getArguments().getBoolean("fromHistory");
         hasControl = getArguments().getBoolean("fromHistory") && (tour.getHostId() == userId);
         ReviewPointStarsService = ApiUtils.getGetReviewPointStarsService();
 
@@ -198,7 +201,19 @@ public class tourinfo_tab1_general extends Fragment {
         numberReviewer = view.findViewById(R.id.numberReviewer);
         ratingBar = view.findViewById(R.id.ratingBar);
         lnlControl = view.findViewById(R.id.lnlControl);
+        btnFollow = view.findViewById(R.id.btnFollow);
         //Đổ dữ liệu
+        if (hasFollow){
+            btnFollow.setVisibility(view.VISIBLE);
+            btnFollow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent follow_tour = new Intent(getActivity(), FollowTourActivity.class);
+                    follow_tour.putExtra("tour", new Gson().toJson(tour));
+                    startActivity(follow_tour );
+                }
+            });
+        }
         if ( hasControl ){
             showTourInfo = view.findViewById(R.id.ShowTourInfo);
             updateTour = view.findViewById(R.id.updateTour);

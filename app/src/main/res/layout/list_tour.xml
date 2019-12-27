@@ -96,7 +96,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
 
                 <Button
                     android:layout_marginLeft="20dp"
@@ -136,17 +137,19 @@
             android:paddingTop="3dp">
 
             <LinearLayout
+                android:id="@+id/lnl_home"
+                android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/btnMenu"
+                    android:id="@+id/btnHome"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/menu" />
+                    android:background="@drawable/home_listtour" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -156,6 +159,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lnl_history"
+                android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="vertical"
@@ -176,6 +181,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lnl_explore"
+                android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="vertical"
@@ -196,6 +203,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lnl_noti"
+                android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -216,6 +225,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lnl_setting"
+                android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="vertical"
