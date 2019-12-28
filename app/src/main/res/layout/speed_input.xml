@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/imgbtn_60"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="120dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/speed_60" />
+
+        <ImageButton
+            android:id="@+id/imgbtn_50"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="120dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/speed_50" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/edt_speed"
+        android:inputType="number"
+        android:digits="0123456789"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="120dp"
+        android:hint="speed"
+        android:textAlignment="center"></EditText>
+
+</LinearLayout>

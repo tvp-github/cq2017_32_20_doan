@@ -3,9 +3,12 @@ package com.ygaps.travelapp;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,6 +24,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -38,7 +44,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.reflect.TypeToken;
 import com.ygaps.travelapp.APIService.GetCoordinatesOfMembersService;
+import com.ygaps.travelapp.APIService.GetNotificationOnRoadService;
+import com.ygaps.travelapp.APIService.SendSpeedService;
 import com.ygaps.travelapp.AppUtils.CurrentLocationBody;
+import com.ygaps.travelapp.AppUtils.SendSpeedBody;
 import com.ygaps.travelapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,6 +61,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import com.ygaps.travelapp.Response.ListOnRoad;
 import com.ygaps.travelapp.Response.Tour;
 import com.ygaps.travelapp.Response.UserLocation;
 import com.ygaps.travelapp.Retrofit.ApiUtils;
@@ -63,6 +73,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class FollowTourActivity  extends FragmentActivity implements LocationListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
 
     Tour tour;
+    String token;
     private GoogleMap mMap;
     FloatingActionButton floatbtnRecord;
     FloatingActionButton floatbtnMessage;
@@ -77,34 +88,57 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
     MyApplication myApplication;
     GetCoordinatesOfMembersService getCoordinatesOfMembersService;
     boolean hasLocation = false;
-
-        @RequiresApi(api = Build.VERSION_CODES.M)
+    private int idUser;
+    boolean didClear = false;
+    @RequiresApi(api = Build.VERSION_CODES.M)
         @SuppressLint("HandlerLeak")
         private void init(){
             myApplication = (MyApplication) getApplication();
             floatbtnRecord = findViewById(R.id.floatbtnRecord);
             floatbtnMessage = findViewById(R.id.floatbtnMessage);
+            floatbtnSpeed = findViewById(R.id.floatbtnSpeed);
+            token = myApplication.getToken();
+            idUser = myApplication.getIdUser();
             getCoordinatesOfMembersService = ApiUtils.getGetCoordinatesOfMembersService();
             handler = new Handler() {
                 @Override
                 public void handleMessage(@NonNull Message msg) {
-                    Type listType = new TypeToken<List<UserLocation>>(){}.getType();
-                    List<UserLocation> list = new Gson().fromJson(msg.getData().getString("info"),listType);
-                    mMap.clear();
-                    for (UserLocation userLocation: list) {
-                        String userName= userLocation.getId();
-                        for (int i = 0 ;i< tour.getMembers().size() ; i++)
-                            if(tour.getMembers().get(i).getId() == Integer.parseInt(userLocation.getId())) {
-                                userName = tour.getMembers().get(i).getName();
-                                break;
-                            }
-
-                        if(userLocation.getId().equals(""+myApplication.getIdUser()))
-                        {
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName).icon(BitmapDescriptorFactory.fromResource(R.drawable.other)));
+                    boolean noti = msg.getData().getBoolean("noti", false);
+                    if(!noti) {
+                        Type listType = new TypeToken<List<UserLocation>>() {
+                        }.getType();
+                        List<UserLocation> list = new Gson().fromJson(msg.getData().getString("info"), listType);
+                        if (!didClear){
+                            mMap.clear();
+                            didClear = true;
                         }
                         else
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName));
+                            didClear = false;
+                        for (UserLocation userLocation : list) {
+                            String userName = userLocation.getId();
+                            for (int i = 0; i < tour.getMembers().size(); i++)
+                                if (tour.getMembers().get(i).getId() == Integer.parseInt(userLocation.getId())) {
+                                    userName = tour.getMembers().get(i).getName();
+                                    break;
+                                }
+
+                            if (userLocation.getId().equals("" + myApplication.getIdUser())) {
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName).icon(BitmapDescriptorFactory.fromResource(R.drawable.other)));
+                            } else
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName));
+                        }
+                    }
+                    else{
+                        if (!didClear){
+                            mMap.clear();
+                            didClear = true;
+                        }
+                        else
+                            didClear = false;
+                        ListOnRoad listOnRoad = new Gson().fromJson(msg.getData().getString("notilist"), ListOnRoad.class);
+                        for (ListOnRoad.OnRoadNoti onRoadNoti : listOnRoad.getNotiList()){
+                            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(onRoadNoti.getLat()), Double.parseDouble(onRoadNoti.getLong()))).title(""+onRoadNoti.getSpeed()));
+                        }
                     }
                 }
             };
@@ -117,6 +151,12 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
             else {
                 if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) )
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
+                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location!= null){
+                        currentLat = location.getLatitude();
+                        currentLong = location.getLongitude();
+                        hasLocation = true;
+                    }
                 else {
                     showAlertToEnableGPS();
                 }
@@ -129,7 +169,14 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
             super.onCreate(savedInstanceState);
             setContentView(R.layout.follow_tour);
             init();
-
+            floatbtnSpeed.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(hasLocation) {
+                        displayAlertDialog();
+                    }
+                }
+            });
             Intent intent=getIntent();
             tour= new Gson().fromJson(intent.getStringExtra("tour"),Tour.class);
             floatbtnRecord.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +200,58 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
             mapFragment.getMapAsync(this);
 
         }
+
+    private void displayAlertDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.speed_input,null);
+        final EditText edtSpeed = view.findViewById(R.id.edt_speed);
+        ImageButton btn50 = view.findViewById(R.id.imgbtn_50);
+        ImageButton btn60 = view.findViewById(R.id.imgbtn_60);
+        btn50.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                edtSpeed.setText("50");
+            }
+        });
+        btn60.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                edtSpeed.setText("60");
+            }
+        });
+
+
+        builder.setView(view)
+                        .setTitle("Send speed").setPositiveButton("Send", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                sendSpeed(Integer.parseInt(edtSpeed.getText().toString()));
+            }
+        });
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+    }
+
+    private void sendSpeed(int speed) {
+        SendSpeedService sendSpeedService = ApiUtils.getSendSpeedService();
+        sendSpeedService.sendData(token, new SendSpeedBody(currentLat,currentLong,tour.getId(),idUser,3,speed)).enqueue(new Callback<com.ygaps.travelapp.AppUtils.Message>() {
+            @Override
+            public void onResponse(Call<com.ygaps.travelapp.AppUtils.Message> call, Response<com.ygaps.travelapp.AppUtils.Message> response) {
+                if(response.code() == 200){
+                    Toast.makeText(FollowTourActivity.this, "Send speed successful", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(FollowTourActivity.this, "Send speed failed", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<com.ygaps.travelapp.AppUtils.Message> call, Throwable t) {
+                Toast.makeText(FollowTourActivity.this, "Unable to connect to server", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void displayRecordVoice() {
         LayoutInflater inflater = getLayoutInflater();
@@ -270,6 +369,12 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
             String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             if(provider != null){
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location!= null){
+                    currentLat = location.getLatitude();
+                    currentLong = location.getLongitude();
+                    hasLocation = true;
+                }
             }
             else
             {
@@ -286,7 +391,15 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == REQUEST_CODE){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, FollowTourActivity.this);
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location!= null){
+                    currentLat = location.getLatitude();
+                    currentLong = location.getLongitude();
+                    hasLocation = true;
+                }
+            }
         }
         else finish();
     }
@@ -372,8 +485,7 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
     private void sendLocationInfo(){
         //send current lat long
         Log.d("TTTT", "sendLocationInfo: send");
-        String token = myApplication.getToken();
-        String userId = ""+myApplication.getIdUser();
+        String userId = ""+idUser;
         String tourId = ""+tour.getId();
         double lat= currentLat;
         double _long = currentLong;
@@ -405,15 +517,10 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
 
         @SuppressLint("MissingPermission")
         public void run() {
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location!= null){
-                currentLat = location.getLatitude();
-                currentLong = location.getLongitude();
-                hasLocation = true;
-            }
             while(!exit){
                 if(hasLocation)
                     sendLocationInfo();
+                    getNotificationOnRoad();
                 try {
 
                     Thread.sleep(10000);
@@ -429,6 +536,29 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
         public void stop(){
             exit = true;
         }
+    }
+
+    private void getNotificationOnRoad() {
+            GetNotificationOnRoadService getNotificationOnRoadService = ApiUtils.getNotificationOnRoadService();
+            getNotificationOnRoadService.sendData(token,tour.getId(),1,100).enqueue(new Callback<ListOnRoad>() {
+                @Override
+                public void onResponse(Call<ListOnRoad> call, Response<ListOnRoad> response) {
+                    if(response.code() == 200)
+                    {
+                        Message message = handler.obtainMessage();
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("noti",true);
+                        bundle.putString("notilist", new Gson().toJson(response.body()));
+                        message.setData(bundle);
+                        handler.sendMessage(message);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ListOnRoad> call, Throwable t) {
+
+                }
+            });
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.ygaps.travelapp.APIService.GetCoordinatesOfMembersService;
 import com.ygaps.travelapp.APIService.GetInforUser;
 import com.ygaps.travelapp.APIService.GetInviteService;
 import com.ygaps.travelapp.APIService.GetListTextMessageService;
+import com.ygaps.travelapp.APIService.GetNotificationOnRoadService;
 import com.ygaps.travelapp.APIService.GetPointStarsService;
 import com.ygaps.travelapp.APIService.GetReviewPointStarsService;
 import com.ygaps.travelapp.APIService.GetSearchStopPointService;
@@ -28,6 +29,7 @@ import com.ygaps.travelapp.APIService.SendReportFeedbackService;
 import com.ygaps.travelapp.APIService.SendReportReviewService;
 import com.ygaps.travelapp.APIService.SendRequestOTPService;
 import com.ygaps.travelapp.APIService.SendReviewService;
+import com.ygaps.travelapp.APIService.SendSpeedService;
 import com.ygaps.travelapp.APIService.SendTextNotificationService;
 import com.ygaps.travelapp.APIService.UpdateTourService;
 import com.ygaps.travelapp.APIService.SendVerifyOTPService;
@@ -162,5 +164,13 @@ public class ApiUtils {
     public static GetCoordinatesOfMembersService getGetCoordinatesOfMembersService() {
 
         return RetrofitClient.getClient(BASE_URL).create(GetCoordinatesOfMembersService.class);
+    }
+
+    public static SendSpeedService getSendSpeedService() {
+        return RetrofitClient.getClient(BASE_URL).create(SendSpeedService.class);
+    }
+
+    public static GetNotificationOnRoadService getNotificationOnRoadService() {
+        return RetrofitClient.getClient(BASE_URL).create(GetNotificationOnRoadService.class);
     }
 }
