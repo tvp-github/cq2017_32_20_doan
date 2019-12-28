@@ -78,6 +78,7 @@
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".FollowTourActivity" />
+        <activity android:name=".TextMessageActivity" />
     </application>
 
 

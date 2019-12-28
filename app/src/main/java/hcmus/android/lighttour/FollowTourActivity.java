@@ -3,6 +3,7 @@ package hcmus.android.lighttour;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -25,12 +26,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.io.IOException;
+
+import hcmus.android.lighttour.Response.Tour;
 
 
 public class FollowTourActivity  extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
 
+    Tour tour;
     private GoogleMap mMap;
     FloatingActionButton floatbtnRecord;
     FloatingActionButton floatbtnMessage;
@@ -41,6 +46,7 @@ public class FollowTourActivity  extends FragmentActivity implements OnMapReadyC
 
         private void init(){
             floatbtnRecord = findViewById(R.id.floatbtnRecord);
+            floatbtnMessage = findViewById(R.id.floatbtnMessage);
 
         }
         @Override
@@ -49,10 +55,22 @@ public class FollowTourActivity  extends FragmentActivity implements OnMapReadyC
             setContentView(R.layout.follow_tour);
             init();
 
+            Intent intent=getIntent();
+            tour= new Gson().fromJson(intent.getStringExtra("tour"),Tour.class);
+
             floatbtnRecord.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     displayRecordVoice();
+                }
+            });
+
+            floatbtnMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(FollowTourActivity.this, TextMessageActivity.class);
+                    intent.putExtra("tour", new Gson().toJson(tour));
+                    startActivity(intent);
                 }
             });
         }

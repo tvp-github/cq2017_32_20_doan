@@ -5,6 +5,7 @@ import hcmus.android.lighttour.APIService.CreateToursService;
 import hcmus.android.lighttour.APIService.EditProfileService;
 import hcmus.android.lighttour.APIService.GetInforUser;
 import hcmus.android.lighttour.APIService.GetInviteService;
+import hcmus.android.lighttour.APIService.GetListTextMessageService;
 import hcmus.android.lighttour.APIService.GetPointStarsService;
 import hcmus.android.lighttour.APIService.GetReviewPointStarsService;
 import hcmus.android.lighttour.APIService.GetSearchStopPointService;
@@ -25,6 +26,7 @@ import hcmus.android.lighttour.APIService.SendReportFeedbackService;
 import hcmus.android.lighttour.APIService.SendReportReviewService;
 import hcmus.android.lighttour.APIService.SendRequestOTPService;
 import hcmus.android.lighttour.APIService.SendReviewService;
+import hcmus.android.lighttour.APIService.SendTextNotificationService;
 import hcmus.android.lighttour.APIService.UpdateTourService;
 import hcmus.android.lighttour.APIService.SendVerifyOTPService;
 
@@ -142,4 +144,11 @@ public class ApiUtils {
         return RetrofitClient.getClient(BASE_URL).create(EditProfileService.class);
     }
 
+    public static SendTextNotificationService getSendTextNotificationService() {
+        return RetrofitClient.getClient(BASE_URL).create(SendTextNotificationService.class);
+    }
+
+    public static GetListTextMessageService getGetListTextMessageService() {
+        return RetrofitClient.getClient(BASE_URL).create(GetListTextMessageService.class);
+    }
 }
