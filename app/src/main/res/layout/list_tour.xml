@@ -72,21 +72,21 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"
-                android:src="@drawable/destination"
-                android:layout_gravity="center"/>
+                android:src="@drawable/destination" />
 
             <TextView
                 android:id="@+id/txtTotaltour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:fontFamily="@font/roboto"
                 android:text="14 Tours"
                 android:textColor="#000"
                 android:textSize="15dp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -99,40 +99,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+               >
 
                 <Button
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:id="@+id/btnPrevPage_listtour"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Previous Page"
                     android:background="@drawable/bg_item"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="0dp"/>
 
                 <Button
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:id="@+id/btnNextPage_listtour"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Next Page"
                     android:background="@drawable/bg_item"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="0dp"/>
             </LinearLayout>
 
             <ListView
                 android:id="@+id/listTour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:layout_marginBottom="5dp"/>
+               />
 
         </LinearLayout>
 

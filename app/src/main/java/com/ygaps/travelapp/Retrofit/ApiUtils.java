@@ -31,6 +31,7 @@ import com.ygaps.travelapp.APIService.SendRequestOTPService;
 import com.ygaps.travelapp.APIService.SendReviewService;
 import com.ygaps.travelapp.APIService.SendSpeedService;
 import com.ygaps.travelapp.APIService.SendTextNotificationService;
+import com.ygaps.travelapp.APIService.UpdatePassService;
 import com.ygaps.travelapp.APIService.UpdateTourService;
 import com.ygaps.travelapp.APIService.SendVerifyOTPService;
 
@@ -172,5 +173,9 @@ public class ApiUtils {
 
     public static GetNotificationOnRoadService getNotificationOnRoadService() {
         return RetrofitClient.getClient(BASE_URL).create(GetNotificationOnRoadService.class);
+	}
+
+    public static UpdatePassService getUpdatePassService() {
+        return RetrofitClient.getClient(BASE_URL).create(UpdatePassService.class);
     }
 }

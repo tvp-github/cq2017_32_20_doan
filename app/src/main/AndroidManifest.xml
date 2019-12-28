@@ -82,6 +82,7 @@
         <activity android:name="com.ygaps.travelapp.EditProfileActivity" />
         <activity android:name="com.ygaps.travelapp.FollowTourActivity" />
         <activity android:name="com.ygaps.travelapp.TextMessageActivity" />
+        <activity android:name="com.ygaps.travelapp.UpdatePassActivity" />
 
 
         <service

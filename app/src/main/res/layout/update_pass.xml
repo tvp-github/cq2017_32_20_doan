@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbar_update_pass"
+        layout="@layout/toolbar">
+    </include>
+
+    <EditText
+        android:id="@+id/edtCurrentPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/style_border"
+        android:drawableLeft="@drawable/password"
+        android:drawablePadding="16dp"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:hint="Enter your current passwword"
+        android:textColor="#000" />
+
+    <EditText
+        android:id="@+id/edtNewPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/style_border"
+        android:drawableLeft="@drawable/password"
+        android:drawablePadding="16dp"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:hint="Enter your new password"
+        android:textColor="#000" />
+
+    <EditText
+        android:id="@+id/edtNewPassAgain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/style_border"
+        android:drawableLeft="@drawable/password"
+        android:drawablePadding="16dp"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:hint="Enter your new password again"
+        android:textColor="#000" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/style_btn_create_tour"
+        android:drawablePadding="16dp"
+        android:inputType="text"
+        android:padding="12dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Submit"
+        android:textColor="#fff" />
+
+</LinearLayout>

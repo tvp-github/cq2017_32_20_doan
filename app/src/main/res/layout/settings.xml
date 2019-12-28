@@ -5,8 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="7dp"
-    android:layout_marginRight="7dp"
     tools:context="com.ygaps.travelapp.SettingsActivity">
 
 
@@ -18,16 +16,16 @@
         android:layout_alignParentTop="true"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/circle_avatar"
         android:layout_marginTop="20dp"
         android:src="@drawable/sydney"
         app:civ_border_width="2dp"
         app:civ_border_color="#FFFFFF"
         android:layout_below="@+id/toolbar_settings"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="15dp"/>
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -49,10 +47,25 @@
         android:layout_below="@+id/userName"
         android:paddingRight="10dp"
         android:paddingLeft="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_alignBottom="@+id/circle_avatar"
         android:text="Edit profile >"
+        android:background="@drawable/style_border"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_changePass"
+        android:layout_toRightOf="@+id/btn_editProfile"
+        android:layout_below="@+id/userName"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignBottom="@+id/circle_avatar"
+        android:text="Change Pass >"
         android:background="@drawable/style_border"/>
 
     <View

@@ -10,7 +10,7 @@
         android:id="@+id/item_report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_border_no_radius"
+        android:background="@drawable/bg_listitem"
         android:layout_marginBottom="5dp"
         android:text="Report"
         android:fontFamily="@font/roboto"
@@ -19,7 +19,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_border_no_radius"
+        android:background="@drawable/bg_listitem"
         android:layout_marginBottom="20dp"
         android:text="Infomation"
         android:fontFamily="@font/roboto">

@@ -22,7 +22,7 @@
             android:layout_below="@+id/toolbar_create_tour"
             android:textSize="15dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="5dp"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -32,8 +32,8 @@
             android:layout_below="@+id/text_stopPointname"
             android:background="@drawable/style_border"
             android:paddingLeft="10dp"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp"/>
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"/>
 
 
         <TextView
@@ -47,12 +47,12 @@
 
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:id="@+id/spinner_serviceType"
             android:hint="Restaurant"
             android:background="@drawable/style_border"
             android:layout_below="@+id/text_serviceType"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:textSize="15dp"/>
 
 
@@ -74,8 +74,8 @@
             android:background="@drawable/style_border"
             android:layout_marginTop="5dp"
             android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"/>
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,11 +101,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/edit_minCoststop"
             android:hint="0"
+            android:inputType="number"
             android:layout_below="@+id/text_minCoststop"
             android:background="@drawable/style_border"
-            android:paddingTop="15dp"
+            android:paddingTop="10dp"
             android:paddingLeft="10dp"
-            android:paddingBottom="15dp"
+            android:paddingBottom="10dp"
             android:layout_marginTop="5dp"
             android:textAlignment="textStart"/>
 
@@ -119,9 +120,10 @@
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/edit_minCoststop"
             android:layout_alignBottom="@+id/edit_minCoststop"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="10dp"
+            android:inputType="number"
             android:textAlignment="textStart"/>
 
 
