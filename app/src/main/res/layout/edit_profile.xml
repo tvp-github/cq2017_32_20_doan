@@ -16,8 +16,8 @@
         android:layout_alignParentTop="true"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:id="@+id/avatar_edit"
         android:layout_marginTop="20dp"
         android:src="@drawable/sydney"
@@ -50,7 +50,7 @@
         android:id="@+id/fullName"
         android:text="Light"
         android:hint="Full name"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:layout_below="@+id/avatar_edit"
         android:layout_marginTop="30dp"
         android:paddingLeft="10dp"/>
@@ -62,7 +62,7 @@
         android:id="@+id/dob"
         android:text="08/12/1999"
         android:hint="Date of birthday"
-        android:textSize="15dp"
+        android:textSize="18dp"
         android:layout_below="@+id/fullName"
         android:layout_marginTop="20dp"
         android:paddingLeft="10dp"/>
@@ -79,7 +79,7 @@
         android:id="@+id/email"
         android:text="abc.xyz@gmail.com"
         android:hint="Email"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:layout_below="@+id/dob"
         android:layout_marginTop="20dp"
         android:paddingLeft="10dp"/>
@@ -91,7 +91,7 @@
         android:id="@+id/phone"
         android:text="0909544123"
         android:hint="Phone number"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:layout_below="@+id/email"
         android:layout_marginTop="20dp"
         android:paddingLeft="10dp"/>
@@ -103,7 +103,7 @@
         android:id="@+id/address"
         android:text="ABC Street, X district, Y city"
         android:hint="Address"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:layout_below="@+id/phone"
         android:layout_marginTop="20dp"
         android:paddingLeft="10dp"/>
@@ -124,7 +124,8 @@
         android:layout_toRightOf="@+id/isMale"
         android:layout_alignTop="@+id/isMale"
         android:layout_alignBottom="@+id/isMale"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textSize="20dp"/>
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -132,7 +133,7 @@
         android:layout_below="@+id/address"
         android:layout_toRightOf="@+id/txtMale"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="30dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -141,7 +142,8 @@
         android:layout_toRightOf="@+id/isFemale"
         android:layout_alignTop="@+id/isFemale"
         android:layout_alignBottom="@+id/isFemale"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textSize="20dp"/>
     <View
         android:layout_width="wrap_content"
         android:layout_height="1dp"

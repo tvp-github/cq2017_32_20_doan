@@ -85,8 +85,8 @@
             android:textAlignment="center"/>
 
         <ImageButton
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/btnStartDate"
             android:background="@drawable/calendar"
             android:layout_below="@id/text_startDate"
@@ -95,10 +95,10 @@
             android:layout_marginTop="5dp"/>
 
         <ImageButton
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/btnEndDate"
-            android:src="@drawable/calendar"
+            android:background="@drawable/calendar"
             android:layout_below="@id/text_endDate"
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/endDate"

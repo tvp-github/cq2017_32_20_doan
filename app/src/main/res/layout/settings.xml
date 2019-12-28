@@ -18,16 +18,16 @@
         android:layout_alignParentTop="true"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:id="@+id/circle_avatar"
         android:layout_marginTop="20dp"
         android:src="@drawable/sydney"
         app:civ_border_width="2dp"
         app:civ_border_color="#FFFFFF"
         android:layout_below="@+id/toolbar_settings"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="15dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -37,8 +37,9 @@
         android:layout_alignTop="@+id/circle_avatar"
         android:text="User name"
         android:gravity="center_vertical"
-        android:textSize="25dp"
-        android:textStyle="bold"/>
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:textColor="@color/textColorPrimaryDark"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -48,6 +49,8 @@
         android:layout_below="@+id/userName"
         android:paddingRight="10dp"
         android:paddingLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:layout_alignBottom="@+id/circle_avatar"
         android:text="Edit profile >"
         android:background="@drawable/style_border"/>
@@ -119,7 +122,7 @@
         android:orientation="horizontal"
         android:background="@color/windowBackground"
         android:layout_gravity="bottom"
-        android:paddingTop="3dp"
+        android:paddingTop="10dp"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
