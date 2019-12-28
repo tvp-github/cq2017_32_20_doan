@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/style_list_item"
+            android:background="@drawable/bg_listitem"
             android:orientation="vertical"
             android:weightSum="2"
             tools:ignore="MissingConstraints">

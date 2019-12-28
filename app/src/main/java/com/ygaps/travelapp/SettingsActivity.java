@@ -26,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
     Spinner spinner;
     Button logout;
     Button editProfile;
+    Button btnChangePass;
     TextView userName;
     ImageButton btnHistory;
     ImageButton btnNoti;
@@ -49,8 +50,17 @@ public class SettingsActivity extends AppCompatActivity {
         btnHome = findViewById(R.id.btnHome);
         btnNoti = findViewById(R.id.btnNoti);
         btnHistory = findViewById(R.id.btnHistory);
+        btnChangePass = findViewById(R.id.btn_changePass);
         lnl_setting = findViewById(R.id.lnl_setting);
         lnl_setting.setBackgroundResource(R.drawable.bg_review);
+
+        btnChangePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, UpdatePassActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnNoti.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -29,6 +29,7 @@ import com.ygaps.travelapp.APIService.SendReportReviewService;
 import com.ygaps.travelapp.APIService.SendRequestOTPService;
 import com.ygaps.travelapp.APIService.SendReviewService;
 import com.ygaps.travelapp.APIService.SendTextNotificationService;
+import com.ygaps.travelapp.APIService.UpdatePassService;
 import com.ygaps.travelapp.APIService.UpdateTourService;
 import com.ygaps.travelapp.APIService.SendVerifyOTPService;
 
@@ -162,5 +163,9 @@ public class ApiUtils {
     public static GetCoordinatesOfMembersService getGetCoordinatesOfMembersService() {
 
         return RetrofitClient.getClient(BASE_URL).create(GetCoordinatesOfMembersService.class);
+    }
+
+    public static UpdatePassService getUpdatePassService() {
+        return RetrofitClient.getClient(BASE_URL).create(UpdatePassService.class);
     }
 }
