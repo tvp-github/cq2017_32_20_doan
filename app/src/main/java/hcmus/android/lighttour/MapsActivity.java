@@ -43,6 +43,7 @@ import androidx.fragment.app.FragmentActivity;
 import hcmus.android.lighttour.APIService.AddStopPointsService;
 import hcmus.android.lighttour.APIService.GetSearchStopPointService;
 import hcmus.android.lighttour.APIService.GetStopPointService;
+import hcmus.android.lighttour.APIService.GetTourInfoService;
 import hcmus.android.lighttour.Adapter.ListStopPointAdapter;
 import hcmus.android.lighttour.AppUtils.AddStopPointsBody;
 import hcmus.android.lighttour.AppUtils.Message;
@@ -51,6 +52,7 @@ import hcmus.android.lighttour.AppUtils.RequestStoppointBody;
 import hcmus.android.lighttour.Response.GetStopPoints;
 import hcmus.android.lighttour.Response.SearchStopPoint;
 import hcmus.android.lighttour.Response.StopPoint;
+import hcmus.android.lighttour.Response.Tour;
 import hcmus.android.lighttour.Retrofit.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,6 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
         tourId = intent.getStringExtra("tourId");
         type = intent.getIntExtra("type",0);
+        //type 1 : chọn vị trí . type 0 : thêm stoppoint type 2: khi chọn gửi trả về result
         String token;
         tourId = intent.getStringExtra("tourId");
         floatingActionButton = findViewById(R.id.btnListStopPoint);
@@ -138,6 +141,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lstStopPoints.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int li, long l) {
+                displayStopPointDialog(returnList.get(li),false);
+            }
+        });
+        lstStopPoints.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int li, long l) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
                 builder.setTitle("Delete this stop point from list?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -147,12 +156,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         adapter.notifyDataSetChanged();
                     }
                 });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
+                builder.setNegativeButton("No",null);
                 builder.create().show();
+                return true;
             }
         });
 
@@ -167,42 +173,86 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         view.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                AddStopPointsService addStopPointsService = ApiUtils.getAddStopPointsService();
-                String token = ((MyApplication)getApplication()) .getToken();
-                Log.d("AAA", "onClick: " + new Gson().toJson(returnList) + "\n" + tourId);
-                addStopPointsService.sendData(token , new AddStopPointsBody(tourId,returnList,null)).enqueue(new Callback<Message>() {
-                    @Override
-                    public synchronized void onResponse(Call<Message> call, Response<Message> response) {
-                        if(response.code()==200){
-                            Toast.makeText(MapsActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            returnList.clear();
-                            if (type == 0)
-                            {
-                                setResult(001);
-                                finish();
-                            }
-                        }
-                        else {
-                            try {
-                                Log.d("AAA", "onResponse: "+tourId);
-                                Toast.makeText(MapsActivity.this, ""+response.code()+'-'+response.errorBody().string(), Toast.LENGTH_SHORT).show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Message> call, Throwable t) {
-
-                    }
-                });
-
+                sendData(1);
             }
         });
         AlertDialog dialog = view.create();
         dialog.show();
     }
+
+    private void updateData(){
+        GetTourInfoService getTourInfoService = ApiUtils.getGetTourInfoService();
+        String token = ((MyApplication) getApplication()).getToken();
+        getTourInfoService.sendData(token, Integer.parseInt(tourId) ).enqueue(new Callback<Tour>() {
+            @Override
+            public void onResponse(Call<Tour> call, Response<Tour> response) {
+                List<StopPoint> listStopPoint = response.body().getStopPoints();
+                if(response.code() == 200){
+                    Log.d("AAA", "onResponse: "+ new Gson().toJson(listStopPoint));
+                    for(int i = 0 ; i<returnList.size(); i++)
+                    {
+                        for (int j = 0 ; j<listStopPoint.size(); j++){
+                            if (returnList.get(i).getServiceId().equals(listStopPoint.get(j). getServiceId()))
+                            {
+                                returnList.get(i).setId(listStopPoint.get(j).getId());
+                                returnList.get(i).setServiceId(null);
+                                break;
+                            }
+                        }
+                    }
+                    sendData(2);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Tour> call, Throwable t) {
+
+            }
+        });
+    }
+    //
+    private void sendData(final int mode) {
+        if(type == 2){
+            Intent intent = new Intent();
+            intent.putExtra("stoppoints",""+new Gson().toJson(returnList).toString());
+            setResult(RESULT_OK, intent);
+            finish();
+            return;
+        }
+        AddStopPointsService addStopPointsService = ApiUtils.getAddStopPointsService();
+        String token = ((MyApplication) getApplication()).getToken();
+        Log.d("AAA", "onClick: " + new Gson().toJson(returnList) + "\n" + tourId);
+        addStopPointsService.sendData(token, new AddStopPointsBody(tourId, returnList, null)).enqueue(new Callback<Message>() {
+            @Override
+            public synchronized void onResponse(Call<Message> call, Response<Message> response) {
+                if (response.code() == 200) {
+
+                    if (mode == 1){
+                        updateData();
+                        Toast.makeText(MapsActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        returnList.clear();
+                        if (type == 0) {
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+                } else {
+                    try {
+                        Log.d("AAA", "onResponse: " + tourId);
+                        Toast.makeText(MapsActivity.this, "" + response.code() + '-' + response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+            }
+        });
+    }
+
     public void displayStopPointDialog(final StopPoint stopPoint, final boolean addStopPoint) {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.create_stop_point, null);
@@ -219,14 +269,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final EditText edtTimeLeave = alertLayout.findViewById(R.id.text_timeLeave);
         ImageButton btnDateArrive = alertLayout.findViewById(R.id.btn_calendar_arrive);
         ImageButton btnDateLeave = alertLayout.findViewById(R.id.btn_calendar_leave);
-
-        Calendar calendarArrive = Calendar.getInstance();
-        Calendar calendarLeave = Calendar.getInstance();
+        Calendar calendarLeave;
+        Calendar calendarArrive;
+        calendarArrive = Calendar.getInstance();
+        calendarLeave = Calendar.getInstance();
+        if(stopPoint.getArrivalAt()!=0 )
+        {
+            calendarArrive.setTimeInMillis(stopPoint.getArrivalAt());
+            calendarLeave.setTimeInMillis(stopPoint.getLeaveAt());
+        }
         txtDateArrive.setText(simpleDateFormat.format(calendarArrive.getTime()));
         txtDateArrive.setTag(calendarArrive);
         txtDateLeave.setText(simpleDateFormat.format(calendarLeave.getTime()));
         txtDateLeave.setTag(calendarLeave);
+        int arrHour = calendarArrive.get(Calendar.HOUR_OF_DAY);
+        int arrMinute = calendarArrive.get(Calendar.MINUTE);
+        int leavHour = calendarLeave.get(Calendar.HOUR_OF_DAY);;
+        int leavMinute = calendarLeave.get(Calendar.MINUTE);
 
+        edtTimeArrive.setText((arrHour <10 ?"0": "")  + arrHour + ":" + (arrMinute <10 ?"0": "") +  arrMinute);
+        edtTimeLeave.setText((leavHour <10 ?"0": "")  + leavHour + ":" + (leavMinute <10 ?"0": "") +  leavMinute);
         btnDateArrive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -312,7 +374,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     public void onClick(View view) {
                         Calendar arrivalAt = (Calendar)(txtDateArrive.getTag());
                         Calendar leaveAt = (Calendar)(txtDateLeave.getTag());
-                        if(validate(edtName.getText().toString(),edtAddress.getText().toString(),edtMinCost.getText().toString(),edtMaxCost.getText().toString())
+                        if(validate(edtName.getText().toString(),edtMinCost.getText().toString(),edtMaxCost.getText().toString())
                                 &&validateHour(edtTimeArrive.getText().toString(),edtTimeLeave.getText().toString())) {
                             int hour, minute;
                             String[] time;
@@ -321,14 +383,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             hour = Integer.parseInt(time[0]);
                             minute = Integer.parseInt(time[1]);
                             //set arrivalTime
-                            arrivalAt.set(Calendar.HOUR, hour);
+                            arrivalAt.set(Calendar.HOUR_OF_DAY, hour);
                             arrivalAt.set(Calendar.MINUTE, minute);
                             //getLeaveTime
                             time = edtTimeLeave.getText().toString().split(":");
                             hour = Integer.parseInt(time[0]);
                             minute = Integer.parseInt(time[1]);
                             //setLeaveTime
-                            leaveAt.set(Calendar.HOUR, hour);
+                            leaveAt.set(Calendar.HOUR_OF_DAY, hour);
                             leaveAt.set(Calendar.MINUTE, minute);
                             //set Time date
                             stopPoint.setArrivalAt(arrivalAt.getTimeInMillis());
@@ -364,7 +426,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 current.setTag(stopPoint);
                                 list.add(stopPoint);
                                 returnList.add(stopPoint);
-                                
+
                             } else {
                                 if (!returnList.contains(stopPoint)) {
                                     stopPoint.setServiceId(stopPoint.getId());

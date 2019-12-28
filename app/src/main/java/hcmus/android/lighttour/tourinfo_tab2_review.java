@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +46,7 @@ import java.util.regex.Pattern;
 
 import hcmus.android.lighttour.APIService.AddStopPointsService;
 import hcmus.android.lighttour.APIService.GetStopPointFeedbackService;
+import hcmus.android.lighttour.APIService.GetTourInfoService;
 import hcmus.android.lighttour.APIService.GetTourReviewService;
 import hcmus.android.lighttour.APIService.InviteService;
 import hcmus.android.lighttour.APIService.SearchUserService;
@@ -167,10 +170,10 @@ public class tourinfo_tab2_review extends ListFragment {
         int userId = myApplication.getIdUser();
         fromHistory = getArguments().getBoolean("fromHistory");
         hasControl = fromHistory && (tour.getHostId() == userId);
+        tourId = tour.getId();
         switch (tab) {
             case 2:
                 Log.d("FFF", "onCreateView: VL" + tour.toString());
-                tourId = tour.getId();
 
                 listReviewData = new ArrayList<Review>();
                 //Init Adapter, set Adapter to listReview
@@ -286,28 +289,7 @@ public class tourinfo_tab2_review extends ListFragment {
                         @Override
                         public void onClick(View view) {
                             //Set data and send
-                            AddStopPointsService addStopPointsService = ApiUtils.getAddStopPointsService();
-                            addStopPointsService.sendData(token, new AddStopPointsBody(""+tour.getId(),listStopPointData,deleteIds)).enqueue(new Callback<Message>() {
-                                @Override
-                                public void onResponse(Call<Message> call, Response<Message> response) {
-                                    if(response.code() == 200){
-                                        Toast.makeText(getActivity(), "Update tour success", Toast.LENGTH_SHORT).show();
-                                        restartFragment();
-                                    }
-                                    else {
-                                        try {
-                                            Log.d("AAA", "onResponse: "+ response.errorBody().string());
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                                @Override
-                                public void onFailure(Call<Message> call, Throwable t) {
-                                    Toast.makeText(getActivity(), "Unable to connect to server", Toast.LENGTH_SHORT).show();
-                                    getActivity().finish();
-                                }
-                            });
+                            sendData(0);
                         }
                     });
                     btnAddStopPoints = view.findViewById(R.id.btn_add_stop_point);
@@ -316,7 +298,7 @@ public class tourinfo_tab2_review extends ListFragment {
                         public void onClick(View view) {
                             Intent intent = new Intent(getActivity(), MapsActivity.class);
                             intent.putExtra("tourId",""+tour.getId());
-                            intent.putExtra("type", 0);
+                            intent.putExtra("type", 2);
                             startActivityForResult(intent,001);
                         }
                     });
@@ -327,13 +309,88 @@ public class tourinfo_tab2_review extends ListFragment {
         return view;
     }
 
+    private void updateData(){
+        GetTourInfoService getTourInfoService = ApiUtils.getGetTourInfoService();
+        getTourInfoService.sendData(token, tourId ).enqueue(new Callback<Tour>() {
+            @Override
+            public void onResponse(Call<Tour> call, Response<Tour> response) {
+                List<StopPoint> listStopPoint = response.body().getStopPoints();
+                if(response.code() == 200){
+                    Log.d("AAA", "onResponse: "+ new Gson().toJson(listStopPoint));
+                    for(int i = 0 ; i<listStopPointData.size(); i++)
+                    {
+                        for (int j = 0 ; j<listStopPoint.size(); j++){
+                            if (listStopPointData.get(i).getServiceId().equals(listStopPoint.get(j). getServiceId()))
+                            {
+                                listStopPointData.get(i).setId(listStopPoint.get(j).getId());
+                                listStopPointData.get(i).setServiceId(null);
+                                break;
+                            }
+                        }
+                    }
+                    sendData(2);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Tour> call, Throwable t) {
+
+            }
+        });
+    }
+    //
+    private void sendData(final int mode) {
+        AddStopPointsService addStopPointsService = ApiUtils.getAddStopPointsService();
+        Log.d("AAA", "onClick: " + new Gson().toJson(listStopPointData) + "\n" + tourId);
+        List<StopPoint> sendList = (mode == 0)? null : listStopPointData;
+        List<Integer> sendDelete = (mode == 0)? deleteIds: null;
+        AddStopPointsBody b = new AddStopPointsBody(""+tourId, sendList, sendDelete);
+        addStopPointsService.sendData(token, b).enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                if (response.code() == 200) {
+
+                    if (mode == 0){
+                        sendData(1);
+                    }
+                    else {
+                        if (mode == 1) {
+                            updateData();
+                            Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            restartFragment();
+                        }
+                    }
+
+                } else {
+                    try {
+                        Log.d("AAA", "onResponse: " + tourId);
+                        Toast.makeText(getActivity(), "" + response.code() + '-' + response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //get New Stoppoint
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 001 && resultCode == 001) {
-            restartFragment();
+            Type StopPointList = new TypeToken<List<StopPoint>>(){}.getType();
+            List<StopPoint> list = new Gson().fromJson(data.getStringExtra("stoppoints"),StopPointList);
+            listStopPointData.addAll(list);
+            listStopPointAdapter.notifyDataSetChanged();
+            btnApplyChanges.setVisibility(View.VISIBLE);
         }
-        if(requestCode == 001 && resultCode == 002){
+        //get lat long
+        if(requestCode == 002 && resultCode == 001){
+            Toast.makeText(getActivity(), "Loai 2", Toast.LENGTH_SHORT).show();
             StopPoint stoppoint = listStopPointData.get(selectedPos);
             newLat = ""+ data.getDoubleExtra("lat", Double.parseDouble(stoppoint.getLat()));
             newLong = ""+ data.getDoubleExtra("long", Double.parseDouble(stoppoint.getLat()));
@@ -417,7 +474,7 @@ public class tourinfo_tab2_review extends ListFragment {
         final EditText edtTimeLeave = alertLayout.findViewById(R.id.text_timeLeave);
         ImageButton btnDateArrive = alertLayout.findViewById(R.id.btn_calendar_arrive);
         ImageButton btnDateLeave = alertLayout.findViewById(R.id.btn_calendar_leave);
-        Button btnChooseLocation = alertLayout.findViewById(R.id.btn_choose_location);
+        final Button btnChooseLocation = alertLayout.findViewById(R.id.btn_choose_location);
 
         if (isShow) {
             spinnerService.setEnabled(false);
@@ -508,6 +565,17 @@ public class tourinfo_tab2_review extends ListFragment {
         alert.setView(alertLayout);
         alert.setCancelable(false);
         alert.setNegativeButton("Cancel", null);
+        btnChooseLocation.setVisibility(View.VISIBLE);
+        btnChooseLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StopPoint markerStopPoint = new StopPoint(listStopPointData.get(selectedPos));
+                markerStopPoint.setId(markerStopPoint.getServiceId());
+                Intent intent = new Intent(getActivity(), PointInformationActivity.class);
+                intent.putExtra("stopPoint", markerStopPoint);
+                startActivity(intent);
+            }
+        });
         if (hasControl)
             if (isShow) {
                 alert.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
@@ -521,6 +589,7 @@ public class tourinfo_tab2_review extends ListFragment {
                 alert.setPositiveButton("Update this", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
                         displayStopPointDialog(stopPoint, false);
                     }
                 });
@@ -531,7 +600,7 @@ public class tourinfo_tab2_review extends ListFragment {
         final AlertDialog dialog = alert.create();
         if (hasControl)
             if (!isShow) {
-                btnChooseLocation.setVisibility(View.VISIBLE);
+                btnChooseLocation.setText("Choose Location");
                 btnChooseLocation.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

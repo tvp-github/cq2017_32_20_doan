@@ -208,6 +208,24 @@ public class StopPoint implements Serializable {
         this.landingTimesOfUser = landingTimesOfUser;
     }
 
+    public StopPoint(StopPoint xyz) {
+        this.arrivalAt = xyz.arrivalAt;
+        this.leaveAt = xyz.leaveAt;
+        this.id = xyz.id;
+        this.name = xyz.name;
+        this.address = xyz.address;
+        this.provinceId = xyz.provinceId;
+        this.contact = xyz.contact;
+        this.lat = xyz.lat;
+        this._long = xyz._long;
+        this.minCost = xyz.minCost;
+        this.maxCost = xyz.maxCost;
+        this.serviceTypeId = xyz.serviceTypeId;
+        this.serviceId = xyz.serviceId;
+        this.avatar = xyz.avatar;
+        this.landingTimesOfUser = xyz.landingTimesOfUser;
+    }
+
     public StopPoint(LatLng latLng) {
 
         this.id = null;

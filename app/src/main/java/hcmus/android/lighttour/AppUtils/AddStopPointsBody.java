@@ -1,5 +1,7 @@
 package hcmus.android.lighttour.AppUtils;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 import hcmus.android.lighttour.Response.StopPoint;

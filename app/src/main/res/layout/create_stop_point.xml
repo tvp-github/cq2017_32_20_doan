@@ -244,7 +244,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_timeLeave"
             android:layout_marginTop="10dp"
-            android:text="Choose Location"
+            android:text="Stop Point Infomation"
             android:visibility="gone"/>
 
     </RelativeLayout>

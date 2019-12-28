@@ -43,7 +43,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/btn_delete"
-            android:text="Add Stop Points" />
+            android:text="Add Stop Points"
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/btn_apply_changes"
