@@ -1,12 +1,22 @@
 package com.ygaps.travelapp;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +24,21 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.reflect.TypeToken;
+import com.ygaps.travelapp.APIService.GetCoordinatesOfMembersService;
+import com.ygaps.travelapp.AppUtils.CurrentLocationBody;
 import com.ygaps.travelapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,11 +49,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 
 import com.ygaps.travelapp.Response.Tour;
+import com.ygaps.travelapp.Response.UserLocation;
+import com.ygaps.travelapp.Retrofit.ApiUtils;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 
-public class FollowTourActivity  extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
+public class FollowTourActivity  extends FragmentActivity implements LocationListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
 
     Tour tour;
     private GoogleMap mMap;
@@ -39,13 +69,61 @@ public class FollowTourActivity  extends FragmentActivity implements OnMapReadyC
     FloatingActionButton floatbtnSpeed;
     MediaRecorder myAudioRecorder;
     String outputFile;
+    private final int REQUEST_CODE = 005;
+    Handler handler;
+    MyRunnable myRun;
+    LocationManager locationManager;
+    double currentLat, currentLong;
+    MyApplication myApplication;
+    GetCoordinatesOfMembersService getCoordinatesOfMembersService;
+    boolean hasLocation = false;
 
-
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @SuppressLint("HandlerLeak")
         private void init(){
+            myApplication = (MyApplication) getApplication();
             floatbtnRecord = findViewById(R.id.floatbtnRecord);
             floatbtnMessage = findViewById(R.id.floatbtnMessage);
+            getCoordinatesOfMembersService = ApiUtils.getGetCoordinatesOfMembersService();
+            handler = new Handler() {
+                @Override
+                public void handleMessage(@NonNull Message msg) {
+                    Type listType = new TypeToken<List<UserLocation>>(){}.getType();
+                    List<UserLocation> list = new Gson().fromJson(msg.getData().getString("info"),listType);
+                    mMap.clear();
+                    for (UserLocation userLocation: list) {
+                        String userName= userLocation.getId();
+                        for (int i = 0 ;i< tour.getMembers().size() ; i++)
+                            if(tour.getMembers().get(i).getId() == Integer.parseInt(userLocation.getId())) {
+                                userName = tour.getMembers().get(i).getName();
+                                break;
+                            }
+
+                        if(userLocation.getId().equals(""+myApplication.getIdUser()))
+                        {
+                            mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName).icon(BitmapDescriptorFactory.fromResource(R.drawable.other)));
+                        }
+                        else
+                            mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName));
+                    }
+                }
+            };
+
+
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION} , REQUEST_CODE);
+            }
+            else {
+                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) )
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
+                else {
+                    showAlertToEnableGPS();
+                }
+            }
 
         }
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -54,7 +132,6 @@ public class FollowTourActivity  extends FragmentActivity implements OnMapReadyC
 
             Intent intent=getIntent();
             tour= new Gson().fromJson(intent.getStringExtra("tour"),Tour.class);
-
             floatbtnRecord.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -70,6 +147,11 @@ public class FollowTourActivity  extends FragmentActivity implements OnMapReadyC
                     startActivity(intent);
                 }
             });
+
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+
         }
 
     private void displayRecordVoice() {
@@ -161,7 +243,53 @@ public class FollowTourActivity  extends FragmentActivity implements OnMapReadyC
         dialog.show();
     }
 
+    private void showAlertToEnableGPS() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Turn On GPS please!")
+                .setCancelable(false)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        FollowTourActivity.this.finish();
+                    }
+                })
+                .setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, REQUEST_CODE);
+                    }
+                }).create().show();
+    }
+    @SuppressLint("MissingPermission")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == 0) {
+            String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            if(provider != null){
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+            }
+            else
+            {
+                startActivity(getIntent());
+                finish();
+            }
+        }
 
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_CODE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, FollowTourActivity.this);
+        }
+        else finish();
+    }
     private boolean validateHour(String ...str){
             for (int i = 0 ; i<str.length; i++) {
                 if (!str[i].matches("^([2][0-3]|[0-1][0-9]|[0-9]):([0-5][0-9]|[0-9])$"))
@@ -191,7 +319,10 @@ public class FollowTourActivity  extends FragmentActivity implements OnMapReadyC
             // Add a marker in Sydney and move the camera
             LatLng hcmus = new LatLng(10.7628247, 106.6813572);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15.0f));
-                   }
+            myRun = new MyRunnable();
+            Thread t1 = new Thread(myRun, "T1");
+            t1.start();
+        }
 
         @Override
         public void onMapLongClick(LatLng latLng) {
@@ -215,5 +346,94 @@ public class FollowTourActivity  extends FragmentActivity implements OnMapReadyC
 
         }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        currentLat = location.getLatitude();
+        currentLong = location.getLongitude();
+        hasLocation = true;
+        Log.d("TTTT", "onLocationChanged: ");
+    }
 
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    private void sendLocationInfo(){
+        //send current lat long
+        Log.d("TTTT", "sendLocationInfo: send");
+        String token = myApplication.getToken();
+        String userId = ""+myApplication.getIdUser();
+        String tourId = ""+tour.getId();
+        double lat= currentLat;
+        double _long = currentLong;
+        Log.d("TTTT", "sendLocationInfo: "+token+'\n'+userId+'\n'+tourId+'\n'+lat+'\n'+_long);
+        getCoordinatesOfMembersService.sendData(token, new CurrentLocationBody(userId, tourId, lat, _long)).enqueue(new Callback<List<UserLocation>>() {
+            @Override
+            public void onResponse(Call<List<UserLocation>> call, Response<List<UserLocation>> response) {
+                if(response.code() == 200)
+                {
+                    Message message= handler.obtainMessage();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("info",new Gson().toJson(response.body()));
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserLocation>> call, Throwable t) {
+                Toast.makeText(FollowTourActivity.this, "Unable to connect to server", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
+    class MyRunnable implements Runnable{
+        private volatile boolean exit = false;
+
+        @SuppressLint("MissingPermission")
+        public void run() {
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location!= null){
+                currentLat = location.getLatitude();
+                currentLong = location.getLongitude();
+                hasLocation = true;
+            }
+            while(!exit){
+                if(hasLocation)
+                    sendLocationInfo();
+                try {
+
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.d("TTTT", "run: Thread is running...."+currentLat+ '-' + currentLong);
+            }
+
+            Log.d("TTTT", "run: Thread is stopped....");
+        }
+
+        public void stop(){
+            exit = true;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(myRun!=null) myRun.stop();
+    }
 }
