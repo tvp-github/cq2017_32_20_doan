@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".tab1_general" >
+    tools:context="com.ygaps.travelapp.tab1_general" >
 
     <LinearLayout
         android:id="@+id/linearLayout"

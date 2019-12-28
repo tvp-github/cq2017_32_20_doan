@@ -9,7 +9,7 @@
     android:paddingRight="16dp"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".MainActivity"
+    tools:context="com.ygaps.travelapp.MainActivity"
     android:background="@drawable/backgroud">
 
     <LinearLayout
