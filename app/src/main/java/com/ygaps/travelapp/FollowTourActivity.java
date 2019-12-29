@@ -61,7 +61,9 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ygaps.travelapp.Response.ListOnRoad;
 import com.ygaps.travelapp.Response.Tour;
@@ -95,11 +97,12 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
     GetCoordinatesOfMembersService getCoordinatesOfMembersService;
     boolean hasLocation = false;
     private int idUser;
-    boolean didClear = false;
+    Map<String,Marker> markerMap;
+    
     @RequiresApi(api = Build.VERSION_CODES.M)
         @SuppressLint("HandlerLeak")
         private void init(){
-
+            markerMap = new HashMap<>();
             myApplication = (MyApplication) getApplication();
             floatbtnRecord = findViewById(R.id.floatbtnRecord);
             floatbtnMessage = findViewById(R.id.floatbtnMessage);
@@ -115,12 +118,6 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
                         Type listType = new TypeToken<List<UserLocation>>() {
                         }.getType();
                         List<UserLocation> list = new Gson().fromJson(msg.getData().getString("info"), listType);
-                        if (!didClear){
-                            mMap.clear();
-                            didClear = true;
-                        }
-                        else
-                            didClear = false;
                         for (UserLocation userLocation : list) {
                             String userName = userLocation.getId();
                             for (int i = 0; i < tour.getMembers().size(); i++)
@@ -128,23 +125,30 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
                                     userName = tour.getMembers().get(i).getName();
                                     break;
                                 }
-
+                            if(markerMap.keySet().contains(userLocation.getId()))
+                            {
+                                markerMap.get(userLocation.getId()).remove();
+                            }
+                            Marker marker;
                             if (userLocation.getId().equals("" + myApplication.getIdUser())) {
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName).icon(BitmapDescriptorFactory.fromResource(R.drawable.other)));
+                                marker = mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName).icon(BitmapDescriptorFactory.fromResource(R.drawable.other)));
                             } else
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName));
+                                marker = mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName));
+                            markerMap.put(userLocation.getId(),marker);
                         }
                     }
                     else{
-                        if (!didClear){
-                            mMap.clear();
-                            didClear = true;
-                        }
-                        else
-                            didClear = false;
+
+
                         ListOnRoad listOnRoad = new Gson().fromJson(msg.getData().getString("notilist"), ListOnRoad.class);
                         for (ListOnRoad.OnRoadNoti onRoadNoti : listOnRoad.getNotiList()){
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(onRoadNoti.getLat()), Double.parseDouble(onRoadNoti.getLong()))).title(""+onRoadNoti.getSpeed()));
+                            if(markerMap.keySet().contains(onRoadNoti.getLat()+onRoadNoti.getLong()+onRoadNoti.getCreatedByTourId()))
+                            {
+                                markerMap.get(onRoadNoti.getLat()+onRoadNoti.getLong()+onRoadNoti.getCreatedByTourId()).remove();
+                            }
+
+                            Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(onRoadNoti.getLat()), Double.parseDouble(onRoadNoti.getLong()))).title(""+onRoadNoti.getSpeed()));
+                            markerMap.put(onRoadNoti.getLat()+onRoadNoti.getLong()+onRoadNoti.getCreatedByTourId(),marker);
                         }
                     }
                 }
