@@ -10,6 +10,7 @@
         <LinearLayout
             android:layout_marginTop="56dp"
             android:id="@+id/lnl_listtour"
+            android:layout_above="@id/bottomBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

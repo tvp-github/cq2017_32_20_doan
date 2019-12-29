@@ -78,6 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     GetStopPointService getStopPointService;
     List<StopPoint> list;
     List<StopPoint> returnList;
+    ListStopPointAdapter adapter;
     SimpleDateFormat simpleDateFormat;
     private void init(){
         Intent intent = getIntent();
@@ -138,7 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.list_stop_points,null);
         ListView lstStopPoints = layout.findViewById(R.id.listStopPoint);
-        final ListStopPointAdapter adapter = new ListStopPointAdapter(MapsActivity.this, R.layout.list_stop_points_item,returnList);
+        adapter = new ListStopPointAdapter(MapsActivity.this, R.layout.list_stop_points_item,returnList);
         lstStopPoints.setAdapter(adapter);
         lstStopPoints.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -435,6 +436,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     stopPoint.setId(null);
                                     returnList.add(stopPoint);
                                 }
+                            }
+                            if(adapter!=null){
+                                adapter.notifyDataSetChanged();
                             }
                             dialog.dismiss();
                         }
