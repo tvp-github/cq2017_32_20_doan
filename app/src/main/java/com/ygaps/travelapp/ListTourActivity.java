@@ -29,6 +29,7 @@ import java.util.List;
 import com.ygaps.travelapp.APIService.ListToursService;
 import com.ygaps.travelapp.APIService.PutToken;
 import com.ygaps.travelapp.Adapter.ListTourAdapter;
+import com.ygaps.travelapp.AppUtils.TokenBody;
 import com.ygaps.travelapp.Response.ListTours;
 import com.ygaps.travelapp.Response.Message;
 import com.ygaps.travelapp.Response.Tour;
@@ -242,7 +243,7 @@ public class ListTourActivity extends AppCompatActivity {
         String deviceId = Settings.Secure.getString(getBaseContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         Log.d("AAA", "sendFCMToken: " + fcmToken+'\n' + deviceId);
-        putToken.sendData(myApplication.getToken(), fcmToken, deviceId, 1, "1.0").enqueue(new Callback<Message>() {
+        putToken.sendData(myApplication.getToken(), new TokenBody(fcmToken, deviceId, 1, "1.0")).enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
                 if(response.code()==200)

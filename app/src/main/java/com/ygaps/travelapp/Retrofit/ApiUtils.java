@@ -1,5 +1,6 @@
 package com.ygaps.travelapp.Retrofit;
 
+import com.google.firebase.firestore.model.mutation.ArrayTransformOperation;
 import com.ygaps.travelapp.APIService.AddStopPointsService;
 import com.ygaps.travelapp.APIService.CreateToursService;
 import com.ygaps.travelapp.APIService.EditProfileService;
@@ -22,6 +23,7 @@ import com.ygaps.travelapp.APIService.LoginGGService;
 import com.ygaps.travelapp.APIService.LoginService;
 import com.ygaps.travelapp.APIService.PutToken;
 import com.ygaps.travelapp.APIService.RegisterService;
+import com.ygaps.travelapp.APIService.RemoveTokenService;
 import com.ygaps.travelapp.APIService.ResponseInviteService;
 import com.ygaps.travelapp.APIService.SearchUserService;
 import com.ygaps.travelapp.APIService.SendFeedbackService;
@@ -177,5 +179,9 @@ public class ApiUtils {
 
     public static UpdatePassService getUpdatePassService() {
         return RetrofitClient.getClient(BASE_URL).create(UpdatePassService.class);
+    }
+
+    public static RemoveTokenService getRemoveTokenService(){
+        return RetrofitClient.getClient(BASE_URL).create(RemoveTokenService.class);
     }
 }
