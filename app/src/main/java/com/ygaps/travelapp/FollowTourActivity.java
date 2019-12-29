@@ -33,6 +33,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,9 +80,13 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
     FloatingActionButton floatbtnRecord;
     FloatingActionButton floatbtnMessage;
     FloatingActionButton floatbtnSpeed;
-    MediaRecorder myAudioRecorder;
-    String outputFile;
-    private final int REQUEST_CODE = 005;
+    MediaRecorder mediaRecorder;
+    MediaPlayer mediaPlayer;
+    boolean isPlaying;
+
+    String pathSave;
+    private final int REQUEST_CODE_LOCATION = 005;
+    private final int REQUEST_CODE_AUDIO = 006;
     Handler handler;
     MyRunnable myRun;
     LocationManager locationManager;
@@ -93,6 +99,7 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
     @RequiresApi(api = Build.VERSION_CODES.M)
         @SuppressLint("HandlerLeak")
         private void init(){
+
             myApplication = (MyApplication) getApplication();
             floatbtnRecord = findViewById(R.id.floatbtnRecord);
             floatbtnMessage = findViewById(R.id.floatbtnMessage);
@@ -146,11 +153,11 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
 
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION} , REQUEST_CODE);
+                requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION} , REQUEST_CODE_LOCATION);
             }
             else {
                 if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) )
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
                     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if (location!= null){
                         currentLat = location.getLatitude();
@@ -253,93 +260,123 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
         });
     }
 
+    private boolean checkPermissionOnCreate() {
+        int write_internal = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int record = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        return write_internal == PackageManager.PERMISSION_GRANTED && record == PackageManager.PERMISSION_GRANTED;
+    }
+    private void requestPermissionOnCreate() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_AUDIO);
+    }
     private void displayRecordVoice() {
-        LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.record_dialog, null);
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Audio Record");
-        alert.setView(alertLayout);
-        alert.setCancelable(false);
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        if(checkPermissionOnCreate()){
+            isPlaying = false;
+            LayoutInflater inflater = getLayoutInflater();
+            View alertLayout = inflater.inflate(R.layout.record_dialog, null);
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Audio Record");
+            alert.setView(alertLayout);
+            alert.setCancelable(false);
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-        final Button btnRecord;
-        final Button btnStop;
-        final Button btnPlay;
-        btnRecord = alertLayout.findViewById(R.id.btnRecord);
-        btnStop = alertLayout.findViewById(R.id.btnStop);
-        btnPlay = alertLayout.findViewById(R.id.btnPlay);
-        btnStop.setEnabled(false);
-        btnPlay.setEnabled(false);
-
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
-        myAudioRecorder = new MediaRecorder();
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        myAudioRecorder.setAudioSamplingRate(16000);
-        myAudioRecorder.setOutputFile(outputFile);
-
-
-        btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Log.d("111","start: ");
-                    myAudioRecorder.prepare();
-                    myAudioRecorder.start();
-                } catch (IllegalStateException ise) {
-                    // make something ...
-                } catch (IOException ioe) {
-                    // make something
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
                 }
-                btnRecord.setEnabled(false);
-                btnRecord.setBackgroundResource(R.drawable.recordsmall);
-                btnStop.setEnabled(true);
-                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
-            }
-        });
+            });
 
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               try{
-                   myAudioRecorder.stop();
-                   myAudioRecorder.release();
-                   myAudioRecorder = null;
-               }catch(RuntimeException stopException){
-                   //handle cleanup here
-               }
+            final Button btnRecord;
+            final Button btnStop;
+            final Button btnPlay;
+            btnRecord = alertLayout.findViewById(R.id.btnRecord);
+            btnStop = alertLayout.findViewById(R.id.btnStop);
+            btnPlay = alertLayout.findViewById(R.id.btnPlay);
+            btnStop.setEnabled(false);
+            btnPlay.setEnabled(false);
 
 
-                btnRecord.setEnabled(true);
-                btnRecord.setBackgroundResource(R.drawable.record);
-                btnStop.setEnabled(false);
-                btnPlay.setEnabled(true);
-                Toast.makeText(getApplicationContext(), "Audio Recorder stopped", Toast.LENGTH_LONG).show();
-            }
-        });
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                try {
-                    Log.d("111","start playing: ");
-                    mediaPlayer.setDataSource(outputFile);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    // make something
+
+            btnRecord.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pathSave = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+
+                    setUpMediaRecorder();
+
+//                    mediaRecorder = new MediaRecorder();
+//                    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//                    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+//                    mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+//                    mediaRecorder.setAudioSamplingRate(16000);
+//                    mediaRecorder.setOutputFile(pathSave);
+                    try {
+                        mediaRecorder.prepare();
+                        mediaRecorder.start();
+                    } catch (IllegalStateException ise) {
+                        // make something ...
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                    btnRecord.setEnabled(false);
+                    btnRecord.setBackgroundResource(R.drawable.recordsmall);
+                    btnStop.setEnabled(true);
+                    Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-        AlertDialog dialog = alert.create();
-        dialog.show();
+            });
+
+            btnStop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mediaRecorder.stop();
+//                        mediaRecorder.release();
+//                        mediaRecorder = null;
+
+
+                    btnRecord.setEnabled(true);
+                    btnRecord.setBackgroundResource(R.drawable.record);
+                    btnStop.setEnabled(false);
+                    btnPlay.setEnabled(true);
+                    Toast.makeText(getApplicationContext(), "Audio Recorder stopped", Toast.LENGTH_LONG).show();
+                }
+            });
+            btnPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!isPlaying){
+                        mediaPlayer = new MediaPlayer();
+                        try {
+                            mediaPlayer.setDataSource(pathSave);
+                            mediaPlayer.prepare();
+                            mediaPlayer.start();
+                            Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            // make something
+                        }
+                    }
+                    else{
+                        if(mediaPlayer!=null)
+                        {
+                            mediaPlayer.stop();
+                            mediaPlayer.release();
+                            setUpMediaRecorder();
+                        }
+                    }
+                    isPlaying = ! isPlaying;
+                }
+            });
+            AlertDialog dialog = alert.create();
+            dialog.show();
+        }
+        else{
+            requestPermissionOnCreate();
+        }
+    }
+
+    private void setUpMediaRecorder() {
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        mediaRecorder.setOutputFile(pathSave);
     }
 
     private void showAlertToEnableGPS() {
@@ -357,7 +394,7 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivityForResult(intent, REQUEST_CODE);
+                        startActivityForResult(intent, REQUEST_CODE_LOCATION);
                     }
                 }).create().show();
     }
@@ -365,7 +402,7 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == 0) {
+        if (requestCode == REQUEST_CODE_LOCATION && resultCode == 0) {
             String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             if(provider != null){
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
@@ -389,7 +426,7 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_CODE){
+        if(requestCode == REQUEST_CODE_LOCATION){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, FollowTourActivity.this);
@@ -401,7 +438,20 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
                 }
             }
         }
-        else finish();
+        else
+        if (requestCode == REQUEST_CODE_AUDIO) {
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Granted Permission", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                startActivity(getIntent());
+                finish();
+            }
+        }
+        else
+            finish();
+
     }
     private boolean validateHour(String ...str){
             for (int i = 0 ; i<str.length; i++) {
