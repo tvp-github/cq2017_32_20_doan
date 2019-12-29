@@ -251,6 +251,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 String phone = validate(ePhone.getText().toString());
                 //String address = validate(eAddress.getText().toString());
                 String dob = validate(eDob.getText().toString());
+                if (dob == "Choose your date of birth"){
+                    eDob.setText("1999-01-01");
+                    dob = validate(eDob.getText().toString());
+                }
                 int gender;
                 if(eMale.isChecked() || eFemale.isChecked()){
                     if (eMale.isChecked())

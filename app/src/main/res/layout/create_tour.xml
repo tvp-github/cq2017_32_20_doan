@@ -17,7 +17,7 @@
             layout="@layout/toolbar">
         </include>
         <TextView
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TOUR NAME"
@@ -25,7 +25,8 @@
             android:id="@+id/textName"
             android:textSize="25dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/toolbar_create_tour"/>
 
         <EditText
             android:layout_width="match_parent"

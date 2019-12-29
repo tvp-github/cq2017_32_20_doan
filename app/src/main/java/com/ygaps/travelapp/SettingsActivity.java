@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
     ImageButton btnNoti;
     ImageButton btnExplore;
     ImageButton btnHome;
+    ImageView avatar;
     LinearLayout lnl_setting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,15 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new Intent(SettingsActivity.this, HistoryActivity.class));
             }
 
+        });
+
+        //Chuyển sang màn hình profile
+        avatar = findViewById(R.id.circle_avatar);
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
+            }
         });
 
         //Language
