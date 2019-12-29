@@ -41,6 +41,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -96,6 +97,7 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
     MyApplication myApplication;
     GetCoordinatesOfMembersService getCoordinatesOfMembersService;
     boolean hasLocation = false;
+    boolean firstTime = true;
     private int idUser;
     Map<String,Marker> markerMap;
     
@@ -132,6 +134,10 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
                             Marker marker;
                             if (userLocation.getId().equals("" + myApplication.getIdUser())) {
                                 marker = mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName).icon(BitmapDescriptorFactory.fromResource(R.drawable.other)));
+                                if(firstTime) {
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(userLocation.getLat(), userLocation.get_long())));
+                                    firstTime = false;
+                                }
                             } else
                                 marker = mMap.addMarker(new MarkerOptions().position(new LatLng(userLocation.getLat(), userLocation.get_long())).title(userName));
                             markerMap.put(userLocation.getId(),marker);
