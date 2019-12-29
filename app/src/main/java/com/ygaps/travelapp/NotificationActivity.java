@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +50,16 @@ public class NotificationActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+    public class CustomComparator implements Comparator<Tour> {
+        @Override
+        public int compare(Tour o1, Tour o2) {
+            if (o1.getCreatedOn() < o2 .getCreatedOn())
+                return 1;
+            if (o1.getCreatedOn() > o2 .getCreatedOn())
+                return -1;
+            return 0;
+        }
+    }
     private void getData(){
         btnNext.setEnabled(true);
         btnPrev.setEnabled(true);
@@ -56,7 +68,9 @@ public class NotificationActivity extends AppCompatActivity {
             public void onResponse(Call<ListTours> call, Response<ListTours> response) {
                 if(response.code() == 200)
                 {
+                    inviteTours.clear();
                     inviteTours.addAll(response.body().getTours());
+                    Collections.sort(inviteTours, new CustomComparator() );
                     inviteAdapter.notifyDataSetChanged();
                     listInvite.smoothScrollToPosition(0);
                     int total = response.body().getTotal();
