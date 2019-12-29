@@ -432,6 +432,14 @@ public class tourinfo_tab2_review extends ListFragment {
                     listUserData.clear();
                     listUserData.addAll(response.body().getUsers());
                     int total = Integer.parseInt(response.body().getTotal());
+                    for (UserInfo user: listUserData){
+                        if(user.getId() == ((MyApplication)getActivity().getApplication()).getIdUser())
+                        {
+                            listUserData.remove(user);
+                            total --;
+                            break;
+                        }
+                    }
                     int totalPage = (total / 5) + (total%5 == 0 ? 0 : 1);
                     userAdapter.notifyDataSetChanged();
                     if (currentPage == 1)
