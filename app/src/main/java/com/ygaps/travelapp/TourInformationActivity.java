@@ -61,6 +61,11 @@ public class TourInformationActivity extends AppCompatActivity
                     loadedData = true;
                     Fragment tourinfo_tab1_general = new tourinfo_tab1_general();//Get Fragment Instance
                     tourinfo_tab1_general.setArguments(infoTour);
+                    tab1.setBackgroundResource(R.drawable.bg_tab_active);
+                    tab2.setBackgroundResource(R.drawable.bg_tab);
+                    tab3.setBackgroundResource(R.drawable.bg_tab);
+                    tab4.setBackgroundResource(R.drawable.bg_tab);
+                    tab5.setBackgroundResource(R.drawable.bg_tab);
                     //Replace default fragment
                     fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tourinfo_tab1_general).commit();
                 }
@@ -168,8 +173,11 @@ public class TourInformationActivity extends AppCompatActivity
 
             switch (view.getId()) {
                 case R.id.Tab1:
-
-
+                    tab1.setBackgroundResource(R.drawable.bg_tab_active);
+                    tab2.setBackgroundResource(R.drawable.bg_tab);
+                    tab3.setBackgroundResource(R.drawable.bg_tab);
+                    tab4.setBackgroundResource(R.drawable.bg_tab);
+                    tab5.setBackgroundResource(R.drawable.bg_tab);
                     Fragment tourinfo_tab1_general = new tourinfo_tab1_general();//Get Fragment Instance
 //                infoTour.putSerializable("tour", tour);
                     tourinfo_tab1_general.setArguments(infoTour);
@@ -178,6 +186,11 @@ public class TourInformationActivity extends AppCompatActivity
                     fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tourinfo_tab1_general).commit();
                     break;
                 case R.id.Tab2:
+                    tab1.setBackgroundResource(R.drawable.bg_tab);
+                    tab2.setBackgroundResource(R.drawable.bg_tab_active);
+                    tab3.setBackgroundResource(R.drawable.bg_tab);
+                    tab4.setBackgroundResource(R.drawable.bg_tab);
+                    tab5.setBackgroundResource(R.drawable.bg_tab);
                     infoTour.putInt("tab", 2);
 //                infoTour.putSerializable("tour", tour);
                     tourinfo_tab2_review.setArguments(infoTour);
@@ -187,6 +200,11 @@ public class TourInformationActivity extends AppCompatActivity
                     //   fragmentManager.beginTransaction().replace(R.id.fragmentContainer, new ArgumentFragment()).commit();
                     break;
                 case R.id.Tab3:
+                    tab1.setBackgroundResource(R.drawable.bg_tab);
+                    tab2.setBackgroundResource(R.drawable.bg_tab);
+                    tab3.setBackgroundResource(R.drawable.bg_tab_active);
+                    tab4.setBackgroundResource(R.drawable.bg_tab);
+                    tab5.setBackgroundResource(R.drawable.bg_tab);
                     infoTour.putInt("tab", 3);
 //                infoTour.putSerializable("tour", tour);
                     tourinfo_tab2_review.setArguments(infoTour);
@@ -196,6 +214,11 @@ public class TourInformationActivity extends AppCompatActivity
                     //   fragmentManager.beginTransaction().replace(R.id.fragmentContainer, new ArgumentFragment()).commit();
                     break;
                 case R.id.Tab4:
+                    tab1.setBackgroundResource(R.drawable.bg_tab);
+                    tab2.setBackgroundResource(R.drawable.bg_tab);
+                    tab3.setBackgroundResource(R.drawable.bg_tab);
+                    tab4.setBackgroundResource(R.drawable.bg_tab_active);
+                    tab5.setBackgroundResource(R.drawable.bg_tab);
                     infoTour.putInt("tab", 4);
 //                infoTour.putSerializable("tour", tour);
                     tourinfo_tab2_review.setArguments(infoTour);
@@ -205,6 +228,11 @@ public class TourInformationActivity extends AppCompatActivity
                     //   fragmentManager.beginTransaction().replace(R.id.fragmentContainer, new ArgumentFragment()).commit();
                     break;
                 case R.id.Tab5:
+                    tab1.setBackgroundResource(R.drawable.bg_tab);
+                    tab2.setBackgroundResource(R.drawable.bg_tab);
+                    tab3.setBackgroundResource(R.drawable.bg_tab);
+                    tab4.setBackgroundResource(R.drawable.bg_tab);
+                    tab5.setBackgroundResource(R.drawable.bg_tab_active);
                     infoTour.putInt("tab", 5);
 //                infoTour.putSerializable("tour", tour);
                     tourinfo_tab2_review.setArguments(infoTour);

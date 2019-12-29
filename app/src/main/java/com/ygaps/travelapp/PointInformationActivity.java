@@ -44,7 +44,13 @@ public class PointInformationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.point_information);
 
+        //Find Ids
+        tab1 = (Button) findViewById(R.id.Tab1);
+        tab2 = (Button) findViewById(R.id.Tab2);
 
+        //Implement Click Listener
+        tab1.setOnClickListener(this);
+        tab2.setOnClickListener(this);
 
         fragmentManager = this.getSupportFragmentManager();//Get Fragment Manager
 
@@ -55,16 +61,13 @@ public class PointInformationActivity extends AppCompatActivity
         stPoint = new Bundle();
         stPoint.putSerializable("stopPoint", stopPoint);
         tab1_general.setArguments(stPoint);
+        tab1.setBackgroundResource(R.drawable.bg_tab_active);
+        tab2.setBackgroundResource(R.drawable.bg_tab);
+
         //Replace default fragment
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tab1_general).commit();
 
-        //Find Ids
-        tab1 = (Button) findViewById(R.id.Tab1);
-        tab2 = (Button) findViewById(R.id.Tab2);
 
-        //Implement Click Listener
-        tab1.setOnClickListener(this);
-        tab2.setOnClickListener(this);
 //
 //        intent=getIntent();
 //        stopPoint= (StopPoint) intent.getSerializableExtra("stopPoint");
@@ -129,7 +132,8 @@ public class PointInformationActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.Tab1:
-
+                tab1.setBackgroundResource(R.drawable.bg_tab_active);
+                tab2.setBackgroundResource(R.drawable.bg_tab);
 
                 Fragment tab1_general = new tab1_general();//Get Fragment Instance
                 stPoint.putSerializable("stopPoint", stopPoint);
@@ -139,7 +143,8 @@ public class PointInformationActivity extends AppCompatActivity
                 fragmentManager.beginTransaction().replace(R.id.fragmentContainer, tab1_general).commit();
                 break;
             case R.id.Tab2:
-
+                tab1.setBackgroundResource(R.drawable.bg_tab);
+                tab2.setBackgroundResource(R.drawable.bg_tab_active);
                 Fragment tab2_review = new tab2_review();//Get Fragment Instance
                 stPoint.putSerializable("stopPoint", stopPoint);
                 tab2_review.setArguments(stPoint);

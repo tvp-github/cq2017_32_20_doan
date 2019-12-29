@@ -135,7 +135,6 @@
         android:orientation="horizontal"
         android:background="@color/windowBackground"
         android:layout_gravity="bottom"
-        android:paddingTop="10dp"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
@@ -157,7 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Menu" />
+                android:text="Home" />
         </LinearLayout>
 
         <LinearLayout
@@ -223,7 +222,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Notifaction" />
+                android:text="Notification" />
         </LinearLayout>
 
         <LinearLayout

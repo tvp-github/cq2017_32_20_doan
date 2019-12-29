@@ -279,6 +279,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
                 android:orientation="vertical"
+                android:background="@drawable/bg_listitem"
                 android:weightSum="2">
 
                 <ImageView

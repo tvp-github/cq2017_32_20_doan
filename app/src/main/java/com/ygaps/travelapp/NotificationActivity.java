@@ -44,12 +44,8 @@ public class NotificationActivity extends AppCompatActivity {
     String token;
     int currentPage = 1;
     int ROWPERPAGE = 30;
-    //enable backpress
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
+
+
     public class CustomComparator implements Comparator<Tour> {
         @Override
         public int compare(Tour o1, Tour o2) {
@@ -106,7 +102,6 @@ public class NotificationActivity extends AppCompatActivity {
         //Gọi khởi tạo toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_notification);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Notification");
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);

@@ -37,6 +37,7 @@ public class HistoryActivity extends AppCompatActivity {
     Button btnNextPage;
     Button btnPrevPage;
     ListView listTour;
+    TextView txtTotalTour;
     ImageButton btnSettings;
     ImageButton btnNoti;
     ImageButton btnExplore;
@@ -56,8 +57,7 @@ public class HistoryActivity extends AppCompatActivity {
         //tool bar
         Toolbar toolbar =findViewById(R.id.toolbar_list_tour);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Travel Assistant");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("History");
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -138,6 +138,7 @@ public class HistoryActivity extends AppCompatActivity {
         btnNoti = findViewById(R.id.btnNoti);
         lnl_history = findViewById(R.id.lnl_history);
         btnSettings = findViewById(R.id.btnSettings);
+        txtTotalTour = findViewById(R.id.txtTotaltour);
         MyApplication myApplication = (MyApplication) getApplication();
         token = myApplication.getToken();
     }
@@ -159,6 +160,7 @@ public class HistoryActivity extends AppCompatActivity {
                             Log.d("AAA", "onResponse: "+T.getId());
                     }
                     total = response.body().getTotal();
+                    txtTotalTour.setText(total + " Tours");
                     //Cập nhật tại listView
                     listTourAdapter.notifyDataSetChanged();
                     int totalPage = (total / pageSize) + (total%pageSize == 0 ? 0 : 1);

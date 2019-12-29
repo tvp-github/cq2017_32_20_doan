@@ -153,7 +153,7 @@ public class FollowTourActivity  extends FragmentActivity implements LocationLis
                                 markerMap.get(onRoadNoti.getLat()+onRoadNoti.getLong()+onRoadNoti.getCreatedByTourId()).remove();
                             }
 
-                            Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(onRoadNoti.getLat()), Double.parseDouble(onRoadNoti.getLong()))).title(""+onRoadNoti.getSpeed()));
+                            Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(onRoadNoti.getLat()), Double.parseDouble(onRoadNoti.getLong()))).title(""+onRoadNoti.getSpeed()).icon(BitmapDescriptorFactory.fromResource(R.drawable.speed)));
                             markerMap.put(onRoadNoti.getLat()+onRoadNoti.getLong()+onRoadNoti.getCreatedByTourId(),marker);
                         }
                     }
